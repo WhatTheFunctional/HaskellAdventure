@@ -66,31 +66,22 @@ allPrepositions = [TokenPreposition ["in", "inside"],
 allTokens :: [Token]
 allTokens = allNouns ++ allVerbs ++ allPrepositions
 
---Match a single token
---Takes the word to match and the token to match as inputs
---Evaluates to the token which was matched
-matchToken :: String -> Token -> Maybe Token
-matchToken "" _  = Nothing --Empty string can't match tokens
-matchToken word token@(TokenVerb synonyms)
-    | lowerCaseWord `elem` synonyms = Just token
-    | otherwise = Nothing
-        where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
-matchToken word token@(TokenNoun name)
-    | word == name = Just token
-    | lowerCaseWord == name = Just token
-    | otherwise = Nothing
-        where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
-matchToken word token@(TokenPreposition synonyms)
-    | lowerCaseWord `elem` synonyms = Just token
-    | otherwise = Nothing
-        where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
-
---Match a token against a single word
+--Match a single word against a single token
 tokenize :: String -> Token -> Maybe TokenMatch
-tokenize word token =
-    case matchToken word token of
-        Nothing -> Nothing --Failed to match token
-        Just matchedToken -> Just (TokenMatches word [matchedToken]) --Token matched
+tokenize "" _  = Nothing --Empty string can't match tokens
+tokenize word token@(TokenVerb synonyms)
+    | lowerCaseWord `elem` synonyms = Just (TokenMatches word [token])
+    | otherwise = Nothing
+        where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
+tokenize word token@(TokenNoun name)
+    | word == name = Just (TokenMatches word [token])
+    | lowerCaseWord == name = Just (TokenMatches word [token])
+    | otherwise = Nothing
+        where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
+tokenize word token@(TokenPreposition synonyms)
+    | lowerCaseWord `elem` synonyms = Just (TokenMatches word [token])
+    | otherwise = Nothing
+        where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
 
 lexTokens :: [String] -> [(Maybe TokenMatch, [String])] -> [TokenMatch]
 lexTokens words [] = lexInput words
