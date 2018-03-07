@@ -13,14 +13,14 @@ data Token = TokenVerb [String] |
              TokenPreposition [String] deriving (Show, Eq)
 
 --Stores the result when a string matches one or more tokens
-data TokenMatch = TokenMatches String [Token] 
+data TokenMatch = TokenMatch String [Token] 
 
 join :: Maybe TokenMatch -> Maybe TokenMatch -> Maybe TokenMatch
 join Nothing Nothing = Nothing
 join (Just a) Nothing = Just a
 join Nothing (Just b) = Just b
-join (Just (TokenMatches wordA tokensA)) (Just (TokenMatches wordB tokensB))
-    | wordA == wordB = Just (TokenMatches wordA (tokensA ++ tokensB))
+join (Just (TokenMatch wordA tokensA)) (Just (TokenMatch wordB tokensB))
+    | wordA == wordB = Just (TokenMatch wordA (tokensA ++ tokensB))
     | otherwise = Nothing
 
 allVerbs :: [Token]
@@ -70,16 +70,16 @@ allTokens = allNouns ++ allVerbs ++ allPrepositions
 tokenize :: String -> Token -> Maybe TokenMatch
 tokenize "" _  = Nothing --Empty string can't match tokens
 tokenize word token@(TokenVerb synonyms)
-    | lowerCaseWord `elem` synonyms = Just (TokenMatches word [token])
+    | lowerCaseWord `elem` synonyms = Just (TokenMatch word [token])
     | otherwise = Nothing
         where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
 tokenize word token@(TokenNoun name)
-    | word == name = Just (TokenMatches word [token])
-    | lowerCaseWord == name = Just (TokenMatches word [token])
+    | word == name = Just (TokenMatch word [token])
+    | lowerCaseWord == name = Just (TokenMatch word [token])
     | otherwise = Nothing
         where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
 tokenize word token@(TokenPreposition synonyms)
-    | lowerCaseWord `elem` synonyms = Just (TokenMatches word [token])
+    | lowerCaseWord `elem` synonyms = Just (TokenMatch word [token])
     | otherwise = Nothing
         where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
 
@@ -105,7 +105,7 @@ printTokens word ((TokenPreposition synonyms) : tokens) = (putStrLn ("== Preposi
 --Print tokens for a word
 printWordTokens :: [TokenMatch] -> IO ()
 printWordTokens [] = return ()
-printWordTokens ((TokenMatches word matchedTokens) : tokens) = printTokens word matchedTokens >> printWordTokens tokens
+printWordTokens ((TokenMatch word matchedTokens) : tokens) = printTokens word matchedTokens >> printWordTokens tokens
 
 --Print help text
 printHelp :: IO ()
