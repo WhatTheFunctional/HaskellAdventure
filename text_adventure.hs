@@ -95,7 +95,7 @@ tokenize word token =
 
 lexTokens :: [String] -> [(Maybe TokenMatch, [String])] -> [TokenMatch]
 lexTokens words [] = lexInput words
-lexTokens words ((Nothing, tokenWords) : tokens) = lexTokens words tokens
+lexTokens words ((Nothing, _) : tokens) = lexTokens words tokens
 lexTokens words ((Just token, tokenWords) : tokens) =
     case token of
         NoTokenMatches -> lexTokens words tokens
