@@ -103,10 +103,10 @@ lexTokens words ((Just token, tokenWords) : tokens) =
 
 lexInput :: [String] -> [TokenMatch]
 lexInput [] = []
-lexInput(word1 : word2 : words) =
+lexInput (word1 : word2 : words) =
     lexTokens (word2 : words) [(Control.Monad.foldM (\acc token -> (tokenize (word1 ++ ' ' : word2) token) `join` acc) NoTokenMatches allTokens, words), --Prioritize look-ahead by putting the look-ahead option first
                                  (Control.Monad.foldM (\acc token -> (tokenize word1 token) `join` acc) NoTokenMatches allTokens , word2 : words)]
-lexInput(word : words) =
+lexInput (word : words) =
     lexTokens words [(Control.Monad.foldM (\acc token -> (tokenize word token) `join` acc) NoTokenMatches allTokens, words)]
 
 printTokens :: String -> [Token] -> IO ()
