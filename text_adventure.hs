@@ -13,14 +13,13 @@ data Token = TokenVerb [String] |
              TokenPreposition [String] deriving (Show, Eq)
 
 --Stores the result when a string matches one or more tokens
-data TokenMatch = NoTokenMatches |
-                  TokenMatches String [Token] 
+data TokenMatch = TokenMatches String [Token] 
 
-join :: TokenMatch -> TokenMatch -> Maybe TokenMatch
-join NoTokenMatches NoTokenMatches = Just NoTokenMatches
-join a NoTokenMatches = Just a
-join NoTokenMatches b = Just b
-join (TokenMatches wordA tokensA) (TokenMatches wordB tokensB)
+join :: Maybe TokenMatch -> Maybe TokenMatch -> Maybe TokenMatch
+join Nothing Nothing = Nothing
+join (Just a) Nothing = Just a
+join Nothing (Just b) = Just b
+join (Just (TokenMatches wordA tokensA)) (Just (TokenMatches wordB tokensB))
     | wordA == wordB = Just (TokenMatches wordA (tokensA ++ tokensB))
     | otherwise = Nothing
 
@@ -87,27 +86,24 @@ matchToken word token@(TokenPreposition synonyms)
         where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
 
 --Match a list of tokens against a single word
-tokenize :: String -> Token -> TokenMatch
+tokenize :: String -> Token -> Maybe TokenMatch
 tokenize word token =
     case matchToken word token of
-        Nothing -> NoTokenMatches --Failed to match token
-        Just matchedToken -> (TokenMatches word [matchedToken]) --Token matched
+        Nothing -> Nothing --Failed to match token
+        Just matchedToken -> Just (TokenMatches word [matchedToken]) --Token matched
 
 lexTokens :: [String] -> [(Maybe TokenMatch, [String])] -> [TokenMatch]
 lexTokens words [] = lexInput words
 lexTokens words ((Nothing, _) : tokens) = lexTokens words tokens
-lexTokens words ((Just token, tokenWords) : tokens) =
-    case token of
-        NoTokenMatches -> lexTokens words tokens
-        token -> token : lexInput tokenWords
+lexTokens words ((Just token, tokenWords) : tokens) = token : lexInput tokenWords
 
 lexInput :: [String] -> [TokenMatch]
 lexInput [] = []
 lexInput (word1 : word2 : words) =
-    lexTokens (word2 : words) [(Control.Monad.foldM (\acc token -> (tokenize (word1 ++ ' ' : word2) token) `join` acc) NoTokenMatches allTokens, words), --Prioritize look-ahead by putting the look-ahead option first
-                               (Control.Monad.foldM (\acc token -> (tokenize word1 token) `join` acc) NoTokenMatches allTokens, word2 : words)]
+    lexTokens (word2 : words) [(foldl (\acc token -> (tokenize (word1 ++ ' ' : word2) token) `join` acc) Nothing allTokens, words), --Prioritize look-ahead by putting the look-ahead option first
+                               (foldl (\acc token -> (tokenize word1 token) `join` acc) Nothing allTokens, word2 : words)]
 lexInput (word : words) =
-    lexTokens words [(Control.Monad.foldM (\acc token -> (tokenize word token) `join` acc) NoTokenMatches allTokens, words)]
+    lexTokens words [(foldl (\acc token -> (tokenize word token) `join` acc) Nothing allTokens, words)]
 
 printTokens :: String -> [Token] -> IO ()
 printTokens word [] = return ()
@@ -118,7 +114,6 @@ printTokens word ((TokenPreposition synonyms) : tokens) = (putStrLn ("== Preposi
 --Print tokens for a word
 printWordTokens :: [TokenMatch] -> IO ()
 printWordTokens [] = return ()
-printWordTokens (NoTokenMatches : tokens) = (putStrLn ("Error: NoTokenMatches found in token list")) >> printWordTokens tokens
 printWordTokens ((TokenMatches word matchedTokens) : tokens) = printTokens word matchedTokens >> printWordTokens tokens
 
 --Print help text
