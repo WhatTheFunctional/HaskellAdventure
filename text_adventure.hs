@@ -85,7 +85,7 @@ matchToken word token@(TokenPreposition synonyms)
     | otherwise = Nothing
         where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
 
---Match a list of tokens against a single word
+--Match a token against a single word
 tokenize :: String -> Token -> Maybe TokenMatch
 tokenize word token =
     case matchToken word token of
