@@ -93,21 +93,21 @@ tokenize word token =
         Nothing -> NoTokenMatches --Failed to match token
         Just matchedToken -> (TokenMatches word [matchedToken]) --Token matched
 
-parseTokens :: [String] -> [(Maybe TokenMatch, [String])] -> [TokenMatch]
-parseTokens words [] = parse words
-parseTokens words ((Nothing, tokenWords) : tokens) = parseTokens words tokens
-parseTokens words ((Just token, tokenWords) : tokens) =
+lexTokens :: [String] -> [(Maybe TokenMatch, [String])] -> [TokenMatch]
+lexTokens words [] = lexInput words
+lexTokens words ((Nothing, tokenWords) : tokens) = lexTokens words tokens
+lexTokens words ((Just token, tokenWords) : tokens) =
     case token of
-        NoTokenMatches -> parseTokens words tokens
-        token -> token : parse tokenWords
+        NoTokenMatches -> lexTokens words tokens
+        token -> token : lexInput tokenWords
 
-parse :: [String] -> [TokenMatch]
-parse [] = []
-parse (word1 : word2 : words) =
-    parseTokens (word2 : words) [(Control.Monad.foldM (\acc token -> (tokenize (word1 ++ ' ' : word2) token) `join` acc) NoTokenMatches allTokens, words), --Prioritize look-ahead by putting the look-ahead option first
+lexInput :: [String] -> [TokenMatch]
+lexInput[] = []
+lexInput(word1 : word2 : words) =
+    lexTokens (word2 : words) [(Control.Monad.foldM (\acc token -> (tokenize (word1 ++ ' ' : word2) token) `join` acc) NoTokenMatches allTokens, words), --Prioritize look-ahead by putting the look-ahead option first
                                  (Control.Monad.foldM (\acc token -> (tokenize word1 token) `join` acc) NoTokenMatches allTokens , word2 : words)]
-parse (word : words) =
-    parseTokens words [(Control.Monad.foldM (\acc token -> (tokenize word token) `join` acc) NoTokenMatches allTokens, words)]
+lexInput(word : words) =
+    lexTokens words [(Control.Monad.foldM (\acc token -> (tokenize word token) `join` acc) NoTokenMatches allTokens, words)]
 
 printTokens :: String -> [Token] -> IO ()
 printTokens word [] = return ()
@@ -159,7 +159,7 @@ parseInput line
     | map Data.Char.toLower line == "Nouns" = printNouns allNouns
     | map Data.Char.toLower line == "prepositions" = printPrepositions allPrepositions
     | map Data.Char.toLower line == "Prepositions" = printPrepositions allPrepositions
-    | otherwise = return (parse (map Data.Text.unpack (Data.Text.splitOn (Data.Text.pack " ") (Data.Text.pack line)))) >>= printWordTokens >> return ()
+    | otherwise = return (lexInput (map Data.Text.unpack (Data.Text.splitOn (Data.Text.pack " ") (Data.Text.pack line)))) >>= printWordTokens >> return ()
 
 adventure :: IO ()
 adventure = getLine >>= parseInput >> hFlush stdout >> adventure
