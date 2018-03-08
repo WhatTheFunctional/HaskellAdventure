@@ -8,6 +8,7 @@ import qualified Data.Char
 import qualified Data.Text
 
 import NaturalLanguageLexer
+import NaturalLanguageParser
 import DummyAdventure
 
 printTokens :: String -> [Token] -> IO ()
