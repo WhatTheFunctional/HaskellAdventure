@@ -7,4 +7,4 @@ module NaturalLanguageParser (ParseTree(..)) where
 import NaturalLanguageLexer
 
 data ParseTree = ParseTreeLeaf Token |
-                 ParseTreeNode ParseTree ParseTree
+                 ParseTreeNode ParseTree ParseTree deriving (Show, Eq)

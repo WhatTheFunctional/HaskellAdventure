@@ -16,7 +16,7 @@ data Token = TokenVerb [String] |
              TokenPreposition [String] deriving (Show, Eq)
 
 --Stores the result when a string matches one or more tokens
-data TokenMatch = TokenMatch String [Token] 
+data TokenMatch = TokenMatch String [Token] deriving (Show, Eq)
 
 join :: Maybe TokenMatch -> Maybe TokenMatch -> Maybe TokenMatch
 join Nothing Nothing = Nothing
