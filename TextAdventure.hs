@@ -31,10 +31,18 @@ printSentence sentence = putStrLn (show sentence)
 printHelp :: IO ()
 printHelp = putStrLn "Commands:" >>
             putStrLn "Help - Print help text" >>
+            putStrLn "Grammar - Print available grammar" >>
             putStrLn "Nouns - Print all available nouns" >>
             putStrLn "Verbs - Print all available verbs" >>
             putStrLn "Prepositions - Print all available prepositions" >>
             putStrLn "Quit - Exit the game"
+
+--Print grammar
+printGrammar :: IO ()
+printGrammar = putStrLn "Simple sentence: <Verb> <Noun>" >>
+               putStrLn "Simple preposition sentence: <Verb> <Preposition> <Noun>" >>
+               putStrLn "Complex sentence: <Verb> <Noun> <Preposition> <Noun>" >>
+               putStrLn "Complex preposition sentence: <Verb> <Preposition> <Noun> <Preposition> <Noun>"
 
 --Print verbs
 printVerbs :: [Token] -> IO ()
@@ -53,23 +61,17 @@ printPrepositions ((TokenPreposition synonyms) : tokens) = putStrLn (show synony
 
 parseInput :: String -> IO ()
 parseInput line
-    | map Data.Char.toLower line == "exit" = putStrLn "Thanks for playing!" >> exitSuccess
-    | map Data.Char.toLower line == "Exit" = putStrLn "Thanks for playing!" >> exitSuccess
-    | map Data.Char.toLower line == "quit" = putStrLn "Thanks for playing!" >> exitSuccess
-    | map Data.Char.toLower line == "Quit" = putStrLn "Thanks for playing!" >> exitSuccess
     | map Data.Char.toLower line == "help" = printHelp
-    | map Data.Char.toLower line == "Help" = printHelp
+    | map Data.Char.toLower line == "grammar" = printGrammar
     | map Data.Char.toLower line == "verbs" = printVerbs allVerbs
-    | map Data.Char.toLower line == "Verbs" = printVerbs allVerbs
     | map Data.Char.toLower line == "nouns" = printNouns allNouns
-    | map Data.Char.toLower line == "Nouns" = printNouns allNouns
     | map Data.Char.toLower line == "prepositions" = printPrepositions allPrepositions
-    | map Data.Char.toLower line == "Prepositions" = printPrepositions allPrepositions
+    | map Data.Char.toLower line == "exit" = putStrLn "Thanks for playing!" >> exitSuccess
+    | map Data.Char.toLower line == "quit" = putStrLn "Thanks for playing!" >> exitSuccess
     | otherwise = return sentence >>= printSentence >> return ()
         where inputWords = (map Data.Text.unpack (Data.Text.splitOn (Data.Text.pack " ") (Data.Text.pack line)))
               sentenceTokenMatches = lexInput allTokens inputWords
               sentence = parseSentence sentenceTokenMatches
-
 
 adventure :: IO ()
 adventure = getLine >>= parseInput >> hFlush stdout >> adventure
