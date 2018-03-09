@@ -5,8 +5,6 @@
 module NaturalLanguageLexer (Token(..),
                              TokenMatch(..),
                              join,
-                             tokenize,
-                             lexTokens,
                              lexInput) where
 
 import qualified Data.Char

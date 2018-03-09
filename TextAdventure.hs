@@ -22,6 +22,11 @@ printWordTokens :: [TokenMatch] -> IO ()
 printWordTokens [] = return ()
 printWordTokens ((TokenMatch word matchedTokens) : tokens) = printTokens word matchedTokens >> printWordTokens tokens
 
+--Print sentence
+printSentence :: Maybe Sentence -> IO ()
+printSentence Nothing = putStrLn "I'm sorry, I don't understand what you said."
+printSentence sentence = putStrLn (show sentence)
+
 --Print help text
 printHelp :: IO ()
 printHelp = putStrLn "Commands:" >>
@@ -60,7 +65,11 @@ parseInput line
     | map Data.Char.toLower line == "Nouns" = printNouns allNouns
     | map Data.Char.toLower line == "prepositions" = printPrepositions allPrepositions
     | map Data.Char.toLower line == "Prepositions" = printPrepositions allPrepositions
-    | otherwise = return (lexInput allTokens (map Data.Text.unpack (Data.Text.splitOn (Data.Text.pack " ") (Data.Text.pack line)))) >>= printWordTokens >> return ()
+    | otherwise = return sentence >>= printSentence >> return ()
+        where inputWords = (map Data.Text.unpack (Data.Text.splitOn (Data.Text.pack " ") (Data.Text.pack line)))
+              sentenceTokenMatches = lexInput allTokens inputWords
+              sentence = parseSentence sentenceTokenMatches
+
 
 adventure :: IO ()
 adventure = getLine >>= parseInput >> hFlush stdout >> adventure
