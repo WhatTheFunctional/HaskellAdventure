@@ -5,6 +5,7 @@
 module NaturalLanguageParser (Sentence(..),
                               parseSentence) where
 
+import Data.List
 import NaturalLanguageLexer
 
 data Sentence = Phrase Token |
@@ -13,54 +14,68 @@ data Sentence = Phrase Token |
                 ComplexSentence Token Token Token Token |
                 ComplexPrepositionSentence Token Token Token Token Token deriving (Show, Eq)
 
-verbIsInTokenList :: [Token] -> Maybe Token
-verbIsInTokenList [] = Nothing
-verbIsInTokenList ((TokenVerb synonyms) : ts) = Just (TokenVerb synonyms)
-verbIsInTokenList (_ : ts) = verbIsInTokenList ts
+verbsInTokenList :: [Token] -> [Token]
+verbsInTokenList [] = []
+verbsInTokenList ((TokenVerb synonyms) : ts) = (TokenVerb synonyms) : verbsInTokenList ts
+verbsInTokenList (_ : ts) = verbsInTokenList ts
 
-nounIsInTokenList :: [Token] -> Maybe Token
-nounIsInTokenList [] = Nothing
-nounIsInTokenList ((TokenNoun name) : ts) = Just (TokenNoun name)
-nounIsInTokenList (_ : ts) = nounIsInTokenList ts
+nounsInTokenList :: [Token] -> [Token]
+nounsInTokenList [] = []
+nounsInTokenList ((TokenNoun name) : ts) = (TokenNoun name) : nounsInTokenList ts
+nounsInTokenList (_ : ts) = nounsInTokenList ts
 
-prepositionIsInTokenList :: [Token] -> Maybe Token
-prepositionIsInTokenList [] = Nothing
-prepositionIsInTokenList ((TokenPreposition synonyms) : ts) = Just (TokenPreposition synonyms)
-prepositionIsInTokenList (_ : ts) = prepositionIsInTokenList ts
+prepositionsInTokenList :: [Token] -> [Token]
+prepositionsInTokenList [] = []
+prepositionsInTokenList ((TokenPreposition synonyms) : ts) = (TokenPreposition synonyms) : prepositionsInTokenList ts
+prepositionsInTokenList (_ : ts) = prepositionsInTokenList ts
 
-makePhrase :: Maybe Token -> Maybe Sentence
-makePhrase (Just verb@(TokenVerb _)) = Just (Phrase verb)
-makePhrase _ = Nothing
+makeSentence :: [[Token]] -> [Sentence]
+makeSentence []
+    = []
+makeSentence [verbs]
+    = fmap (\verb -> Phrase verb) verbs
+makeSentence [verbs, nouns]
+    = fmap (\[verb, noun] -> SimpleSentence verb noun) 
+      ((:) <$> verbs <*>
+           ((:) <$> nouns <*> [[]]))
+makeSentence [verbs, prepositions, nouns]
+    = fmap (\[verb, preposition, noun] -> SimplePrepositionSentence verb preposition noun)
+      ((:) <$> verbs <*>
+          ((:) <$> prepositions <*>
+              ((:) <$> nouns <*> [[]])))
+makeSentence [verbs, nouns0, prepositions, nouns1]
+    = fmap (\[verb, noun0, preposition, noun1] -> ComplexSentence verb noun0 preposition noun1)
+      ((:) <$> verbs <*>
+          ((:) <$> nouns0 <*>
+              ((:) <$> prepositions <*>
+                  ((:) <$> nouns1 <*> [[]]))))
+makeSentence [verbs, prepositions0, nouns0, prepositions1, nouns1]
+    = fmap (\[verb, preposition0, noun0, preposition1, noun1] -> ComplexPrepositionSentence verb preposition0 noun0 preposition1 noun1)
+      ((:) <$> verbs <*>
+          ((:) <$> prepositions0 <*>
+              ((:) <$> nouns0 <*>
+                  ((:) <$> prepositions1 <*>
+                      ((:) <$> nouns1 <*> [[]])))))
 
-makeSimpleSentence :: Maybe Token -> Maybe Token -> Maybe Sentence
-makeSimpleSentence (Just verb@(TokenVerb _)) (Just noun@(TokenNoun _))
-    = Just (SimpleSentence verb noun)
-makeSimpleSentence _ _ = Nothing
-
-makeSimplePrepositionSentence :: Maybe Token -> Maybe Token -> Maybe Token -> Maybe Sentence
-makeSimplePrepositionSentence (Just verb@(TokenVerb _)) (Just preposition@(TokenPreposition _)) (Just noun@(TokenNoun _))
-    = Just (SimplePrepositionSentence verb preposition noun)
-makeSimplePrepositionSentence _ _ _ = Nothing
-
-makeComplexSentence :: Maybe Token -> Maybe Token -> Maybe Token -> Maybe Token -> Maybe Sentence
-makeComplexSentence (Just verb@(TokenVerb _)) (Just noun0@(TokenNoun _)) (Just preposition@(TokenPreposition _)) (Just noun1@(TokenNoun _))
-    = Just (ComplexSentence verb noun0 preposition noun1)
-makeComplexSentence _ _ _ _ = Nothing
-
-makeComplexPrepositionSentence :: Maybe Token -> Maybe Token -> Maybe Token -> Maybe Token -> Maybe Token -> Maybe Sentence
-makeComplexPrepositionSentence (Just verb@(TokenVerb _)) (Just preposition0@(TokenPreposition _)) (Just noun0@(TokenNoun _)) (Just preposition1@(TokenPreposition _)) (Just noun1@(TokenNoun _))
-    = Just (ComplexPrepositionSentence verb preposition0 noun0 preposition1 noun1)
-makeComplexPrepositionSentence _ _ _ _ _ = Nothing
-
-parseSentence :: [TokenMatch] -> Maybe Sentence
+parseSentence :: [TokenMatch] -> [Sentence]
 parseSentence [(TokenMatch _ t0), (TokenMatch _ t1), (TokenMatch _ t2), (TokenMatch _ t3), (TokenMatch _ t4)]
-    = makeComplexPrepositionSentence (verbIsInTokenList t0) (prepositionIsInTokenList t1) (nounIsInTokenList t2) (prepositionIsInTokenList t3) (nounIsInTokenList t4)
+    = makeSentence [(verbsInTokenList t0),
+                    (prepositionsInTokenList t1),
+                    (nounsInTokenList t2),
+                    (prepositionsInTokenList t3),
+                    (nounsInTokenList t4)]
 parseSentence [(TokenMatch _ t0), (TokenMatch _ t1), (TokenMatch _ t2), (TokenMatch _ t3)]
-    = makeComplexSentence (verbIsInTokenList t0) (nounIsInTokenList t1) (prepositionIsInTokenList t2) (nounIsInTokenList t3)
+    = makeSentence [(verbsInTokenList t0),
+                    (nounsInTokenList t1),
+                    (prepositionsInTokenList t2),
+                    (nounsInTokenList t3)]
 parseSentence [(TokenMatch _ t0), (TokenMatch _ t1), (TokenMatch _ t2)]
-    = makeSimplePrepositionSentence (verbIsInTokenList t0) (prepositionIsInTokenList t1) (nounIsInTokenList t2)
+    = makeSentence [(verbsInTokenList t0),
+                    (prepositionsInTokenList t1),
+                    (nounsInTokenList t2)]
 parseSentence [(TokenMatch _ t0), (TokenMatch _ t1)]
-    = makeSimpleSentence (verbIsInTokenList t0) (nounIsInTokenList t1)
+    = makeSentence [(verbsInTokenList t0),
+                    (nounsInTokenList t1)]
 parseSentence [(TokenMatch _ t0)]
-    = makePhrase (verbIsInTokenList t0)
-parseSentence _ = Nothing
+    = makeSentence [(verbsInTokenList t0)]
+parseSentence _ = []
