@@ -7,7 +7,8 @@ module NaturalLanguageParser (Sentence(..),
 
 import NaturalLanguageLexer
 
-data Sentence = SimpleSentence Token Token |
+data Sentence = Phrase Token |
+                SimpleSentence Token Token |
                 SimplePrepositionSentence Token Token Token |
                 ComplexSentence Token Token Token Token |
                 ComplexPrepositionSentence Token Token Token Token Token deriving (Show, Eq)
@@ -26,6 +27,10 @@ prepositionIsInTokenList :: [Token] -> Maybe Token
 prepositionIsInTokenList [] = Nothing
 prepositionIsInTokenList ((TokenPreposition synonyms) : ts) = Just (TokenPreposition synonyms)
 prepositionIsInTokenList (_ : ts) = prepositionIsInTokenList ts
+
+makePhrase :: Maybe Token -> Maybe Sentence
+makePhrase (Just verb@(TokenVerb _)) = Just (Phrase verb)
+makePhrase _ = Nothing
 
 makeSimpleSentence :: Maybe Token -> Maybe Token -> Maybe Sentence
 makeSimpleSentence (Just verb@(TokenVerb _)) (Just noun@(TokenNoun _))
@@ -56,4 +61,6 @@ parseSentence [(TokenMatch _ t0), (TokenMatch _ t1), (TokenMatch _ t2)]
     = makeSimplePrepositionSentence (verbIsInTokenList t0) (prepositionIsInTokenList t1) (nounIsInTokenList t2)
 parseSentence [(TokenMatch _ t0), (TokenMatch _ t1)]
     = makeSimpleSentence (verbIsInTokenList t0) (nounIsInTokenList t1)
+parseSentence [(TokenMatch _ t0)]
+    = makePhrase (verbIsInTokenList t0)
 parseSentence _ = Nothing
