@@ -41,7 +41,7 @@ data Interaction = Interaction {sentences :: [Sentence],
                                 addedObjects :: ObjectChanges, --Objects to add to inventory
                                 removedObjects :: ObjectChanges, --Objects to remove from inventory
                                 setFlags :: FlagChanges, --Flags to set
-                                removeFlags :: FlagChanges, --Flags to remove
+                                removedFlags :: FlagChanges, --Flags to remove
                                 nextScene :: Maybe SceneIndex} deriving (Show, Eq)
 
 data SceneDescription = SceneDescription {description :: String, --This description is always printed
@@ -76,7 +76,7 @@ printConditionalDescriptions inventory flags ((condition, description) : remaini
 
 printSceneDescription :: NarrativeGraph -> SceneIndex -> Inventory -> Flags -> IO ()
 printSceneDescription (NarrativeGraph {nodes = graphNodes, endScenes = graphEndScenes}) sceneIndex inventory flags
-    = putStr thisSceneDescription >> printConditionalDescriptions inventory flags thisConditionalDescriptions >> putStr "\n" >> hFlush stdout
+    = putStr thisSceneDescription >> printConditionalDescriptions inventory flags thisConditionalDescriptions >> putStr "\n\n" >> hFlush stdout
         where Scene {sceneDescription = (SceneDescription {description = thisSceneDescription,
                                                            conditionalDescriptions = thisConditionalDescriptions}),
                      interactions = _} = graphNodes ! sceneIndex
@@ -93,29 +93,58 @@ updateFlags (Flags flags) (FlagChanges setFlags) (FlagChanges removedFlags) = Fl
 updateInventory :: Inventory -> ObjectChanges -> ObjectChanges -> Inventory
 updateInventory (Inventory inventory) (ObjectChanges addedObjects) (ObjectChanges removedObjects) = Inventory (addedObjects ++ (filter (\x -> not (x `elem` removedObjects)) inventory))
 
+sceneTransition :: Maybe SceneIndex -> [SceneIndex] -> String -> SceneIndex -> Inventory -> ObjectChanges -> ObjectChanges -> Flags -> FlagChanges -> FlagChanges -> IO (Maybe (SceneIndex, Inventory, Flags))
+sceneTransition Nothing _ interactionDescription currentScene inventory addedObjects removedObjects flags setFlags removedFlags
+    = putStrLn interactionDescription >>
+      return (Just (currentScene,
+                    updateInventory inventory addedObjects removedObjects,
+                    updateFlags flags setFlags removedFlags)) --If there is no scene transition, return to the current scene with updated inventory and flags
+sceneTransition (Just nextScene) endScenes interactionDescription _ inventory addedObjects removedObjects flags setFlags removedFlags
+    = if nextScene `elem` endScenes
+      then putStrLn interactionDescription >>
+           return Nothing --This is an end state for the game
+      else putStrLn interactionDescription >>
+           return (Just (nextScene,
+                         updateInventory inventory addedObjects removedObjects,
+                         updateFlags flags setFlags removedFlags))
+
+--Scene transition takes an interaction description, fail string, next scene index, end scene index, current scene index, inventory, and flags
+--Scene transition evaluates to the next state of the game
+updateGameState :: Maybe String -> [SceneIndex] -> SceneIndex -> Inventory -> Flags -> Interaction -> IO (Maybe (SceneIndex, Inventory, Flags))
+updateGameState Nothing endScenes currentScene inventory flags
+                interaction@(Interaction {sentences = _,
+                                          interactionDescription = thisInteractionDescription,
+                                          preconditions = _,
+                                          addedObjects = thisAddedObjects,
+                                          removedObjects = thisRemovedObjects,
+                                          setFlags = thisSetFlags,
+                                          removedFlags = thisRemovedFlags,
+                                          nextScene = thisNextScene})
+    = sceneTransition thisNextScene endScenes thisInteractionDescription currentScene inventory thisAddedObjects thisRemovedObjects flags thisSetFlags thisRemovedFlags
+updateGameState (Just failString) _ currentScene inventory flags _
+    = putStrLn failString >>
+      hFlush stdout >>
+      return (Just (currentScene, inventory, flags)) --The interaction failed due to a precondition, print the fail string and evaluate to the current state
+
 --Perform the interaction and return a tuple of (new scene index, new inventory, new flags)
 doInteraction :: SceneIndex -> [SceneIndex] -> Inventory -> Flags -> Maybe Interaction -> IO (Maybe (SceneIndex, Inventory, Flags))
-doInteraction _ _ _ _ Nothing = return Nothing
+doInteraction currentScene _ inventory flags Nothing
+    = putStrLn "That does nothing." >>
+      return (Just (currentScene, inventory, flags)) --If there are no valid interactions but the sentence was valid, just return to the current state
 doInteraction currentScene
               endScenes
               inventory
               flags
               (Just interaction@(Interaction {sentences = _,
-                                              interactionDescription = thisInteractionDescription,
+                                              interactionDescription = _,
                                               preconditions = thisPreconditions,
-                                              addedObjects = thisAddedObjects,
-                                              removedObjects = thisRemovedObjects,
-                                              setFlags = thisSetFlags,
-                                              removeFlags = thisRemoveFlags,
-                                              nextScene = thisNextScene}))
-    = case thisPreconditionsMet of
-          Nothing -> case thisNextScene of
-                         Nothing -> putStrLn thisInteractionDescription >> return (Just (currentScene, inventory, flags))
-                         Just justNextScene -> if justNextScene `elem` endScenes
-                                               then putStrLn thisInteractionDescription >> return Nothing
-                                               else putStrLn thisInteractionDescription >> return (Just (justNextScene, updateInventory inventory thisAddedObjects thisRemovedObjects, updateFlags flags thisSetFlags thisRemoveFlags))
-          Just failString -> putStrLn failString >> return (Just (currentScene, inventory, flags))
-          where thisPreconditionsMet = preconditionsMet thisPreconditions inventory flags
+                                              addedObjects = _,
+                                              removedObjects = _,
+                                              setFlags = _,
+                                              removedFlags = _,
+                                              nextScene = _}))
+    = updateGameState failString endScenes currentScene inventory flags interaction
+          where failString = preconditionsMet thisPreconditions inventory flags
 
 --Find an interaction in the interactions list which matches the head of the sentences list
 findSentenceInteraction :: [Interaction] -> [Sentence] -> [Sentence] -> Maybe Interaction
@@ -127,7 +156,7 @@ findSentenceInteraction allInteractions@(interaction@(Interaction {sentences = t
                                                                    addedObjects = _,
                                                                    removedObjects = _,
                                                                    setFlags = _,
-                                                                   removeFlags = _,
+                                                                   removedFlags = _,
                                                                    nextScene = _}) : remainingInteractions) (sentence : remainingSentences) allSentences
     | sentence `elem` thisSentences = Just interaction --This interaction matches this sentence
     | otherwise = findSentenceInteraction allInteractions remainingSentences allSentences --This interaction doesn't match this sentence, try all remaining sentences
@@ -152,10 +181,14 @@ processInteraction (Scene {sceneDescription = _,
 --Takes the narrative graph, current scene index, inventory, and sentence as input
 --Evaluates to Maybe of the next scene index and inventory state
 performInteraction :: NarrativeGraph -> SceneIndex -> Inventory -> Flags -> [Sentence] -> IO (Maybe (NarrativeGraph, SceneIndex, Inventory, Flags))
-performInteraction _ _ _ _ [] = return Nothing
+performInteraction narrativeGraph sceneIndex inventory flags []
+    = putStrLn "Please enter a command." >>
+      hFlush stdout >>
+      return (Just (narrativeGraph, sceneIndex, inventory, flags)) --If there are no valid sentences, just continue.
 performInteraction narrativeGraph@(NarrativeGraph {nodes = graphNodes, endScenes = graphEndScenes}) sceneIndex inventory flags sentences
-    = newSceneTuple >>= \thisTuple -> case thisTuple of
-                                          Nothing -> return Nothing
-                                          (Just (newSceneIndex, newSceneInventory, newSceneFlags)) -> hFlush stdout >> return (Just (narrativeGraph, newSceneIndex, newSceneInventory, newSceneFlags))
+    = hFlush stdout >>
+      fmap (\maybeNewSceneTuple -> maybeNewSceneTuple >>=
+                                   (\(newSceneIndex, newSceneInventory, newSceneFlags) -> Just (narrativeGraph, newSceneIndex, newSceneInventory, newSceneFlags)))
+      ioMaybeNewSceneTuple
         where currentScene = graphNodes ! sceneIndex
-              newSceneTuple = processInteraction currentScene sceneIndex graphEndScenes inventory flags sentences
+              ioMaybeNewSceneTuple = processInteraction currentScene sceneIndex graphEndScenes inventory flags sentences

@@ -71,6 +71,7 @@ allPrepositions = [TokenPreposition ["in", "inside", "within"],
                    TokenPreposition ["into"],
                    TokenPreposition ["out", "outside"],
                    TokenPreposition ["on", "on top", "upon"],
+                   TokenPreposition ["on", "with"],
                    TokenPreposition ["above", "over"],
                    TokenPreposition ["over"],
                    TokenPreposition ["below", "under", "underneath", "beneath"],
@@ -120,7 +121,7 @@ scene0 = Scene {sceneDescription = scene0Description,
                                              addedObjects = ObjectChanges ["key"],
                                              removedObjects = ObjectChanges [],
                                              setFlags = FlagChanges [],
-                                             removeFlags = FlagChanges [],
+                                             removedFlags = FlagChanges [],
                                              nextScene = Nothing},
                                 Interaction {sentences = [SimpleSentence (TokenVerb ["open"])
                                                                          (TokenNoun "white door")],
@@ -129,7 +130,7 @@ scene0 = Scene {sceneDescription = scene0Description,
                                              addedObjects = ObjectChanges [],
                                              removedObjects = ObjectChanges [],
                                              setFlags = FlagChanges [],
-                                             removeFlags = FlagChanges [],
+                                             removedFlags = FlagChanges [],
                                              nextScene = Nothing},
                                 Interaction {sentences = [Phrase (TokenVerb ["look around"])],
                                              interactionDescription = "You take a look around.",
@@ -137,7 +138,7 @@ scene0 = Scene {sceneDescription = scene0Description,
                                              addedObjects = ObjectChanges [],
                                              removedObjects = ObjectChanges [],
                                              setFlags = FlagChanges [],
-                                             removeFlags = FlagChanges [],
+                                             removedFlags = FlagChanges [],
                                              nextScene = Nothing},
                                 Interaction {sentences = [ComplexSentence (TokenVerb ["unlock"])
                                                                           (TokenNoun "white door")
@@ -146,13 +147,17 @@ scene0 = Scene {sceneDescription = scene0Description,
                                                           ComplexSentence (TokenVerb ["open"])
                                                                           (TokenNoun "white door")
                                                                           (TokenPreposition ["with"])
-                                                                          (TokenNoun "key")],
+                                                                          (TokenNoun "key"),
+                                                          ComplexSentence (TokenVerb ["use"])
+                                                                          (TokenNoun "key")
+                                                                          (TokenPreposition ["on", "with"])
+                                                                          (TokenNoun "white door")],
                                              interactionDescription = "You unlock the white door with the key and open it.",
                                              preconditions = [(InInventory "key", "You need a [key] to open the [white door].")],
                                              addedObjects = ObjectChanges [],
                                              removedObjects = ObjectChanges [],
                                              setFlags = FlagChanges ["opened white door"],
-                                             removeFlags = FlagChanges [],
+                                             removedFlags = FlagChanges [],
                                              nextScene = Nothing},
                                Interaction {sentences = [SimplePrepositionSentence (TokenVerb ["move", "walk", "go", "run"])
                                                                                    (TokenPreposition ["through"])
@@ -162,7 +167,7 @@ scene0 = Scene {sceneDescription = scene0Description,
                                             addedObjects = ObjectChanges [],
                                             removedObjects = ObjectChanges [],
                                             setFlags = FlagChanges [],
-                                            removeFlags = FlagChanges [],
+                                            removedFlags = FlagChanges [],
                                             nextScene = Just 1}
                                ]}
 
