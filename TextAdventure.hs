@@ -64,7 +64,7 @@ printVerbs ((TokenVerb synonyms) : tokens) = putStrLn ("Synonyms for " ++ (head 
 
 printNouns :: [Token] -> IO ()
 printNouns [] = putStr "\n" >> hFlush stdout
-printNouns ((TokenNoun name) : tokens) = putStrLn (name ++ ".") >> printNouns tokens
+printNouns ((TokenNoun synonyms) : tokens) = putStrLn ("Synonyms for " ++ (head synonyms) ++ ": " ++ (show synonyms) ++ ".") >> printNouns tokens
 
 printPrepositions :: [Token] -> IO ()
 printPrepositions [] = putStr "\n" >> hFlush stdout

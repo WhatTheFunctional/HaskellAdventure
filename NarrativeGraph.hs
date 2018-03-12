@@ -33,11 +33,11 @@ data FlagChanges = FlagChanges [String] deriving (Show, Eq)
 
 data NarrativeCondition = InInventory String | --Inventory has an item
                           FlagSet String | --Flag is set
-                          TrueCondition | --Always true
-                          FalseCondition | --Always false
-                          NotCondition NarrativeCondition |
-                          OrCondition NarrativeCondition NarrativeCondition |
-                          AndCondition NarrativeCondition NarrativeCondition deriving (Show, Eq)
+                          CTrue | --Always true
+                          CFalse | --Always false
+                          CNot NarrativeCondition |
+                          COr NarrativeCondition NarrativeCondition |
+                          CAnd NarrativeCondition NarrativeCondition deriving (Show, Eq)
 
 data ConditionalDescription = ConditionalDescription {description :: String, --This description is always printed
                                                       conditionalDescriptions :: [(NarrativeCondition, String)]} deriving (Show, Eq)
@@ -69,13 +69,13 @@ makeNarrativeGraph scenes scenesEndScenes scene
                       graphDefaultScene = scene}
 
 evaluateCondition :: NarrativeCondition -> Inventory -> Flags -> Bool
-evaluateCondition TrueCondition _ _ = True
-evaluateCondition FalseCondition _ _ = False
+evaluateCondition CTrue _ _ = True
+evaluateCondition CFalse _ _ = False
 evaluateCondition (FlagSet flag) _ (Flags flags) = flag `elem` flags
 evaluateCondition (InInventory object) (Inventory inventory) _ = object `elem` inventory
-evaluateCondition (NotCondition condition) inventory flags = not (evaluateCondition condition inventory flags)
-evaluateCondition (AndCondition condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) && (evaluateCondition condition1 inventory flags)
-evaluateCondition (OrCondition condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) || (evaluateCondition condition1 inventory flags)
+evaluateCondition (CNot condition) inventory flags = not (evaluateCondition condition inventory flags)
+evaluateCondition (COr condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) || (evaluateCondition condition1 inventory flags)
+evaluateCondition (CAnd condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) && (evaluateCondition condition1 inventory flags)
 
 printSubDescriptions :: Inventory -> Flags -> ConditionalDescription -> IO ()
 printSubDescriptions inventory flags (ConditionalDescription {description = thisDescription,

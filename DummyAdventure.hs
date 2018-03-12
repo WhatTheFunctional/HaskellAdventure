@@ -47,35 +47,35 @@ allVerbs =
 allNouns :: [Token]
 allNouns =
     [
-        TokenNoun "north",
-        TokenNoun "south",
-        TokenNoun "west",
-        TokenNoun "east",
-        TokenNoun "staircase",
-        TokenNoun "stairs",
-        TokenNoun "up",
-        TokenNoun "down",
-        TokenNoun "inside",
-        TokenNoun "outside",
-        TokenNoun "door",
-        TokenNoun "green door",
-        TokenNoun "white door",
-        TokenNoun "window",
-        TokenNoun "chest",
-        TokenNoun "chair",
-        TokenNoun "table",
-        TokenNoun "pen",
-        TokenNoun "north entrance",
-        TokenNoun "exit",
-        TokenNoun "key",
-        TokenNoun "me",
-        TokenNoun "myself",
-        TokenNoun "my hand",
-        TokenNoun "fork",
-        TokenNoun "spoon",
-        TokenNoun "Steve",
-        TokenNoun "juice",
-        TokenNoun "cake"
+        TokenNoun ["north"],
+        TokenNoun ["south"],
+        TokenNoun ["west"],
+        TokenNoun ["east"],
+        TokenNoun ["staircase"],
+        TokenNoun ["stairs"],
+        TokenNoun ["up"],
+        TokenNoun ["down"],
+        TokenNoun ["inside"],
+        TokenNoun ["outside"],
+        TokenNoun ["door"],
+        TokenNoun ["green door"],
+        TokenNoun ["white door", "door"],
+        TokenNoun ["window"],
+        TokenNoun ["chest"],
+        TokenNoun ["chair"],
+        TokenNoun ["table"],
+        TokenNoun ["pen"],
+        TokenNoun ["north entrance"],
+        TokenNoun ["exit"],
+        TokenNoun ["key"],
+        TokenNoun ["me"],
+        TokenNoun ["myself"],
+        TokenNoun ["my hand"],
+        TokenNoun ["fork"],
+        TokenNoun ["spoon"],
+        TokenNoun ["Steve"],
+        TokenNoun ["juice"],
+        TokenNoun ["cake"]
     ]
 
 allPrepositions :: [Token]
@@ -129,20 +129,20 @@ scene0 =
         ConditionalDescription
         {
             description = "You're standing in a green room. The room has a <white door>.\n",
-            conditionalDescriptions = [(NotCondition (InInventory "key"), "There is a <key> on the floor.\n"),
-                                       (NotCondition (FlagSet "opened white door"), "The <white door> is closed.\n"),
+            conditionalDescriptions = [(CNot (InInventory "key"), "There is a <key> on the floor.\n"),
+                                       (CNot (FlagSet "opened white door"), "The <white door> is closed.\n"),
                                        (FlagSet "opened white door", "The <white door> is open.\n")]
         },
         interactions =
             [
                 Interaction
                 {
-                    sentences = [SimpleSentence (TokenVerb ["get", "take", "pick up"]) (TokenNoun "key")],
+                    sentences = [SimpleSentence (TokenVerb ["get", "take", "pick up"]) (TokenNoun ["key"])],
                     conditionalActions =
                         [
                             ConditionalAction
                             {
-                                condition = NotCondition (InInventory "key"), --The player does not have the key
+                                condition = CNot (InInventory "key"), --The player does not have the key
                                 conditionalDescription = ConditionalDescription {description = "You pick up the <key>.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges ["key"],
                                 removedObjects = ObjectChanges [],
@@ -152,7 +152,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = TrueCondition, --The player has the key
+                                condition = CTrue, --The player has the key
                                 conditionalDescription = ConditionalDescription {description = "You already have the <key>.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -164,7 +164,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimpleSentence (TokenVerb ["open"]) (TokenNoun "white door")],
+                    sentences = [SimpleSentence (TokenVerb ["open"]) (TokenNoun ["white door", "door"])],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -179,7 +179,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = (NotCondition (FlagSet "unlocked white door")) `AndCondition` (InInventory "key"), --The white door is locked and the player has a key
+                                condition = (CNot (FlagSet "unlocked white door")) `CAnd` (InInventory "key"), --The white door is locked and the player has a key
                                 conditionalDescription = ConditionalDescription {description = "You unlock the <white door> with your <key>.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -199,7 +199,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = (NotCondition (FlagSet "unlocked white door")) `AndCondition` (NotCondition (InInventory "key")), --The white door is locked player and the player doesn't have a key
+                                condition = (CNot (FlagSet "unlocked white door")) `CAnd` (CNot (InInventory "key")), --The white door is locked player and the player doesn't have a key
                                 conditionalDescription = ConditionalDescription {description = "The <white door> is locked.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -211,7 +211,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimpleSentence (TokenVerb ["close", "shut"]) (TokenNoun "white door")],
+                    sentences = [SimpleSentence (TokenVerb ["close", "shut"]) (TokenNoun ["white door", "door"])],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -226,7 +226,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = TrueCondition, --Otherwise
+                                condition = CTrue, --Otherwise
                                 conditionalDescription = ConditionalDescription {description = "The <white door> is already closed.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -238,7 +238,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimplePrepositionSentence (TokenVerb ["look"]) (TokenPreposition ["at"]) (TokenNoun "white door")],
+                    sentences = [SimplePrepositionSentence (TokenVerb ["look"]) (TokenPreposition ["at"]) (TokenNoun ["white door", "door"])],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -253,7 +253,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = TrueCondition, --Otherwise
+                                condition = CTrue, --Otherwise
                                 conditionalDescription = ConditionalDescription {description = "The <white door> is closed.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -265,12 +265,12 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimplePrepositionSentence (TokenVerb ["look"]) (TokenPreposition ["at"]) (TokenNoun "key")],
+                    sentences = [SimplePrepositionSentence (TokenVerb ["look"]) (TokenPreposition ["at"]) (TokenNoun ["key"])],
                     conditionalActions =
                         [
                             ConditionalAction
                             {
-                                condition = NotCondition (InInventory "key"), --Otherwise
+                                condition = CNot (InInventory "key"), --Otherwise
                                 conditionalDescription = ConditionalDescription {description = "There's a <key> on the floor.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -287,7 +287,7 @@ scene0 =
                         [
                             ConditionalAction
                             {
-                                condition = TrueCondition, --Otherwise
+                                condition = CTrue, --Otherwise
                                 conditionalDescription = ConditionalDescription {description = "You take a look around. You don't like the color scheme of this room.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -299,12 +299,12 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [ComplexSentence (TokenVerb ["use"]) (TokenNoun "key") (TokenPreposition ["on", "with"]) (TokenNoun "white door")],
+                    sentences = [ComplexSentence (TokenVerb ["use"]) (TokenNoun ["key"]) (TokenPreposition ["on", "with"]) (TokenNoun ["white door", "door"])],
                     conditionalActions =
                         [
                             ConditionalAction
                             {
-                                condition = NotCondition (InInventory "key"), --Player does not have a key
+                                condition = CNot (InInventory "key"), --Player does not have a key
                                 conditionalDescription = ConditionalDescription {description = "You don't have a <key> to use with the <white door>.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -314,7 +314,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = NotCondition (FlagSet "unlocked white door"), --The player has a key and the door is locked
+                                condition = CNot (FlagSet "unlocked white door"), --The player has a key and the door is locked
                                 conditionalDescription = ConditionalDescription {description = "You unlock the <white door> with your <key>.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -338,14 +338,14 @@ scene0 =
                 {
                     sentences =
                         [
-                            SimpleSentence (TokenVerb ["lock"]) (TokenNoun "white door"),
-                            ComplexSentence (TokenVerb ["lock"]) (TokenNoun "white door") (TokenPreposition ["with"]) (TokenNoun "key")
+                            SimpleSentence (TokenVerb ["lock"]) (TokenNoun ["white door", "door"]),
+                            ComplexSentence (TokenVerb ["lock"]) (TokenNoun ["white door", "door"]) (TokenPreposition ["with"]) (TokenNoun ["key"])
                         ],
                     conditionalActions =
                         [
                             ConditionalAction
                             {
-                                condition = (FlagSet "unlocked white door") `AndCondition` (InInventory "key"), --Player has a key and the white door is unlocked
+                                condition = (FlagSet "unlocked white door") `CAnd` (InInventory "key"), --Player has a key and the white door is unlocked
                                 conditionalDescription = ConditionalDescription {description = "You lock the <white door> with your <key>.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -355,7 +355,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = NotCondition (FlagSet "unlocked white door"), --The door is already locked
+                                condition = CNot (FlagSet "unlocked white door"), --The door is already locked
                                 conditionalDescription = ConditionalDescription {description = "The <white door> is already locked.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -365,7 +365,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = NotCondition (InInventory "key"), --Otherwise
+                                condition = CNot (InInventory "key"), --Otherwise
                                 conditionalDescription = ConditionalDescription {description = "You don't have a <key> to lock the <white door> with.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -379,14 +379,14 @@ scene0 =
                 {
                     sentences =
                         [
-                            SimpleSentence (TokenVerb ["unlock"]) (TokenNoun "white door"),
-                            ComplexSentence (TokenVerb ["unlock"]) (TokenNoun "white door") (TokenPreposition ["with"]) (TokenNoun "key")
+                            SimpleSentence (TokenVerb ["unlock"]) (TokenNoun ["white door", "door"]),
+                            ComplexSentence (TokenVerb ["unlock"]) (TokenNoun ["white door", "door"]) (TokenPreposition ["with"]) (TokenNoun ["key"])
                         ],
                     conditionalActions =
                         [
                             ConditionalAction
                             {
-                                condition = (NotCondition (FlagSet "unlocked white door")) `AndCondition` (InInventory "key"), --Player has a key and the white door is locked
+                                condition = (CNot (FlagSet "unlocked white door")) `CAnd` (InInventory "key"), --Player has a key and the white door is locked
                                 conditionalDescription = ConditionalDescription {description = "You unlock the <white door> with your <key>.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -406,7 +406,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = NotCondition (InInventory "key"), --Otherwise
+                                condition = CNot (InInventory "key"), --Otherwise
                                 conditionalDescription = ConditionalDescription {description = "You don't have a <key> to unlock the <white door> with.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -418,12 +418,12 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [ComplexSentence (TokenVerb ["open"]) (TokenNoun "white door") (TokenPreposition ["with"]) (TokenNoun "key")],
+                    sentences = [ComplexSentence (TokenVerb ["open"]) (TokenNoun ["white door", "door"]) (TokenPreposition ["with"]) (TokenNoun ["key"])],
                     conditionalActions =
                         [
                             ConditionalAction
                             {
-                                condition = (NotCondition (FlagSet "unlocked white door")) `AndCondition` (InInventory "key"), --Player has a key and the white door is locked
+                                condition = (CNot (FlagSet "unlocked white door")) `CAnd` (InInventory "key"), --Player has a key and the white door is locked
                                 conditionalDescription = ConditionalDescription {description = "You unlock the <white door> with the <key> and open it.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -433,7 +433,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = (NotCondition (FlagSet "opened white door")) `AndCondition` (FlagSet "unlocked white door"), --Player has a key and the white door is locked
+                                condition = (CNot (FlagSet "opened white door")) `CAnd` (FlagSet "unlocked white door"), --Player has a key and the white door is locked
                                 conditionalDescription = ConditionalDescription {description = "You open the <white door>.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -453,7 +453,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = NotCondition (InInventory "key"), --The player does not have the key
+                                condition = CNot (InInventory "key"), --The player does not have the key
                                 conditionalDescription = ConditionalDescription {description = "You don't have a <key> to open the <white door> with.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -465,7 +465,8 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimplePrepositionSentence (TokenVerb ["move", "walk", "go"]) (TokenPreposition ["through"]) (TokenNoun "white door")],
+                    sentences = [SimplePrepositionSentence (TokenVerb ["move", "walk", "go"]) (TokenPreposition ["through"]) (TokenNoun ["white door", "door"]),
+                                 SimplePrepositionSentence (TokenVerb ["leave", "exit"]) (TokenPreposition ["through"]) (TokenNoun ["white door", "door"])],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -480,7 +481,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = TrueCondition, --Otherwise
+                                condition = CTrue, --Otherwise
                                 conditionalDescription = ConditionalDescription {description = "The <white door> is closed.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -492,7 +493,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimplePrepositionSentence (TokenVerb ["run", "jog", "sprint", "dash"]) (TokenPreposition ["through"]) (TokenNoun "white door")],
+                    sentences = [SimplePrepositionSentence (TokenVerb ["run", "jog", "sprint", "dash"]) (TokenPreposition ["through"]) (TokenNoun ["white door", "door"])],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -507,7 +508,7 @@ scene0 =
                             },
                             ConditionalAction
                             {
-                                condition = TrueCondition, --Otherwise
+                                condition = CTrue, --Otherwise
                                 conditionalDescription = ConditionalDescription {description = "The <white door> is closed.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -552,7 +553,7 @@ defaultScene =
                         [
                             ConditionalAction
                             {
-                                condition = TrueCondition, --Always do this
+                                condition = CTrue, --Always do this
                                 conditionalDescription = ConditionalDescription {description = "You jump up and down in place.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -569,7 +570,7 @@ defaultScene =
                         [
                             ConditionalAction
                             {
-                                condition = TrueCondition, --Always do this
+                                condition = CTrue, --Always do this
                                 conditionalDescription = ConditionalDescription {description = "You walk around a bit.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -586,7 +587,7 @@ defaultScene =
                         [
                             ConditionalAction
                             {
-                                condition = TrueCondition, --Always do this
+                                condition = CTrue, --Always do this
                                 conditionalDescription = ConditionalDescription {description = "You jog in place.", conditionalDescriptions = []},
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
@@ -598,7 +599,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [SimplePrepositionSentence (TokenVerb ["look"]) (TokenPreposition ["at"]) (TokenNoun "key")],
+                    sentences = [SimplePrepositionSentence (TokenVerb ["look"]) (TokenPreposition ["at"]) (TokenNoun ["key"])],
                     conditionalActions =
                         [
                             ConditionalAction

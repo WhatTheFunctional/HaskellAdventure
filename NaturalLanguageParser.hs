@@ -21,7 +21,7 @@ verbsInTokenList (_ : ts) = verbsInTokenList ts
 
 nounsInTokenList :: [Token] -> [Token]
 nounsInTokenList [] = []
-nounsInTokenList ((TokenNoun name) : ts) = (TokenNoun name) : nounsInTokenList ts
+nounsInTokenList ((TokenNoun synonyms) : ts) = (TokenNoun synonyms) : nounsInTokenList ts
 nounsInTokenList (_ : ts) = nounsInTokenList ts
 
 prepositionsInTokenList :: [Token] -> [Token]

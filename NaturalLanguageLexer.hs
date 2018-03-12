@@ -10,7 +10,7 @@ module NaturalLanguageLexer (Token(..),
 import qualified Data.Char
 
 data Token = TokenVerb [String] |
-             TokenNoun String |
+             TokenNoun [String] |
              TokenPreposition [String] deriving (Show, Eq)
 
 --Stores the result when a string matches one or more tokens
@@ -31,9 +31,9 @@ tokenize word token@(TokenVerb synonyms)
     | lowerCaseWord `elem` synonyms = Just (TokenMatch word [token])
     | otherwise = Nothing
         where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
-tokenize word token@(TokenNoun name)
-    | word == name = Just (TokenMatch word [token])
-    | lowerCaseWord == name = Just (TokenMatch word [token])
+tokenize word token@(TokenNoun synonyms)
+    | word `elem` synonyms = Just (TokenMatch word [token])
+    | lowerCaseWord `elem` synonyms = Just (TokenMatch word [token])
     | otherwise = Nothing
         where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
 tokenize word token@(TokenPreposition synonyms)
