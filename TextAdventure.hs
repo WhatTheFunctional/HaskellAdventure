@@ -95,9 +95,11 @@ parseInput inventory flags line
               sentences = parseSentence sentenceTokenMatches
 
 doAdventureLoop :: NarrativeGraph -> SceneIndex -> Inventory -> Flags -> Maybe [Sentence] -> IO (Maybe (NarrativeGraph, SceneIndex, Inventory, Flags))
-doAdventureLoop _ _ _ _ Nothing = return Nothing
-doAdventureLoop narrativeGraph sceneIndex inventory flags (Just []) = adventure (Just (narrativeGraph, sceneIndex, inventory, flags))
-doAdventureLoop narrativeGraph sceneIndex inventory flags (Just sentences) = performInteraction narrativeGraph sceneIndex inventory flags sentences >>= adventure
+doAdventureLoop _ _ _ _ Nothing = return Nothing -- End state of the game
+doAdventureLoop narrativeGraph sceneIndex inventory flags (Just []) = putStrLn "I'm sorry, I don't understand what you said.\n" >>
+                                                                      adventure (Just (narrativeGraph, sceneIndex, inventory, flags)) --Failed to parse any sentences
+doAdventureLoop narrativeGraph sceneIndex inventory flags (Just sentences) = performInteraction narrativeGraph sceneIndex inventory flags sentences >>=
+                                                                             adventure --Perform the adventure loop
 
 adventure :: Maybe (NarrativeGraph, SceneIndex, Inventory, Flags) -> IO (Maybe (NarrativeGraph, SceneIndex, Inventory, Flags))
 adventure Nothing = putStrLn "Game over." >> hFlush stdout >> return Nothing
