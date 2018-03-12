@@ -129,14 +129,28 @@ scene0 = Scene {sceneDescription = ConditionalDescription {description = "You're
                                                                                       nextScene = Nothing}]},
                                 Interaction {sentences = [SimpleSentence (TokenVerb ["open"])
                                                                          (TokenNoun "white door")],
-                                             conditionalActions = [ConditionalAction {condition = (NotCondition (FlagSet "unlocked white door")) `AndCondition` (InInventory "key"), --The white door is locked
+                                             conditionalActions = [ConditionalAction {condition = FlagSet "opened white door", --The white door is locked
+                                                                                      conditionalDescription = ConditionalDescription {description = "The [white door] is already opened.", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges [],
+                                                                                      removedFlags = FlagChanges [],
+                                                                                      nextScene = Nothing},
+                                                                   ConditionalAction {condition = (NotCondition (FlagSet "unlocked white door")) `AndCondition` (InInventory "key"), --The white door is locked and the player has a key
                                                                                       conditionalDescription = ConditionalDescription {description = "You unlock the [white door] with your [key].", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges ["unlocked white door", "opened white door"],
+                                                                                      removedFlags = FlagChanges [],
+                                                                                      nextScene = Nothing},
+                                                                   ConditionalAction {condition = FlagSet "unlocked white door", --The white door is unlocked
+                                                                                      conditionalDescription = ConditionalDescription {description = "You open the [white door].", conditionalDescriptions = []},
                                                                                       addedObjects = ObjectChanges [],
                                                                                       removedObjects = ObjectChanges [],
                                                                                       setFlags = FlagChanges ["opened white door"],
                                                                                       removedFlags = FlagChanges [],
                                                                                       nextScene = Nothing},
-                                                                   ConditionalAction {condition = TrueCondition, --The white door is locked
+                                                                   ConditionalAction {condition = (NotCondition (FlagSet "unlocked white door")) `AndCondition` (NotCondition (InInventory "key")), --The white door is locked player and the player doesn't have a key
                                                                                       conditionalDescription = ConditionalDescription {description = "The [white door] is locked.", conditionalDescriptions = []},
                                                                                       addedObjects = ObjectChanges [],
                                                                                       removedObjects = ObjectChanges [],
@@ -201,22 +215,79 @@ scene0 = Scene {sceneDescription = ConditionalDescription {description = "You're
                                                                                       setFlags = FlagChanges [],
                                                                                       removedFlags = FlagChanges [],
                                                                                       nextScene = Nothing}]},
-                                Interaction {sentences = [ComplexSentence (TokenVerb ["unlock"])
-                                                                          (TokenNoun "white door")
-                                                                          (TokenPreposition ["with"])
-                                                                          (TokenNoun "key"),
-                                                          ComplexSentence (TokenVerb ["use"])
+                                Interaction {sentences = [ComplexSentence (TokenVerb ["use"])
                                                                           (TokenNoun "key")
                                                                           (TokenPreposition ["on", "with"])
                                                                           (TokenNoun "white door")],
-                                             conditionalActions = [ConditionalAction {condition = InInventory "key", --Player has a key
-                                                                                      conditionalDescription = ConditionalDescription {description = "You unlock the [white door] with the [key].", conditionalDescriptions = []},
+                                             conditionalActions = [ConditionalAction {condition = NotCondition (InInventory "key"), --Player does not have a key
+                                                                                      conditionalDescription = ConditionalDescription {description = "You don't have a [key] to use with the [white door].", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges [],
+                                                                                      removedFlags = FlagChanges ["unlocked white door"],
+                                                                                      nextScene = Nothing},
+                                                                   ConditionalAction {condition = NotCondition (FlagSet "unlocked white door"), --The player has a key and the door is locked
+                                                                                      conditionalDescription = ConditionalDescription {description = "You unlock the [white door] with your [key].", conditionalDescriptions = []},
                                                                                       addedObjects = ObjectChanges [],
                                                                                       removedObjects = ObjectChanges [],
                                                                                       setFlags = FlagChanges ["unlocked white door"],
                                                                                       removedFlags = FlagChanges [],
                                                                                       nextScene = Nothing},
-                                                                   ConditionalAction {condition = TrueCondition, --Otherwise
+                                                                   ConditionalAction {condition = (FlagSet "unlocked white door"), --The player has a key and the door is unlocked
+                                                                                      conditionalDescription = ConditionalDescription {description = "You lock the [white door] with your [key].", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges [],
+                                                                                      removedFlags = FlagChanges ["unlocked white door"],
+                                                                                      nextScene = Nothing}]},
+                                Interaction {sentences = [SimpleSentence (TokenVerb ["lock"])
+                                                                         (TokenNoun "white door"),
+                                                          ComplexSentence (TokenVerb ["lock"])
+                                                                          (TokenNoun "white door")
+                                                                          (TokenPreposition ["with"])
+                                                                          (TokenNoun "key")],
+                                             conditionalActions = [ConditionalAction {condition = (FlagSet "unlocked white door") `AndCondition` (InInventory "key"), --Player has a key and the white door is unlocked
+                                                                                      conditionalDescription = ConditionalDescription {description = "You lock the [white door] with your [key].", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges [],
+                                                                                      removedFlags = FlagChanges ["unlocked white door"],
+                                                                                      nextScene = Nothing},
+                                                                   ConditionalAction {condition = NotCondition (FlagSet "unlocked white door"), --The door is already locked
+                                                                                      conditionalDescription = ConditionalDescription {description = "The [white door] is already locked.", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges [],
+                                                                                      removedFlags = FlagChanges [],
+                                                                                      nextScene = Nothing},
+                                                                   ConditionalAction {condition = NotCondition (InInventory "key"), --Otherwise
+                                                                                      conditionalDescription = ConditionalDescription {description = "You don't have a [key] to lock the [white door] with.", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges [],
+                                                                                      removedFlags = FlagChanges [],
+                                                                                      nextScene = Nothing}]},
+                                Interaction {sentences = [SimpleSentence (TokenVerb ["unlock"])
+                                                                         (TokenNoun "white door"),
+                                                          ComplexSentence (TokenVerb ["unlock"])
+                                                                          (TokenNoun "white door")
+                                                                          (TokenPreposition ["with"])
+                                                                          (TokenNoun "key")],
+                                             conditionalActions = [ConditionalAction {condition = (NotCondition (FlagSet "unlocked white door")) `AndCondition` (InInventory "key"), --Player has a key and the white door is locked
+                                                                                      conditionalDescription = ConditionalDescription {description = "You unlock the [white door] with your [key].", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges ["unlocked white door"],
+                                                                                      removedFlags = FlagChanges [],
+                                                                                      nextScene = Nothing},
+                                                                   ConditionalAction {condition = (FlagSet "unlocked white door"), --The door is already unlocked
+                                                                                      conditionalDescription = ConditionalDescription {description = "The [white door] is already unlocked.", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges ["unlocked white door"],
+                                                                                      removedFlags = FlagChanges [],
+                                                                                      nextScene = Nothing},
+                                                                   ConditionalAction {condition = NotCondition (InInventory "key"), --Otherwise
                                                                                       conditionalDescription = ConditionalDescription {description = "You don't have a [key] to unlock the [white door] with.", conditionalDescriptions = []},
                                                                                       addedObjects = ObjectChanges [],
                                                                                       removedObjects = ObjectChanges [],
@@ -227,15 +298,29 @@ scene0 = Scene {sceneDescription = ConditionalDescription {description = "You're
                                                                           (TokenNoun "white door")
                                                                           (TokenPreposition ["with"])
                                                                           (TokenNoun "key")],
-                                             conditionalActions = [ConditionalAction {condition = InInventory "key", --Player has a key
+                                             conditionalActions = [ConditionalAction {condition = (NotCondition (FlagSet "unlocked white door")) `AndCondition` (InInventory "key"), --Player has a key and the white door is locked
                                                                                       conditionalDescription = ConditionalDescription {description = "You unlock the [white door] with the [key] and open it.", conditionalDescriptions = []},
                                                                                       addedObjects = ObjectChanges [],
                                                                                       removedObjects = ObjectChanges [],
                                                                                       setFlags = FlagChanges ["unlocked white door", "opened white door"],
                                                                                       removedFlags = FlagChanges [],
                                                                                       nextScene = Nothing},
-                                                                   ConditionalAction {condition = TrueCondition, --Otherwise
-                                                                                      conditionalDescription = ConditionalDescription {description = "You don't have a [key] to unlock the [white door] with.", conditionalDescriptions = []},
+                                                                   ConditionalAction {condition = (NotCondition (FlagSet "opened white door")) `AndCondition` (FlagSet "unlocked white door"), --Player has a key and the white door is locked
+                                                                                      conditionalDescription = ConditionalDescription {description = "You open the [white door].", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges ["opened white door"],
+                                                                                      removedFlags = FlagChanges [],
+                                                                                      nextScene = Nothing},
+                                                                   ConditionalAction {condition = FlagSet "opened white door", --The white door is already opened
+                                                                                      conditionalDescription = ConditionalDescription {description = "The [white door] is already open.", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges [],
+                                                                                      removedFlags = FlagChanges [],
+                                                                                      nextScene = Nothing},
+                                                                   ConditionalAction {condition = NotCondition (InInventory "key"), --The player does not have the key
+                                                                                      conditionalDescription = ConditionalDescription {description = "You don't have a [key] to open the [white door] with.", conditionalDescriptions = []},
                                                                                       addedObjects = ObjectChanges [],
                                                                                       removedObjects = ObjectChanges [],
                                                                                       setFlags = FlagChanges [],
@@ -248,9 +333,9 @@ scene0 = Scene {sceneDescription = ConditionalDescription {description = "You're
                                                                                       conditionalDescription = ConditionalDescription {description = "You walk through the [white door]. Congratulations, you escaped the green room!", conditionalDescriptions = []},
                                                                                       addedObjects = ObjectChanges [],
                                                                                       removedObjects = ObjectChanges [],
-                                                                                      setFlags = FlagChanges ["unlocked white door", "opened white door"],
+                                                                                      setFlags = FlagChanges [],
                                                                                       removedFlags = FlagChanges [],
-                                                                                      nextScene = Nothing},
+                                                                                      nextScene = Just 1},
                                                                    ConditionalAction {condition = TrueCondition, --Otherwise
                                                                                       conditionalDescription = ConditionalDescription {description = "The [white door] is closed.", conditionalDescriptions = []},
                                                                                       addedObjects = ObjectChanges [],

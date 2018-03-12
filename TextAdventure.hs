@@ -76,6 +76,13 @@ printFlags :: Flags -> IO ()
 printFlags (Flags []) = putStr "\n" >> hFlush stdout
 printFlags (Flags (flag : remainingFlags)) = putStrLn flag >> printFlags (Flags remainingFlags)
 
+splitInput :: [Char] -> String -> [String] -> [String]
+splitInput [] [] allWords = [] --No characters remaining and no current word
+splitInput [] currentWord allWords = (reverse currentWord) : allWords --No characters remaining and a current word exists
+splitInput (' ' : cs) [] allWords = splitInput cs [] allWords --Whitespace detected and no current word exists
+splitInput (' ' : cs) currentWord allWords = (reverse currentWord) : splitInput cs [] allWords --Whitespace detected and a current word exists
+splitInput (c : cs) currentWord allWords = splitInput cs (c : currentWord) allWords --A non-whitespace character was detected
+
 parseInput :: Inventory -> Flags -> String -> IO (Maybe [Sentence])
 parseInput inventory flags line
     | map Data.Char.toLower line == "help" = printHelp >> return (Just [])
@@ -87,17 +94,17 @@ parseInput inventory flags line
     | map Data.Char.toLower line == "flags" = printFlags flags >> return (Just [])
     | map Data.Char.toLower line == "exit" = putStrLn "Thanks for playing!" >> hFlush stdout >> return Nothing
     | map Data.Char.toLower line == "quit" = putStrLn "Thanks for playing!" >> hFlush stdout >> return Nothing
+    | sentences == [] = putStrLn "I'm sorry, I don't understand what you said.\n" >> return (Just sentences)
     | otherwise = --printWordTokens sentenceTokenMatches >>
                   --printSentences sentences >>
                   return (Just sentences)
-        where inputWords = (map Data.Text.unpack (Data.Text.splitOn (Data.Text.pack " ") (Data.Text.pack line)))
+        where inputWords = splitInput line [] []
               sentenceTokenMatches = lexInput allTokens inputWords
               sentences = parseSentence sentenceTokenMatches
 
 doAdventureLoop :: NarrativeGraph -> SceneIndex -> Inventory -> Flags -> Maybe [Sentence] -> IO (Maybe (NarrativeGraph, SceneIndex, Inventory, Flags))
 doAdventureLoop _ _ _ _ Nothing = return Nothing -- End state of the game
-doAdventureLoop narrativeGraph sceneIndex inventory flags (Just []) = putStrLn "I'm sorry, I don't understand what you said.\n" >>
-                                                                      adventure (Just (narrativeGraph, sceneIndex, inventory, flags)) --Failed to parse any sentences
+doAdventureLoop narrativeGraph sceneIndex inventory flags (Just []) = adventure (Just (narrativeGraph, sceneIndex, inventory, flags)) --Failed to parse any sentences
 doAdventureLoop narrativeGraph sceneIndex inventory flags (Just sentences) = performInteraction narrativeGraph sceneIndex inventory flags sentences >>=
                                                                              adventure --Perform the adventure loop
 
