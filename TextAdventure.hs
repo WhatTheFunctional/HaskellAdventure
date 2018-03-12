@@ -41,11 +41,11 @@ printHelp :: IO ()
 printHelp = putStrLn "The following commands are available:" >>
             putStrLn "Help - Print help text" >>
             putStrLn "Grammar - Print available grammar" >>
-            putStrLn "Nouns - Print all available nouns" >>
+            putStrLn "Nouns - Print all available nouns. Warning, this contains spoilers!" >>
             putStrLn "Verbs - Print all available verbs" >>
             putStrLn "Prepositions - Print all available prepositions" >>
             putStrLn "Inventory - Print all current inventory items" >>
-            putStrLn "Flags - Print all current flags" >>
+            putStrLn "Flags - Print all current flags. Warning, this contains spoilers!" >>
             putStrLn "Quit - Exit the game" >>
             putStr   "\n" >>
             hFlush stdout
