@@ -60,6 +60,7 @@ allNouns =
         TokenNoun ["door"],
         TokenNoun ["green door"],
         TokenNoun ["white door", "door"],
+        TokenNoun ["green room", "room"],
         TokenNoun ["window"],
         TokenNoun ["chest"],
         TokenNoun ["chair"],
@@ -363,7 +364,10 @@ scene0 =
                 Interaction
                 {
                     sentences = [SimplePrepositionSentence (TokenVerb ["move", "walk", "go"]) (TokenPreposition ["through"]) (TokenNoun ["white door", "door"]),
-                                 SimplePrepositionSentence (TokenVerb ["leave", "exit"]) (TokenPreposition ["through"]) (TokenNoun ["white door", "door"])],
+                                 SimplePrepositionSentence (TokenVerb ["leave", "exit"]) (TokenPreposition ["through"]) (TokenNoun ["white door", "door"]),
+                                 SimpleSentence (TokenVerb ["move", "walk", "go"]) (TokenNoun ["outside"]),
+                                 Phrase (TokenVerb ["leave", "exit"]),
+                                 SimpleSentence (TokenVerb ["leave", "exit"]) (TokenNoun ["green room", "room"])],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -375,7 +379,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is closed.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You can't leave. The <white door> is closed.")],
                                 stateChanges = []
                             }
                         ]
@@ -394,7 +398,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is closed.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You can't leave. The <white door> is closed.")],
                                 stateChanges = []
                             }
                         ]

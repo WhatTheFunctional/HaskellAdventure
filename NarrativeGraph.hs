@@ -79,7 +79,7 @@ evaluateCondition (CAnd condition0 condition1) inventory flags = (evaluateCondit
 printConditionalDescription :: [Char] -> Int -> Inventory -> Flags -> ConditionalDescription -> [String] -> IO ()
 printConditionalDescription charsToSplit columnWidth
                             inventory flags (ConditionalDescription []) linesToPrint
-    = reflowPutStrs charsToSplit columnWidth (reverse linesToPrint) >> return () --No more sub-descriptions to print
+    = reflowPutStrs charsToSplit columnWidth (reverse linesToPrint) >> putStr "\n" >> return () --No more sub-descriptions to print
 printConditionalDescription charsToSplit columnWidth
                             inventory flags (ConditionalDescription ((condition, subDescription) : remainingDescriptions)) linesToPrint
     | evaluateCondition condition inventory flags

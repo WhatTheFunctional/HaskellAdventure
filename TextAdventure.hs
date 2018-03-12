@@ -42,6 +42,7 @@ printIntro = reflowPutStrs allCharsToSplit
                            allColumnWidth
                            ["Haskell Text Adventure Engine v1.0\n",
                             "Copyright Laurence Emms 2018\n"] >>
+             putStr "\n" >>
              hFlush stdout
 
 --Print help text
@@ -49,15 +50,16 @@ printHelp :: IO ()
 printHelp = reflowPutStrs allCharsToSplit
                           allColumnWidth
                           ["The following commands are available:\n",
-                           "Help - Print help text\n",
-                           "Grammar - Print available grammar\n",
+                           "Help - Print help text.\n",
+                           "Grammar - Print available grammar.\n",
                            "Nouns - Print all available nouns. Warning, this contains spoilers!\n",
-                           "Verbs - Print all available verbs\n",
-                           "Prepositions - Print all available prepositions\n",
-                           "Inventory - Print all current inventory items\n",
+                           "Verbs - Print all available verbs.\n",
+                           "Prepositions - Print all available prepositions.\n",
+                           "Inventory - Print all current inventory items.\n",
                            "Flags - Print all current flags. Warning, this contains spoilers!\n",
-                           "Quit - Exit the game\n",
+                           "Quit - Exit the game.\n",
                            "--------------------\n"] >>
+            putStr "\n" >>
             hFlush stdout
 
 printGrammar :: IO ()
@@ -115,11 +117,11 @@ parseInput inventory flags line
     | map Data.Char.toLower line == "flags" = putStrLn "All currently set flags:" >> printFlags flags >> return (Just [])
     | map Data.Char.toLower line == "exit" = putStrLn "Thanks for playing!" >> hFlush stdout >> return Nothing
     | map Data.Char.toLower line == "quit" = putStrLn "Thanks for playing!" >> hFlush stdout >> return Nothing
-    | sentences == [] = putStrLn "I'm sorry, I don't understand what you said.\n" >> return (Just sentences)
+    | sentences == [] = reflowPutStr allCharsToSplit allColumnWidth "I'm sorry, I don't understand what you said." >> putStr "\n" >> return (Just sentences)
     | otherwise = --printWordTokens sentenceTokenMatches >>
                   --printSentences sentences >>
                   return (Just sentences)
-        where inputWords = splitInput allCharsToSplit line [] []
+        where inputWords = splitString allCharsToSplit line [] []
               sentenceTokenMatches = lexInput allTokens inputWords
               sentences = parseSentence sentenceTokenMatches
 
@@ -130,14 +132,15 @@ doAdventureLoop narrativeGraph sceneIndex inventory flags (Just sentences) = per
                                                                              adventure --Perform the adventure loop
 
 adventure :: Maybe (NarrativeGraph, SceneIndex, Inventory, Flags) -> IO (Maybe (NarrativeGraph, SceneIndex, Inventory, Flags))
-adventure Nothing = putStrLn "Game over. Thanks for playing!" >> hFlush stdout >> return Nothing
+adventure Nothing = reflowPutStr allCharsToSplit allColumnWidth "Game over. Thanks for playing!" >> hFlush stdout >> return Nothing
 adventure (Just (narrativeGraph, sceneIndex, inventory, flags)) = printSceneDescription allCharsToSplit allColumnWidth narrativeGraph sceneIndex inventory flags >>
                                                                   putStr "\n" >>
                                                                   getLine >>=
                                                                   parseInput inventory flags >>=
                                                                   doAdventureLoop narrativeGraph sceneIndex inventory flags
 main = printIntro >>
-       putStrLn gameIntro >>
+       reflowPutStr allCharsToSplit allColumnWidth gameIntro >>
+       putStr "\n" >>
        printHelp >>
        hFlush stdout >>
        adventure (Just (makeNarrativeGraph adventureScenes endScenes defaultScene, 0, startInventory, startFlags)) >>
