@@ -126,10 +126,10 @@ scene0 =
     Scene
     {
         sceneDescription =
-            ConditionalDescription [(CTrue, "You're standing in a green room. The room has a <white door>.\n"),
-                                    (CNot (InInventory "key"), "There is a <key> on the floor.\n"),
-                                    (CNot (FlagSet "opened white door"), "The <white door> is closed.\n"),
-                                    (FlagSet "opened white door", "The <white door> is open.\n")],
+            ConditionalDescription [(CTrue, "You're standing in a green room. The room has a <white door>."),
+                                    (CNot (InInventory "key"), "There is a <key> on the floor."),
+                                    (CNot (FlagSet "opened white door"), "The <white door> is closed."),
+                                    (FlagSet "opened white door", "The <white door> is open.")],
         interactions =
             [
                 Interaction

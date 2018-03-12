@@ -22,6 +22,7 @@ import System.IO
 import Data.Array
 import qualified Data.List
 
+import TextReflow
 import NaturalLanguageLexer
 import NaturalLanguageParser
 
@@ -75,17 +76,21 @@ evaluateCondition (CNot condition) inventory flags = not (evaluateCondition cond
 evaluateCondition (COr condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) || (evaluateCondition condition1 inventory flags)
 evaluateCondition (CAnd condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) && (evaluateCondition condition1 inventory flags)
 
-printConditionalDescription :: Inventory -> Flags -> ConditionalDescription -> IO ()
-printConditionalDescription inventory flags (ConditionalDescription [])
-    = putStr "\n" >> return () --No more sub-descriptions to print
-printConditionalDescription inventory flags (ConditionalDescription ((condition, subDescription) : remainingDescriptions))
-    | evaluateCondition condition inventory flags = putStr subDescription >>
-                                                    printConditionalDescription inventory flags (ConditionalDescription remainingDescriptions)
-    | otherwise = printConditionalDescription inventory flags (ConditionalDescription remainingDescriptions)
+printConditionalDescription :: [Char] -> Int -> Inventory -> Flags -> ConditionalDescription -> [String] -> IO ()
+printConditionalDescription charsToSplit columnWidth
+                            inventory flags (ConditionalDescription []) linesToPrint
+    = reflowPutStrs charsToSplit columnWidth (reverse linesToPrint) >> return () --No more sub-descriptions to print
+printConditionalDescription charsToSplit columnWidth
+                            inventory flags (ConditionalDescription ((condition, subDescription) : remainingDescriptions)) linesToPrint
+    | evaluateCondition condition inventory flags
+        = printConditionalDescription charsToSplit columnWidth
+                                      inventory flags (ConditionalDescription remainingDescriptions) (subDescription : linesToPrint) --Condition is true, add sub-description to print
+    | otherwise
+        = printConditionalDescription charsToSplit columnWidth inventory flags (ConditionalDescription remainingDescriptions) linesToPrint
 
-printSceneDescription :: NarrativeGraph -> SceneIndex -> Inventory -> Flags -> IO ()
-printSceneDescription (NarrativeGraph {nodes = graphNodes, endScenes = graphEndScenes}) sceneIndex inventory flags
-    = printConditionalDescription inventory flags thisSceneDescription >> hFlush stdout
+printSceneDescription :: [Char] -> Int -> NarrativeGraph -> SceneIndex -> Inventory -> Flags -> IO ()
+printSceneDescription charsToSplit columnWidth (NarrativeGraph {nodes = graphNodes, endScenes = graphEndScenes}) sceneIndex inventory flags
+    = printConditionalDescription charsToSplit columnWidth inventory flags thisSceneDescription [] >> hFlush stdout
         where Scene {sceneDescription = thisSceneDescription,
                      interactions = _} = graphNodes ! sceneIndex
 
@@ -119,10 +124,10 @@ sceneTransition (Just (SceneChange nextScene)) endScenes  _ inventory flags
 
 --Update game state takes an interaction description, fail string, next scene index, end scene index, current scene index, inventory, and flags
 --Update game state Scene transition evaluates to the next state of the game
-updateGameState :: [SceneIndex] -> SceneIndex -> Inventory -> Flags -> ConditionalAction -> IO (Maybe (SceneIndex, Inventory, Flags))
-updateGameState endScenes currentScene inventory flags conditionalAction@(ConditionalAction {conditionalDescription = thisConditionalDescription,
+updateGameState :: [Char] -> Int -> [SceneIndex] -> SceneIndex -> Inventory -> Flags -> ConditionalAction -> IO (Maybe (SceneIndex, Inventory, Flags))
+updateGameState charsToSplit columnWidth endScenes currentScene inventory flags conditionalAction@(ConditionalAction {conditionalDescription = thisConditionalDescription,
                                                                                              stateChanges = thisStateChanges})
-    = printConditionalDescription inventory flags thisConditionalDescription >>
+    = printConditionalDescription charsToSplit columnWidth inventory flags thisConditionalDescription [] >>
       sceneTransition (Data.List.find (\x -> case x of
                                              (SceneChange _) -> True
                                              otherwise -> False) thisStateChanges)
@@ -133,47 +138,57 @@ updateGameState endScenes currentScene inventory flags conditionalAction@(Condit
                       conditionalAction --This conditional action passed all of the preconditions, check whether we need to transition to a new scene
 
 --Perform the interaction and return a tuple of (new scene index, new inventory, new flags)
-performConditionalActions :: SceneIndex -> [SceneIndex] -> Inventory -> Flags -> Maybe Interaction -> Maybe Interaction -> IO (Maybe (SceneIndex, Inventory, Flags))
-performConditionalActions currentScene _ inventory flags Nothing Nothing
+performConditionalActions :: [Char] -> Int -> SceneIndex -> [SceneIndex] -> Inventory -> Flags -> Maybe Interaction -> Maybe Interaction -> IO (Maybe (SceneIndex, Inventory, Flags))
+performConditionalActions _ _ currentScene _ inventory flags Nothing Nothing
     = putStrLn "That does nothing.\n" >>
       hFlush stdout >>
       return (Just (currentScene, inventory, flags)) --If there are no valid interactions actions but the sentence was valid, just return to the current state
-performConditionalActions currentScene
+performConditionalActions charsToSplit
+                          columnWidth
+                          currentScene
                           endScenes
                           inventory
                           flags
-                          (Just (Interaction {sentences = thisSentences,
+                          (Just (Interaction {sentences = _,
                                               conditionalActions = []}))
                           defaultSceneInteractions --There are no remaining conditional actions for the current scene
-    = performConditionalActions currentScene endScenes inventory flags Nothing defaultSceneInteractions --All current scene conditional actions were exhausted, try default scene interactions
-performConditionalActions currentScene
+    = performConditionalActions charsToSplit columnWidth currentScene endScenes inventory flags Nothing defaultSceneInteractions --All current scene conditional actions were exhausted, try default scene interactions
+performConditionalActions charsToSplit
+                          columnWidth
+                          currentScene
                           endScenes
                           inventory
                           flags
                           (Just (Interaction {sentences = thisSentences,
                                               conditionalActions = (conditionalAction@(ConditionalAction {condition = thisCondition}) : remainingConditionalActions)}))
                           defaultSceneInteractions -- Ignore default scene interactions if there are still current scene interactions
-    | evaluateCondition thisCondition inventory flags = updateGameState endScenes currentScene inventory flags conditionalAction --The condition for the action passed, update the game state
-    | otherwise = performConditionalActions currentScene endScenes inventory flags (Just (Interaction {sentences = thisSentences,
-                                                                                                       conditionalActions = remainingConditionalActions})) defaultSceneInteractions --The condition for the action failed, attempt other actions
-performConditionalActions currentScene
+    | evaluateCondition thisCondition inventory flags = updateGameState charsToSplit columnWidth endScenes currentScene inventory flags conditionalAction --The condition for the action passed, update the game state
+    | otherwise = performConditionalActions charsToSplit columnWidth currentScene endScenes inventory flags
+                                            (Just (Interaction {sentences = thisSentences,
+                                                                conditionalActions = remainingConditionalActions})) defaultSceneInteractions --The condition for the action failed, attempt other actions
+performConditionalActions charsToSplit
+                          columnWidth
+                          currentScene
                           endScenes
                           inventory
                           flags
                           Nothing --The current scene failed to have any interactions
-                          (Just (Interaction {sentences = thisSentences,
+                          (Just (Interaction {sentences = _,
                                               conditionalActions = []}))
-    = performConditionalActions currentScene endScenes inventory flags Nothing Nothing --All possible conditional actions are exhausted
-performConditionalActions currentScene
+    = performConditionalActions charsToSplit columnWidth currentScene endScenes inventory flags Nothing Nothing --All possible conditional actions are exhausted
+performConditionalActions charsToSplit
+                          columnWidth
+                          currentScene
                           endScenes
                           inventory
                           flags
                           Nothing --The current scene failed to have any interactions
                           (Just (Interaction {sentences = thisSentences,
                                               conditionalActions = (conditionalAction@(ConditionalAction {condition = thisCondition}) : remainingConditionalActions)}))
-    | evaluateCondition thisCondition inventory flags = updateGameState endScenes currentScene inventory flags conditionalAction --The condition for the action passed, update the game state
-    | otherwise = performConditionalActions currentScene endScenes inventory flags Nothing (Just (Interaction {sentences = thisSentences,
-                                                                                                               conditionalActions = remainingConditionalActions})) --The condition for the action failed, attempt other actions
+    | evaluateCondition thisCondition inventory flags = updateGameState charsToSplit columnWidth endScenes currentScene inventory flags conditionalAction --The condition for the action passed, update the game state
+    | otherwise = performConditionalActions charsToSplit columnWidth currentScene endScenes inventory flags Nothing
+                                            (Just (Interaction {sentences = thisSentences,
+                                                                conditionalActions = remainingConditionalActions})) --The condition for the action failed, attempt other actions
 
 --Find an interaction in the interactions list which matches the head of the sentences list
 findSentenceInteraction :: [Interaction] -> [Sentence] -> [Sentence] -> Maybe Interaction
@@ -188,8 +203,10 @@ findInteraction [] _ = Nothing --You can't match no interactions
 findInteraction _ [] = Nothing --You can't match no sentences
 findInteraction interactions sentences = findSentenceInteraction interactions sentences sentences
 
-processInteraction :: Scene -> Scene -> SceneIndex -> [SceneIndex] -> Inventory -> Flags -> [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
-processInteraction (Scene {sceneDescription = _,
+processInteraction :: [Char] -> Int -> Scene -> Scene -> SceneIndex -> [SceneIndex] -> Inventory -> Flags -> [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
+processInteraction charsToSplit
+                   columnWidth
+                   (Scene {sceneDescription = _,
                            interactions = thisSceneInteractions})
                    (Scene {sceneDescription = _,
                            interactions = defaultSceneInteractions})
@@ -198,22 +215,22 @@ processInteraction (Scene {sceneDescription = _,
                    inventory
                    flags
                    sentences
-    = performConditionalActions currentScene endScenes inventory flags interaction defaultInteraction
+    = performConditionalActions charsToSplit columnWidth currentScene endScenes inventory flags interaction defaultInteraction
         where interaction = findInteraction thisSceneInteractions sentences
               defaultInteraction = findInteraction defaultSceneInteractions sentences
 
 --Perform an interaction with the current scene
 --Takes the narrative graph, current scene index, inventory, and sentence as input
 --Evaluates to Maybe of the next scene index and inventory state
-performInteraction :: NarrativeGraph -> SceneIndex -> Inventory -> Flags -> [Sentence] -> IO (Maybe (NarrativeGraph, SceneIndex, Inventory, Flags))
-performInteraction narrativeGraph sceneIndex inventory flags []
+performInteraction :: [Char] -> Int -> NarrativeGraph -> SceneIndex -> Inventory -> Flags -> [Sentence] -> IO (Maybe (NarrativeGraph, SceneIndex, Inventory, Flags))
+performInteraction _ _ narrativeGraph sceneIndex inventory flags []
     = putStrLn "Please enter a command." >>
       hFlush stdout >>
       return (Just (narrativeGraph, sceneIndex, inventory, flags)) --If there are no valid sentences, just continue.
-performInteraction narrativeGraph@(NarrativeGraph {nodes = graphNodes, endScenes = graphEndScenes, graphDefaultScene = thisDefaultScene}) sceneIndex inventory flags sentences
+performInteraction charsToSplit columnWidth narrativeGraph@(NarrativeGraph {nodes = graphNodes, endScenes = graphEndScenes, graphDefaultScene = thisDefaultScene}) sceneIndex inventory flags sentences
     = hFlush stdout >>
       fmap (\maybeNewSceneTuple -> maybeNewSceneTuple >>=
                                    (\(newSceneIndex, newSceneInventory, newSceneFlags) -> Just (narrativeGraph, newSceneIndex, newSceneInventory, newSceneFlags)))
       ioMaybeNewSceneTuple
         where currentScene = graphNodes ! sceneIndex
-              ioMaybeNewSceneTuple = processInteraction currentScene thisDefaultScene sceneIndex graphEndScenes inventory flags sentences
+              ioMaybeNewSceneTuple = processInteraction charsToSplit columnWidth currentScene thisDefaultScene sceneIndex graphEndScenes inventory flags sentences
