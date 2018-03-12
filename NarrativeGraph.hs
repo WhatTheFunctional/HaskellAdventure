@@ -5,8 +5,7 @@
 module NarrativeGraph (SceneIndex,
                        Flags(..),
                        Inventory(..),
-                       ObjectChanges(..),
-                       FlagChanges(..),
+                       StateChange(..),
                        NarrativeCondition(..),
                        ConditionalDescription(..),
                        ConditionalAction(..),
@@ -21,6 +20,7 @@ module NarrativeGraph (SceneIndex,
 
 import System.IO
 import Data.Array
+import qualified Data.List
 
 import NaturalLanguageLexer
 import NaturalLanguageParser
@@ -28,8 +28,11 @@ import NaturalLanguageParser
 type SceneIndex = Int
 data Flags = Flags [String] deriving (Show, Eq)
 data Inventory = Inventory [String] deriving (Show, Eq)
-data ObjectChanges = ObjectChanges [String] deriving (Show, Eq)
-data FlagChanges = FlagChanges [String] deriving (Show, Eq)
+data StateChange = AddToInventory String |
+                   RemoveFromInventory String |
+                   SetFlag String |
+                   RemoveFlag String |
+                   SceneChange SceneIndex deriving (Show, Eq)
 
 data NarrativeCondition = InInventory String | --Inventory has an item
                           FlagSet String | --Flag is set
@@ -43,11 +46,7 @@ data ConditionalDescription = ConditionalDescription [(NarrativeCondition, Strin
 
 data ConditionalAction = ConditionalAction {condition :: NarrativeCondition, --Condition under which action occurs
                                             conditionalDescription :: ConditionalDescription, --Description of action
-                                            addedObjects :: ObjectChanges, --Objects to add to inventory
-                                            removedObjects :: ObjectChanges, --Objects to remove from inventory
-                                            setFlags :: FlagChanges, --Flags to set
-                                            removedFlags :: FlagChanges, --Flags to remove
-                                            nextScene :: Maybe SceneIndex} deriving (Show, Eq)
+                                            stateChanges :: [StateChange]} deriving (Show, Eq) --State changes to make
 
 data Interaction = Interaction {sentences :: [Sentence],
                                 conditionalActions :: [ConditionalAction]} deriving (Show, Eq)
@@ -90,41 +89,48 @@ printSceneDescription (NarrativeGraph {nodes = graphNodes, endScenes = graphEndS
         where Scene {sceneDescription = thisSceneDescription,
                      interactions = _} = graphNodes ! sceneIndex
 
-updateFlags :: Flags -> FlagChanges -> FlagChanges -> Flags
-updateFlags (Flags flags) (FlagChanges setFlags) (FlagChanges removedFlags) = Flags (setFlags ++ (filter (\x -> not (x `elem` removedFlags)) flags))
+updateFlags :: Flags -> [StateChange] -> Flags
+updateFlags (Flags flags) [] = Flags flags
+updateFlags (Flags flags) ((RemoveFlag flag) : remainingChanges) = updateFlags (Flags (filter (\x -> x /= flag) flags)) remainingChanges
+updateFlags (Flags flags) ((SetFlag flag) : remainingChanges) = updateFlags (Flags (flag : flags)) remainingChanges
+updateFlags (Flags flags) (_ : remainingChanges) = updateFlags (Flags flags) remainingChanges
 
-updateInventory :: Inventory -> ObjectChanges -> ObjectChanges -> Inventory
-updateInventory (Inventory inventory) (ObjectChanges addedObjects) (ObjectChanges removedObjects) = Inventory (addedObjects ++ (filter (\x -> not (x `elem` removedObjects)) inventory))
+updateInventory :: Inventory -> [StateChange] -> Inventory
+updateInventory (Inventory inventory) [] = Inventory inventory
+updateInventory (Inventory inventory) ((RemoveFromInventory object) : remainingChanges) = updateInventory (Inventory (filter (\x -> x /= object) inventory)) remainingChanges
+updateInventory (Inventory inventory) ((AddToInventory object) : remainingChanges) = updateInventory (Inventory (object : inventory)) remainingChanges
+updateInventory (Inventory inventory) (_ : remainingChanges) = updateInventory (Inventory inventory) remainingChanges
 
 --Scene transition takes the next scene index, the end scene index list, the current scene index, the inventory and flags, and a conditional action
 --Scene transition evaluates to the next state of the game
-sceneTransition :: Maybe SceneIndex -> [SceneIndex] -> SceneIndex -> Inventory -> Flags -> ConditionalAction -> IO (Maybe (SceneIndex, Inventory, Flags))
+sceneTransition :: Maybe StateChange -> [SceneIndex] -> SceneIndex -> Inventory -> Flags -> ConditionalAction -> IO (Maybe (SceneIndex, Inventory, Flags))
 sceneTransition Nothing _ currentScene inventory flags
-                conditionalAction@(ConditionalAction {addedObjects = thisAddedObjects,
-                                                      removedObjects = thisRemovedObjects,
-                                                      setFlags = thisSetFlags,
-                                                      removedFlags = thisRemovedFlags})
+                conditionalAction@(ConditionalAction {stateChanges = thisStateChanges})
     = return (Just (currentScene,
-                    updateInventory inventory thisAddedObjects thisRemovedObjects,
-                    updateFlags flags thisSetFlags thisRemovedFlags)) --If there is no scene transition, return to the current scene with updated inventory and flags
-sceneTransition (Just nextScene) endScenes  _ inventory flags
-                conditionalAction@(ConditionalAction {addedObjects = thisAddedObjects,
-                                                      removedObjects = thisRemovedObjects,
-                                                      setFlags = thisSetFlags,
-                                                      removedFlags = thisRemovedFlags})
+                    updateInventory inventory thisStateChanges,
+                    updateFlags flags thisStateChanges)) --If there is no scene transition, return to the current scene with updated inventory and flags
+sceneTransition (Just (SceneChange nextScene)) endScenes  _ inventory flags
+                conditionalAction@(ConditionalAction {stateChanges = thisStateChanges})
     = if nextScene `elem` endScenes
       then return Nothing --This is an end state for the game
       else return (Just (nextScene,
-                         updateInventory inventory thisAddedObjects thisRemovedObjects,
-                         updateFlags flags thisSetFlags thisRemovedFlags)) --Transition to the next scene with updated inventory and flags
+                         updateInventory inventory thisStateChanges,
+                         updateFlags flags thisStateChanges)) --Transition to the next scene with updated inventory and flags
 
 --Update game state takes an interaction description, fail string, next scene index, end scene index, current scene index, inventory, and flags
 --Update game state Scene transition evaluates to the next state of the game
 updateGameState :: [SceneIndex] -> SceneIndex -> Inventory -> Flags -> ConditionalAction -> IO (Maybe (SceneIndex, Inventory, Flags))
-updateGameState endScenes currentScene inventory flags conditionalAction@(ConditionalAction {nextScene = thisNextScene,
-                                                                                             conditionalDescription = thisConditionalDescription})
+updateGameState endScenes currentScene inventory flags conditionalAction@(ConditionalAction {conditionalDescription = thisConditionalDescription,
+                                                                                             stateChanges = thisStateChanges})
     = printConditionalDescription inventory flags thisConditionalDescription >>
-      sceneTransition thisNextScene endScenes currentScene inventory flags conditionalAction --This conditional action passed all of the preconditions, check whether we need to transition to a new scene
+      sceneTransition (Data.List.find (\x -> case x of
+                                             (SceneChange _) -> True
+                                             otherwise -> False) thisStateChanges)
+                      endScenes
+                      currentScene
+                      inventory
+                      flags
+                      conditionalAction --This conditional action passed all of the preconditions, check whether we need to transition to a new scene
 
 --Perform the interaction and return a tuple of (new scene index, new inventory, new flags)
 performConditionalActions :: SceneIndex -> [SceneIndex] -> Inventory -> Flags -> Maybe Interaction -> Maybe Interaction -> IO (Maybe (SceneIndex, Inventory, Flags))
