@@ -39,8 +39,7 @@ data NarrativeCondition = InInventory String | --Inventory has an item
                           COr NarrativeCondition NarrativeCondition |
                           CAnd NarrativeCondition NarrativeCondition deriving (Show, Eq)
 
-data ConditionalDescription = ConditionalDescription {description :: String, --This description is always printed
-                                                      conditionalDescriptions :: [(NarrativeCondition, String)]} deriving (Show, Eq)
+data ConditionalDescription = ConditionalDescription [(NarrativeCondition, String)] deriving (Show, Eq)
 
 data ConditionalAction = ConditionalAction {condition :: NarrativeCondition, --Condition under which action occurs
                                             conditionalDescription :: ConditionalDescription, --Description of action
@@ -77,21 +76,13 @@ evaluateCondition (CNot condition) inventory flags = not (evaluateCondition cond
 evaluateCondition (COr condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) || (evaluateCondition condition1 inventory flags)
 evaluateCondition (CAnd condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) && (evaluateCondition condition1 inventory flags)
 
-printSubDescriptions :: Inventory -> Flags -> ConditionalDescription -> IO ()
-printSubDescriptions inventory flags (ConditionalDescription {description = thisDescription,
-                                                              conditionalDescriptions = []})
-    = return () --No sub-descriptions to print
-printSubDescriptions inventory flags (ConditionalDescription {description = thisDescription,
-                                                              conditionalDescriptions = ((condition, subDescription) : remainingDescriptions)})
-    | evaluateCondition condition inventory flags = putStr subDescription >>
-                                                    printSubDescriptions inventory flags (ConditionalDescription {description = thisDescription,
-                                                                                                                  conditionalDescriptions = remainingDescriptions})
-    | otherwise = printSubDescriptions inventory flags (ConditionalDescription {description = thisDescription,
-                                                                                conditionalDescriptions = remainingDescriptions})
-
 printConditionalDescription :: Inventory -> Flags -> ConditionalDescription -> IO ()
-printConditionalDescription inventory flags conditionalDescription@(ConditionalDescription {description = thisDescription})
-    = putStr thisDescription >> printSubDescriptions inventory flags conditionalDescription >> putStr "\n\n" >> hFlush stdout
+printConditionalDescription inventory flags (ConditionalDescription [])
+    = putStr "\n" >> return () --No more sub-descriptions to print
+printConditionalDescription inventory flags (ConditionalDescription ((condition, subDescription) : remainingDescriptions))
+    | evaluateCondition condition inventory flags = putStr subDescription >>
+                                                    printConditionalDescription inventory flags (ConditionalDescription remainingDescriptions)
+    | otherwise = printConditionalDescription inventory flags (ConditionalDescription remainingDescriptions)
 
 printSceneDescription :: NarrativeGraph -> SceneIndex -> Inventory -> Flags -> IO ()
 printSceneDescription (NarrativeGraph {nodes = graphNodes, endScenes = graphEndScenes}) sceneIndex inventory flags

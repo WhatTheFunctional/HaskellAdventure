@@ -126,13 +126,10 @@ scene0 =
     Scene
     {
         sceneDescription =
-        ConditionalDescription
-        {
-            description = "You're standing in a green room. The room has a <white door>.\n",
-            conditionalDescriptions = [(CNot (InInventory "key"), "There is a <key> on the floor.\n"),
-                                       (CNot (FlagSet "opened white door"), "The <white door> is closed.\n"),
-                                       (FlagSet "opened white door", "The <white door> is open.\n")]
-        },
+            ConditionalDescription [(CTrue, "You're standing in a green room. The room has a <white door>.\n"),
+                                    (CNot (InInventory "key"), "There is a <key> on the floor.\n"),
+                                    (CNot (FlagSet "opened white door"), "The <white door> is closed.\n"),
+                                    (FlagSet "opened white door", "The <white door> is open.\n")],
         interactions =
             [
                 Interaction
@@ -143,7 +140,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --The player does not have the key
-                                conditionalDescription = ConditionalDescription {description = "You pick up the <key>.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You pick up the <key>.")],
                                 addedObjects = ObjectChanges ["key"],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -153,7 +150,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CTrue, --The player has the key
-                                conditionalDescription = ConditionalDescription {description = "You already have the <key>.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You already have the <key>.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -170,7 +167,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is locked
-                                conditionalDescription = ConditionalDescription {description = "The <white door> is already opened.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already opened.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -180,7 +177,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = (CNot (FlagSet "unlocked white door")) `CAnd` (InInventory "key"), --The white door is locked and the player has a key
-                                conditionalDescription = ConditionalDescription {description = "You unlock the <white door> with your <key>.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with your <key>.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges ["unlocked white door", "opened white door"],
@@ -190,7 +187,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "unlocked white door", --The white door is unlocked
-                                conditionalDescription = ConditionalDescription {description = "You open the <white door>.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You open the <white door>.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges ["opened white door"],
@@ -200,7 +197,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = (CNot (FlagSet "unlocked white door")) `CAnd` (CNot (InInventory "key")), --The white door is locked player and the player doesn't have a key
-                                conditionalDescription = ConditionalDescription {description = "The <white door> is locked.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is locked.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -217,7 +214,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is open
-                                conditionalDescription = ConditionalDescription {description = "You close the <white door>.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You close the <white door>.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -227,7 +224,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription {description = "The <white door> is already closed.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already closed.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -244,7 +241,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is open
-                                conditionalDescription = ConditionalDescription {description = "The <white door> is open.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is open.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -254,7 +251,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription {description = "The <white door> is closed.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is closed.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -271,7 +268,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --Otherwise
-                                conditionalDescription = ConditionalDescription {description = "There's a <key> on the floor.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "There's a <key> on the floor.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -288,7 +285,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription {description = "You take a look around. You don't like the color scheme of this room.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You take a look around. You don't like the color scheme of this room.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -305,7 +302,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --Player does not have a key
-                                conditionalDescription = ConditionalDescription {description = "You don't have a <key> to use with the <white door>.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to use with the <white door>.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -315,7 +312,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CNot (FlagSet "unlocked white door"), --The player has a key and the door is locked
-                                conditionalDescription = ConditionalDescription {description = "You unlock the <white door> with your <key>.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with your <key>.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges ["unlocked white door"],
@@ -325,7 +322,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = (FlagSet "unlocked white door"), --The player has a key and the door is unlocked
-                                conditionalDescription = ConditionalDescription {description = "You lock the <white door> with your <key>.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You lock the <white door> with your <key>.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -346,7 +343,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = (FlagSet "unlocked white door") `CAnd` (InInventory "key"), --Player has a key and the white door is unlocked
-                                conditionalDescription = ConditionalDescription {description = "You lock the <white door> with your <key>.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You lock the <white door> with your <key>.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -356,7 +353,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CNot (FlagSet "unlocked white door"), --The door is already locked
-                                conditionalDescription = ConditionalDescription {description = "The <white door> is already locked.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already locked.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -366,7 +363,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --Otherwise
-                                conditionalDescription = ConditionalDescription {description = "You don't have a <key> to lock the <white door> with.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to lock the <white door> with.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -387,7 +384,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = (CNot (FlagSet "unlocked white door")) `CAnd` (InInventory "key"), --Player has a key and the white door is locked
-                                conditionalDescription = ConditionalDescription {description = "You unlock the <white door> with your <key>.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with your <key>.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges ["unlocked white door"],
@@ -397,7 +394,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = (FlagSet "unlocked white door"), --The door is already unlocked
-                                conditionalDescription = ConditionalDescription {description = "The <white door> is already unlocked.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already unlocked.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges ["unlocked white door"],
@@ -407,7 +404,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --Otherwise
-                                conditionalDescription = ConditionalDescription {description = "You don't have a <key> to unlock the <white door> with.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to unlock the <white door> with.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -424,7 +421,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = (CNot (FlagSet "unlocked white door")) `CAnd` (InInventory "key"), --Player has a key and the white door is locked
-                                conditionalDescription = ConditionalDescription {description = "You unlock the <white door> with the <key> and open it.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with the <key> and open it.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges ["unlocked white door", "opened white door"],
@@ -434,7 +431,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = (CNot (FlagSet "opened white door")) `CAnd` (FlagSet "unlocked white door"), --Player has a key and the white door is locked
-                                conditionalDescription = ConditionalDescription {description = "You open the <white door>.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You open the <white door>.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges ["opened white door"],
@@ -444,7 +441,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is already opened
-                                conditionalDescription = ConditionalDescription {description = "The <white door> is already open.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already open.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -454,7 +451,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --The player does not have the key
-                                conditionalDescription = ConditionalDescription {description = "You don't have a <key> to open the <white door> with.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to open the <white door> with.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -472,7 +469,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is opened
-                                conditionalDescription = ConditionalDescription {description = "You walk through the <white door>. Congratulations, you escaped the green room!", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You walk through the <white door>. Congratulations, you escaped the green room!")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -482,7 +479,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription {description = "The <white door> is closed.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is closed.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -499,7 +496,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is opened
-                                conditionalDescription = ConditionalDescription {description = "You dash through the <white door>. Congratulations, you escaped the green room!", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You dash through the <white door>. Congratulations, you escaped the green room!")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -509,7 +506,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription {description = "The <white door> is closed.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is closed.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -525,12 +522,7 @@ scene1 :: Scene
 scene1 =
     Scene
     {
-        sceneDescription =
-        ConditionalDescription
-        {
-            description = "", --The end state description is not printed
-            conditionalDescriptions = []
-        },
+        sceneDescription = ConditionalDescription [],
         interactions = []
     }
 
@@ -538,12 +530,7 @@ defaultScene :: Scene
 defaultScene =
     Scene
     {
-        sceneDescription =
-        ConditionalDescription
-        {
-            description = "", --The default state description is not printed
-            conditionalDescriptions = []
-        },
+        sceneDescription = ConditionalDescription [],
         interactions =
             [
                 Interaction
@@ -554,7 +541,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription {description = "You jump up and down in place.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You jump up and down in place.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -571,7 +558,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription {description = "You walk around a bit.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You walk around a bit.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -588,7 +575,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription {description = "You jog in place.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "You jog in place.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
@@ -605,7 +592,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "key", --The key is in your inventory
-                                conditionalDescription = ConditionalDescription {description = "The <key> is in your pocket where you left it.", conditionalDescriptions = []},
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <key> is in your pocket where you left it.")],
                                 addedObjects = ObjectChanges [],
                                 removedObjects = ObjectChanges [],
                                 setFlags = FlagChanges [],
