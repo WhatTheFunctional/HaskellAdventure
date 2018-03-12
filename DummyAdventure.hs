@@ -2,11 +2,14 @@
 --Copyright Laurence Emms 2018
 --Module with a dummy vocabulary and adventure for testing
 
-module DummyAdventure (allVerbs, allNouns, allPrepositions, allTokens, startInventory, startFlags, allScenes) where
+module DummyAdventure (gameIntro, allVerbs, allNouns, allPrepositions, allTokens, startInventory, startFlags, allScenes) where
 
 import NaturalLanguageLexer
 import NaturalLanguageParser
 import NarrativeGraph
+
+gameIntro :: String
+gameIntro = "Dummy Adventure by Laurence Emms\n"
 
 allVerbs :: [Token]
 allVerbs = [TokenVerb ["get", "take", "pick up"],

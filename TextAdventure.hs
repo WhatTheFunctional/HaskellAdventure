@@ -115,6 +115,7 @@ adventure (Just (narrativeGraph, sceneIndex, inventory, flags)) = printSceneDesc
                                                                   parseInput inventory flags >>=
                                                                   doAdventureLoop narrativeGraph sceneIndex inventory flags
 main = printIntro >>
+       putStrLn gameIntro >>
        printHelp >>
        hFlush stdout >>
        adventure (Just (makeNarrativeGraph adventureScenes endScenes, 0, startInventory, startFlags)) >>
