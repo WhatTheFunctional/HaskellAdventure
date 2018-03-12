@@ -2,7 +2,7 @@
 --Copyright Laurence Emms 2018
 --Module with a dummy vocabulary and adventure for testing
 
-module DummyAdventure (gameIntro, allVerbs, allNouns, allPrepositions, allTokens, startInventory, startFlags, allScenes) where
+module DummyAdventure (gameIntro, allVerbs, allNouns, allPrepositions, allTokens, startInventory, startFlags, defaultScene, allScenes) where
 
 import NaturalLanguageLexer
 import NaturalLanguageParser
@@ -21,9 +21,12 @@ allVerbs = [TokenVerb ["get", "take", "pick up"],
             TokenVerb ["look around"],
             TokenVerb ["use"],
             TokenVerb ["jump"],
-            TokenVerb ["move", "walk", "go", "run"],
-            TokenVerb ["move down", "walk down", "go down", "run down"],
-            TokenVerb ["move up", "walk up", "go up", "run up"],
+            TokenVerb ["move", "walk", "go"],
+            TokenVerb ["move down", "walk down", "go down"],
+            TokenVerb ["move up", "walk up", "go up"],
+            TokenVerb ["run", "jog", "sprint", "dash"],
+            TokenVerb ["run down", "jog down", "sprint down", "dash down"],
+            TokenVerb ["run up", "jog up", "sprint up", "dash up"],
             TokenVerb ["climb", "scale"],
             TokenVerb ["climb down", "scale down"],
             TokenVerb ["climb up", "scale up"],
@@ -196,14 +199,7 @@ scene0 = Scene {sceneDescription = ConditionalDescription {description = "You're
                                 Interaction {sentences = [SimplePrepositionSentence (TokenVerb ["look"])
                                                                                     (TokenPreposition ["at"])
                                                                                     (TokenNoun "key")],
-                                             conditionalActions = [ConditionalAction {condition = InInventory "key", --The key is in your inventory
-                                                                                      conditionalDescription = ConditionalDescription {description = "The [key] is in your pocket where you left it.", conditionalDescriptions = []},
-                                                                                      addedObjects = ObjectChanges [],
-                                                                                      removedObjects = ObjectChanges [],
-                                                                                      setFlags = FlagChanges [],
-                                                                                      removedFlags = FlagChanges [],
-                                                                                      nextScene = Nothing},
-                                                                   ConditionalAction {condition = TrueCondition, --Otherwise
+                                             conditionalActions = [ConditionalAction {condition = NotCondition (InInventory "key"), --Otherwise
                                                                                       conditionalDescription = ConditionalDescription {description = "There's a [key] on the floor.", conditionalDescriptions = []},
                                                                                       addedObjects = ObjectChanges [],
                                                                                       removedObjects = ObjectChanges [],
@@ -329,11 +325,28 @@ scene0 = Scene {sceneDescription = ConditionalDescription {description = "You're
                                                                                       setFlags = FlagChanges [],
                                                                                       removedFlags = FlagChanges [],
                                                                                       nextScene = Nothing}]},
-                                Interaction {sentences = [SimplePrepositionSentence (TokenVerb ["move", "walk", "go", "run"])
+                                Interaction {sentences = [SimplePrepositionSentence (TokenVerb ["move", "walk", "go"])
                                                                                     (TokenPreposition ["through"])
                                                                                     (TokenNoun "white door")],
                                              conditionalActions = [ConditionalAction {condition = FlagSet "opened white door", --The white door is opened
                                                                                       conditionalDescription = ConditionalDescription {description = "You walk through the [white door]. Congratulations, you escaped the green room!", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges [],
+                                                                                      removedFlags = FlagChanges [],
+                                                                                      nextScene = Just 1},
+                                                                   ConditionalAction {condition = TrueCondition, --Otherwise
+                                                                                      conditionalDescription = ConditionalDescription {description = "The [white door] is closed.", conditionalDescriptions = []},
+                                                                                      addedObjects = ObjectChanges [],
+                                                                                      removedObjects = ObjectChanges [],
+                                                                                      setFlags = FlagChanges [],
+                                                                                      removedFlags = FlagChanges [],
+                                                                                      nextScene = Nothing}]},
+                                Interaction {sentences = [SimplePrepositionSentence (TokenVerb ["run", "jog", "sprint", "dash"])
+                                                                                    (TokenPreposition ["through"])
+                                                                                    (TokenNoun "white door")],
+                                             conditionalActions = [ConditionalAction {condition = FlagSet "opened white door", --The white door is opened
+                                                                                      conditionalDescription = ConditionalDescription {description = "You dash through the [white door]. Congratulations, you escaped the green room!", conditionalDescriptions = []},
                                                                                       addedObjects = ObjectChanges [],
                                                                                       removedObjects = ObjectChanges [],
                                                                                       setFlags = FlagChanges [],
@@ -352,6 +365,45 @@ scene1 :: Scene
 scene1 = Scene {sceneDescription = ConditionalDescription {description = "", --The end state description is not printed
                                                            conditionalDescriptions = []},
                 interactions = []}
+
+defaultScene :: Scene
+defaultScene = Scene {sceneDescription = ConditionalDescription {description = "", --The default state description is not printed
+                                                                 conditionalDescriptions = []},
+                      interactions = [Interaction {sentences = [Phrase (TokenVerb ["jump"])],
+                                                   conditionalActions = [ConditionalAction {condition = TrueCondition, --Always do this
+                                                                                            conditionalDescription = ConditionalDescription {description = "You jump up and down in place.", conditionalDescriptions = []},
+                                                                                            addedObjects = ObjectChanges [],
+                                                                                            removedObjects = ObjectChanges [],
+                                                                                            setFlags = FlagChanges [],
+                                                                                            removedFlags = FlagChanges [],
+                                                                                            nextScene = Nothing}]},
+                                      Interaction {sentences = [Phrase (TokenVerb ["move", "walk", "go"])],
+                                                   conditionalActions = [ConditionalAction {condition = TrueCondition, --Always do this
+                                                                                            conditionalDescription = ConditionalDescription {description = "You walk around a bit.", conditionalDescriptions = []},
+                                                                                            addedObjects = ObjectChanges [],
+                                                                                            removedObjects = ObjectChanges [],
+                                                                                            setFlags = FlagChanges [],
+                                                                                            removedFlags = FlagChanges [],
+                                                                                            nextScene = Nothing}]},
+                                      Interaction {sentences = [Phrase (TokenVerb ["run", "jog", "sprint", "dash"])],
+                                                   conditionalActions = [ConditionalAction {condition = TrueCondition, --Always do this
+                                                                                            conditionalDescription = ConditionalDescription {description = "You jog in place.", conditionalDescriptions = []},
+                                                                                            addedObjects = ObjectChanges [],
+                                                                                            removedObjects = ObjectChanges [],
+                                                                                            setFlags = FlagChanges [],
+                                                                                            removedFlags = FlagChanges [],
+                                                                                            nextScene = Nothing}]},
+                                      Interaction {sentences = [SimplePrepositionSentence (TokenVerb ["look"])
+                                                                                          (TokenPreposition ["at"])
+                                                                                          (TokenNoun "key")],
+                                                   conditionalActions = [ConditionalAction {condition = InInventory "key", --The key is in your inventory
+                                                                                            conditionalDescription = ConditionalDescription {description = "The [key] is in your pocket where you left it.", conditionalDescriptions = []},
+                                                                                            addedObjects = ObjectChanges [],
+                                                                                            removedObjects = ObjectChanges [],
+                                                                                            setFlags = FlagChanges [],
+                                                                                            removedFlags = FlagChanges [],
+                                                                                            nextScene = Nothing}]}
+                                     ]}
 
 allScenes :: ([Scene], [SceneIndex])
 allScenes = ([scene0, scene1], --List of scenes

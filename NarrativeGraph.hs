@@ -58,13 +58,15 @@ data Scene = Scene {sceneDescription :: ConditionalDescription,
 
 --By definition the first node in the narrative graph is the start
 data NarrativeGraph = NarrativeGraph {nodes :: Array SceneIndex Scene,
-                                      endScenes :: [SceneIndex]} deriving (Show, Eq)
+                                      endScenes :: [SceneIndex],
+                                      graphDefaultScene :: Scene} deriving (Show, Eq)
 
 --Takes a list of scenes and returns a starting index and a NarrativeGraph
-makeNarrativeGraph :: [Scene] -> [SceneIndex] -> NarrativeGraph
-makeNarrativeGraph scenes scenesEndScenes
+makeNarrativeGraph :: [Scene] -> [SceneIndex] -> Scene -> NarrativeGraph
+makeNarrativeGraph scenes scenesEndScenes scene
     = NarrativeGraph {nodes = array (0, length scenes) (zip [0..length scenes] scenes),
-                      endScenes = scenesEndScenes}
+                      endScenes = scenesEndScenes,
+                      graphDefaultScene = scene}
 
 evaluateCondition :: NarrativeCondition -> Inventory -> Flags -> Bool
 evaluateCondition TrueCondition _ _ = True
@@ -134,8 +136,8 @@ updateGameState endScenes currentScene inventory flags conditionalAction@(Condit
       sceneTransition thisNextScene endScenes currentScene inventory flags conditionalAction --This conditional action passed all of the preconditions, check whether we need to transition to a new scene
 
 --Perform the interaction and return a tuple of (new scene index, new inventory, new flags)
-performConditionalActions :: SceneIndex -> [SceneIndex] -> Inventory -> Flags -> Maybe Interaction -> IO (Maybe (SceneIndex, Inventory, Flags))
-performConditionalActions currentScene _ inventory flags Nothing
+performConditionalActions :: SceneIndex -> [SceneIndex] -> Inventory -> Flags -> Maybe Interaction -> Maybe Interaction -> IO (Maybe (SceneIndex, Inventory, Flags))
+performConditionalActions currentScene _ inventory flags Nothing Nothing
     = putStrLn "That does nothing.\n" >>
       hFlush stdout >>
       return (Just (currentScene, inventory, flags)) --If there are no valid interactions actions but the sentence was valid, just return to the current state
@@ -144,10 +146,37 @@ performConditionalActions currentScene
                           inventory
                           flags
                           (Just (Interaction {sentences = thisSentences,
+                                              conditionalActions = []}))
+                          defaultSceneInteractions --There are no remaining conditional actions for the current scene
+    = performConditionalActions currentScene endScenes inventory flags Nothing defaultSceneInteractions --All current scene conditional actions were exhausted, try default scene interactions
+performConditionalActions currentScene
+                          endScenes
+                          inventory
+                          flags
+                          (Just (Interaction {sentences = thisSentences,
                                               conditionalActions = (conditionalAction@(ConditionalAction {condition = thisCondition}) : remainingConditionalActions)}))
-    | evaluateCondition thisCondition inventory flags = updateGameState endScenes currentScene inventory flags conditionalAction --The condition for the action passed, print the conditional description and update the game state
+                          defaultSceneInteractions -- Ignore default scene interactions if there are still current scene interactions
+    | evaluateCondition thisCondition inventory flags = updateGameState endScenes currentScene inventory flags conditionalAction --The condition for the action passed, update the game state
     | otherwise = performConditionalActions currentScene endScenes inventory flags (Just (Interaction {sentences = thisSentences,
-                                                                                                       conditionalActions = remainingConditionalActions})) --The condition for the action failed, print the conditional description and attempt other actions
+                                                                                                       conditionalActions = remainingConditionalActions})) defaultSceneInteractions --The condition for the action failed, attempt other actions
+performConditionalActions currentScene
+                          endScenes
+                          inventory
+                          flags
+                          Nothing --The current scene failed to have any interactions
+                          (Just (Interaction {sentences = thisSentences,
+                                              conditionalActions = []}))
+    = performConditionalActions currentScene endScenes inventory flags Nothing Nothing --All possible conditional actions are exhausted
+performConditionalActions currentScene
+                          endScenes
+                          inventory
+                          flags
+                          Nothing --The current scene failed to have any interactions
+                          (Just (Interaction {sentences = thisSentences,
+                                              conditionalActions = (conditionalAction@(ConditionalAction {condition = thisCondition}) : remainingConditionalActions)}))
+    | evaluateCondition thisCondition inventory flags = updateGameState endScenes currentScene inventory flags conditionalAction --The condition for the action passed, update the game state
+    | otherwise = performConditionalActions currentScene endScenes inventory flags Nothing (Just (Interaction {sentences = thisSentences,
+                                                                                                               conditionalActions = remainingConditionalActions})) --The condition for the action failed, attempt other actions
 
 --Find an interaction in the interactions list which matches the head of the sentences list
 findSentenceInteraction :: [Interaction] -> [Sentence] -> [Sentence] -> Maybe Interaction
@@ -162,16 +191,19 @@ findInteraction [] _ = Nothing --You can't match no interactions
 findInteraction _ [] = Nothing --You can't match no sentences
 findInteraction interactions sentences = findSentenceInteraction interactions sentences sentences
 
-processInteraction :: Scene -> SceneIndex -> [SceneIndex] -> Inventory -> Flags -> [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
+processInteraction :: Scene -> Scene -> SceneIndex -> [SceneIndex] -> Inventory -> Flags -> [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
 processInteraction (Scene {sceneDescription = _,
                            interactions = thisSceneInteractions})
+                   (Scene {sceneDescription = _,
+                           interactions = defaultSceneInteractions})
                    currentScene
                    endScenes
                    inventory
                    flags
                    sentences
-    = performConditionalActions currentScene endScenes inventory flags interaction
+    = performConditionalActions currentScene endScenes inventory flags interaction defaultInteraction
         where interaction = findInteraction thisSceneInteractions sentences
+              defaultInteraction = findInteraction defaultSceneInteractions sentences
 
 --Perform an interaction with the current scene
 --Takes the narrative graph, current scene index, inventory, and sentence as input
@@ -181,10 +213,10 @@ performInteraction narrativeGraph sceneIndex inventory flags []
     = putStrLn "Please enter a command." >>
       hFlush stdout >>
       return (Just (narrativeGraph, sceneIndex, inventory, flags)) --If there are no valid sentences, just continue.
-performInteraction narrativeGraph@(NarrativeGraph {nodes = graphNodes, endScenes = graphEndScenes}) sceneIndex inventory flags sentences
+performInteraction narrativeGraph@(NarrativeGraph {nodes = graphNodes, endScenes = graphEndScenes, graphDefaultScene = thisDefaultScene}) sceneIndex inventory flags sentences
     = hFlush stdout >>
       fmap (\maybeNewSceneTuple -> maybeNewSceneTuple >>=
                                    (\(newSceneIndex, newSceneInventory, newSceneFlags) -> Just (narrativeGraph, newSceneIndex, newSceneInventory, newSceneFlags)))
       ioMaybeNewSceneTuple
         where currentScene = graphNodes ! sceneIndex
-              ioMaybeNewSceneTuple = processInteraction currentScene sceneIndex graphEndScenes inventory flags sentences
+              ioMaybeNewSceneTuple = processInteraction currentScene thisDefaultScene sceneIndex graphEndScenes inventory flags sentences

@@ -118,6 +118,6 @@ main = printIntro >>
        putStrLn gameIntro >>
        printHelp >>
        hFlush stdout >>
-       adventure (Just (makeNarrativeGraph adventureScenes endScenes, 0, startInventory, startFlags)) >>
+       adventure (Just (makeNarrativeGraph adventureScenes endScenes defaultScene, 0, startInventory, startFlags)) >>
        return ()
            where (adventureScenes, endScenes) = allScenes
