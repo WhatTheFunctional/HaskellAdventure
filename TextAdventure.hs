@@ -38,12 +38,14 @@ printIntro = putStrLn "Haskell Text Adventure Engine v1.0" >>
 
 --Print help text
 printHelp :: IO ()
-printHelp = putStrLn "Commands:" >>
+printHelp = putStrLn "The following commands are available:" >>
             putStrLn "Help - Print help text" >>
             putStrLn "Grammar - Print available grammar" >>
             putStrLn "Nouns - Print all available nouns" >>
             putStrLn "Verbs - Print all available verbs" >>
             putStrLn "Prepositions - Print all available prepositions" >>
+            putStrLn "Inventory - Print all current inventory items" >>
+            putStrLn "Flags - Print all current flags" >>
             putStrLn "Quit - Exit the game" >>
             putStr   "\n" >>
             hFlush stdout
@@ -58,23 +60,23 @@ printGrammar = putStrLn "Simple sentence: <Verb> <Noun>" >>
 
 printVerbs :: [Token] -> IO ()
 printVerbs [] = putStr "\n" >> hFlush stdout
-printVerbs ((TokenVerb synonyms) : tokens) = putStrLn (show synonyms) >> printVerbs tokens
+printVerbs ((TokenVerb synonyms) : tokens) = putStrLn ("Synonyms for " ++ (head synonyms) ++ ": " ++ (show synonyms) ++ ".") >> printVerbs tokens
 
 printNouns :: [Token] -> IO ()
 printNouns [] = putStr "\n" >> hFlush stdout
-printNouns ((TokenNoun name) : tokens) = putStrLn name >> printNouns tokens
+printNouns ((TokenNoun name) : tokens) = putStrLn (name ++ ".") >> printNouns tokens
 
 printPrepositions :: [Token] -> IO ()
 printPrepositions [] = putStr "\n" >> hFlush stdout
-printPrepositions ((TokenPreposition synonyms) : tokens) = putStrLn (show synonyms) >> printPrepositions tokens
+printPrepositions ((TokenPreposition synonyms) : tokens) = putStrLn ("Synonyms for " ++ (head synonyms) ++ ": " ++ (show synonyms) ++ ".") >> printPrepositions tokens
 
 printInventory :: Inventory -> IO ()
 printInventory (Inventory []) = putStr "\n" >> hFlush stdout
-printInventory (Inventory (object : remainingInventory)) = putStrLn object >> printInventory (Inventory remainingInventory)
+printInventory (Inventory (object : remainingInventory)) = putStrLn (object ++ ".") >> printInventory (Inventory remainingInventory)
 
 printFlags :: Flags -> IO ()
 printFlags (Flags []) = putStr "\n" >> hFlush stdout
-printFlags (Flags (flag : remainingFlags)) = putStrLn flag >> printFlags (Flags remainingFlags)
+printFlags (Flags (flag : remainingFlags)) = putStrLn (flag ++ ".") >> printFlags (Flags remainingFlags)
 
 splitInput :: [Char] -> String -> [String] -> [String]
 splitInput [] [] allWords = [] --No characters remaining and no current word
@@ -86,12 +88,12 @@ splitInput (c : cs) currentWord allWords = splitInput cs (c : currentWord) allWo
 parseInput :: Inventory -> Flags -> String -> IO (Maybe [Sentence])
 parseInput inventory flags line
     | map Data.Char.toLower line == "help" = printHelp >> return (Just [])
-    | map Data.Char.toLower line == "grammar" = printGrammar >> return (Just [])
-    | map Data.Char.toLower line == "verbs" = printVerbs allVerbs >> return (Just [])
-    | map Data.Char.toLower line == "nouns" = printNouns allNouns >> return (Just [])
-    | map Data.Char.toLower line == "prepositions" = printPrepositions allPrepositions >> return (Just [])
-    | map Data.Char.toLower line == "inventory" = printInventory inventory >> return (Just [])
-    | map Data.Char.toLower line == "flags" = printFlags flags >> return (Just [])
+    | map Data.Char.toLower line == "grammar" = putStrLn "All grammar:" >> printGrammar >> return (Just [])
+    | map Data.Char.toLower line == "verbs" = putStrLn "All verbs:" >> printVerbs allVerbs >> return (Just [])
+    | map Data.Char.toLower line == "nouns" = putStrLn "All nouns:" >> printNouns allNouns >> return (Just [])
+    | map Data.Char.toLower line == "prepositions" = putStrLn "All prepositions:" >> printPrepositions allPrepositions >> return (Just [])
+    | map Data.Char.toLower line == "inventory" = putStrLn "Inventory:" >> printInventory inventory >> return (Just [])
+    | map Data.Char.toLower line == "flags" = putStrLn "Flags:" >> printFlags flags >> return (Just [])
     | map Data.Char.toLower line == "exit" = putStrLn "Thanks for playing!" >> hFlush stdout >> return Nothing
     | map Data.Char.toLower line == "quit" = putStrLn "Thanks for playing!" >> hFlush stdout >> return Nothing
     | sentences == [] = putStrLn "I'm sorry, I don't understand what you said.\n" >> return (Just sentences)
@@ -109,7 +111,7 @@ doAdventureLoop narrativeGraph sceneIndex inventory flags (Just sentences) = per
                                                                              adventure --Perform the adventure loop
 
 adventure :: Maybe (NarrativeGraph, SceneIndex, Inventory, Flags) -> IO (Maybe (NarrativeGraph, SceneIndex, Inventory, Flags))
-adventure Nothing = putStrLn "Game over." >> hFlush stdout >> return Nothing
+adventure Nothing = putStrLn "Game over. Thanks for playing!" >> hFlush stdout >> return Nothing
 adventure (Just (narrativeGraph, sceneIndex, inventory, flags)) = printSceneDescription narrativeGraph sceneIndex inventory flags >>
                                                                   getLine >>=
                                                                   parseInput inventory flags >>=
