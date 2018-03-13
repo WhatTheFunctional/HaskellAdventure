@@ -21,9 +21,9 @@ allColumnWidth = 80
 
 printTokens :: String -> [Token] -> IO ()
 printTokens word [] = return () >> putStr "\n" >> hFlush stdout
-printTokens word ((TokenVerb synonyms) : tokens) = (putStrLn ("== Verb " ++ word)) >> printTokens word tokens
-printTokens word ((TokenNoun name) : tokens) = (putStrLn ("== Noun " ++ word)) >> printTokens word tokens
-printTokens word ((TokenPreposition synonyms) : tokens) = (putStrLn ("== Preposition " ++ word)) >> printTokens word tokens
+printTokens word ((TokenVerb _ _) : tokens) = (putStrLn ("== Verb " ++ word)) >> printTokens word tokens
+printTokens word ((TokenNoun _ _) : tokens) = (putStrLn ("== Noun " ++ word)) >> printTokens word tokens
+printTokens word ((TokenPreposition _ _) : tokens) = (putStrLn ("== Preposition " ++ word)) >> printTokens word tokens
 
 --Print tokens for a word
 printWordTokens :: [TokenMatch] -> IO ()
@@ -73,23 +73,23 @@ printGrammar = reflowPutStrs allCharsToSplit
 
 printVerbs :: [Token] -> IO ()
 printVerbs [] = putStr "\n" >> hFlush stdout
-printVerbs ((TokenVerb synonyms) : tokens) = reflowPutStr allCharsToSplit
-                                                          allColumnWidth
-                                                          ("Synonyms for " ++ (head synonyms) ++ ": " ++ (show synonyms) ++ ".") >>
+printVerbs ((TokenVerb name synonyms) : tokens) = reflowPutStr allCharsToSplit
+                                                               allColumnWidth
+                                                               ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".") >>
                                              printVerbs tokens
 
 printNouns :: [Token] -> IO ()
 printNouns [] = putStr "\n" >> hFlush stdout
-printNouns ((TokenNoun synonyms) : tokens) = reflowPutStr allCharsToSplit
-                                                          allColumnWidth
-                                                          ("Synonyms for " ++ (head synonyms) ++ ": " ++ (show synonyms) ++ ".") >>
+printNouns ((TokenNoun name synonyms) : tokens) = reflowPutStr allCharsToSplit
+                                                               allColumnWidth
+                                                               ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".") >>
                                              printNouns tokens
 
 printPrepositions :: [Token] -> IO ()
 printPrepositions [] = putStr "\n" >> hFlush stdout
-printPrepositions ((TokenPreposition synonyms) : tokens) = reflowPutStr allCharsToSplit
-                                                                        allColumnWidth
-                                                                        ("Synonyms for " ++ (head synonyms) ++ ": " ++ (show synonyms) ++ ".") >>
+printPrepositions ((TokenPreposition name synonyms) : tokens) = reflowPutStr allCharsToSplit
+                                                                             allColumnWidth
+                                                                             ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".") >>
                                                            printPrepositions tokens
 
 printInventory :: Inventory -> IO ()
@@ -135,6 +135,7 @@ adventure :: Maybe (NarrativeGraph, SceneIndex, Inventory, Flags) -> IO (Maybe (
 adventure Nothing = reflowPutStr allCharsToSplit allColumnWidth "Game over. Thanks for playing!" >> hFlush stdout >> return Nothing
 adventure (Just (narrativeGraph, sceneIndex, inventory, flags)) = printSceneDescription allCharsToSplit allColumnWidth narrativeGraph sceneIndex inventory flags >>
                                                                   putStr "\n" >>
+                                                                  printInvalidInteractions narrativeGraph sceneIndex >>
                                                                   getLine >>=
                                                                   parseInput inventory flags >>=
                                                                   doAdventureLoop narrativeGraph sceneIndex inventory flags

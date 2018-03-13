@@ -9,9 +9,9 @@ module NaturalLanguageLexer (Token(..),
 
 import qualified Data.Char
 
-data Token = TokenVerb [String] |
-             TokenNoun [String] |
-             TokenPreposition [String] deriving (Show, Eq)
+data Token = TokenVerb String [String] |
+             TokenNoun  String [String] |
+             TokenPreposition  String [String] deriving (Show, Eq)
 
 --Stores the result when a string matches one or more tokens
 data TokenMatch = TokenMatch String [Token] deriving (Show, Eq)
@@ -27,16 +27,16 @@ join (Just (TokenMatch wordA tokensA)) (Just (TokenMatch wordB tokensB))
 --Match a single word against a single token
 tokenize :: String -> Token -> Maybe TokenMatch
 tokenize "" _  = Nothing --Empty string can't match tokens
-tokenize word token@(TokenVerb synonyms)
+tokenize word token@(TokenVerb _ synonyms)
     | lowerCaseWord `elem` synonyms = Just (TokenMatch word [token])
     | otherwise = Nothing
         where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
-tokenize word token@(TokenNoun synonyms)
+tokenize word token@(TokenNoun _ synonyms)
     | word `elem` synonyms = Just (TokenMatch word [token])
     | lowerCaseWord `elem` synonyms = Just (TokenMatch word [token])
     | otherwise = Nothing
         where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
-tokenize word token@(TokenPreposition synonyms)
+tokenize word token@(TokenPreposition _ synonyms)
     | lowerCaseWord `elem` synonyms = Just (TokenMatch word [token])
     | otherwise = Nothing
         where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)

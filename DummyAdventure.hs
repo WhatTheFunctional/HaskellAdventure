@@ -4,6 +4,8 @@
 
 module DummyAdventure (gameIntro, allVerbs, allNouns, allPrepositions, allTokens, startInventory, startFlags, defaultScene, allScenes) where
 
+import qualified Data.List
+
 import NaturalLanguageLexer
 import NaturalLanguageParser
 import NarrativeGraph
@@ -14,104 +16,142 @@ gameIntro = "Dummy Adventure by Laurence Emms\n"
 allVerbs :: [Token]
 allVerbs =
     [
-        TokenVerb ["get", "take", "pick up"],
-        TokenVerb ["put", "place", "put down"],
-        TokenVerb ["throw", "pitch"],
-        TokenVerb ["give"],
-        TokenVerb ["select", "pick"],
-        TokenVerb ["look"],
-        TokenVerb ["look around"],
-        TokenVerb ["use"],
-        TokenVerb ["jump"],
-        TokenVerb ["move", "walk", "go"],
-        TokenVerb ["move down", "walk down", "go down"],
-        TokenVerb ["move up", "walk up", "go up"],
-        TokenVerb ["run", "jog", "sprint", "dash"],
-        TokenVerb ["run down", "jog down", "sprint down", "dash down"],
-        TokenVerb ["run up", "jog up", "sprint up", "dash up"],
-        TokenVerb ["climb", "scale"],
-        TokenVerb ["climb down", "scale down"],
-        TokenVerb ["climb up", "scale up"],
-        TokenVerb ["unlock"],
-        TokenVerb ["lock"],
-        TokenVerb ["open"],
-        TokenVerb ["close", "shut"],
-        TokenVerb ["enter"],
-        TokenVerb ["insert"],
-        TokenVerb ["remove"],
-        TokenVerb ["leave", "exit"],
-        TokenVerb ["eat", "consume"],
-        TokenVerb ["drink", "consume"]
+        TokenVerb "get" ["get", "take", "pick up"],
+        TokenVerb "put" ["put", "place", "put down"],
+        TokenVerb "throw" ["throw", "pitch"],
+        TokenVerb "give" ["give"],
+        TokenVerb "select" ["select", "pick"],
+        TokenVerb "look" ["look"],
+        TokenVerb "look around" ["look around"],
+        TokenVerb "use" ["use"],
+        TokenVerb "jump" ["jump"],
+        TokenVerb "walk" ["walk", "move", "go"],
+        TokenVerb "walk down" ["walk down", "move down", "go down"],
+        TokenVerb "walk up" ["walk up", "move up", "go up"],
+        TokenVerb "run" ["run", "jog", "sprint", "dash"],
+        TokenVerb "run down" ["run down", "jog down", "sprint down", "dash down"],
+        TokenVerb "run up" ["run up", "jog up", "sprint up", "dash up"],
+        TokenVerb "climb" ["climb", "scale"],
+        TokenVerb "climb down" ["climb down", "scale down"],
+        TokenVerb "climb up" ["climb up", "scale up"],
+        TokenVerb "unlock" ["unlock"],
+        TokenVerb "lock" ["lock"],
+        TokenVerb "open" ["open"],
+        TokenVerb "close" ["close", "shut"],
+        TokenVerb "enter" ["enter"],
+        TokenVerb "insert" ["insert"],
+        TokenVerb "remove" ["remove"],
+        TokenVerb "leave" ["leave", "exit"],
+        TokenVerb "eat" ["eat", "consume"],
+        TokenVerb "drink" ["drink", "consume"]
     ]
 
 allNouns :: [Token]
 allNouns =
     [
-        TokenNoun ["north"],
-        TokenNoun ["south"],
-        TokenNoun ["west"],
-        TokenNoun ["east"],
-        TokenNoun ["staircase"],
-        TokenNoun ["stairs"],
-        TokenNoun ["up"],
-        TokenNoun ["down"],
-        TokenNoun ["inside"],
-        TokenNoun ["outside"],
-        TokenNoun ["door"],
-        TokenNoun ["green door"],
-        TokenNoun ["white door", "door"],
-        TokenNoun ["green room", "room"],
-        TokenNoun ["window"],
-        TokenNoun ["chest"],
-        TokenNoun ["chair"],
-        TokenNoun ["table"],
-        TokenNoun ["pen"],
-        TokenNoun ["north entrance"],
-        TokenNoun ["exit"],
-        TokenNoun ["key"],
-        TokenNoun ["me"],
-        TokenNoun ["myself"],
-        TokenNoun ["my hand"],
-        TokenNoun ["fork"],
-        TokenNoun ["spoon"],
-        TokenNoun ["Steve"],
-        TokenNoun ["juice"],
-        TokenNoun ["cake"]
+        TokenNoun "north" ["north"],
+        TokenNoun "south" ["south"],
+        TokenNoun "west" ["west"],
+        TokenNoun "east" ["east"],
+        TokenNoun "staircase" ["staircase"],
+        TokenNoun "stairs" ["stairs"],
+        TokenNoun "up" ["up"],
+        TokenNoun "down" ["down"],
+        TokenNoun "inside" ["inside"],
+        TokenNoun "outside" ["outside"],
+        TokenNoun "door" ["door"],
+        TokenNoun "green door" ["green door"],
+        TokenNoun "white door" ["white door", "door"],
+        TokenNoun "green room" ["green room", "room"],
+        TokenNoun "window" ["window"],
+        TokenNoun "chest" ["chest"],
+        TokenNoun "chair" ["chair"],
+        TokenNoun "table" ["table"],
+        TokenNoun "pen" ["pen"],
+        TokenNoun "north entrance" ["north entrance"],
+        TokenNoun "exit" ["exit"],
+        TokenNoun "key" ["key"],
+        TokenNoun "me" ["me"],
+        TokenNoun "myself" ["myself"],
+        TokenNoun "my hand" ["my hand"],
+        TokenNoun "fork" ["fork"],
+        TokenNoun "spoon" ["spoon"],
+        TokenNoun "Steve" ["Steve"],
+        TokenNoun "juice" ["juice"],
+        TokenNoun "cake" ["cake"]
     ]
 
 allPrepositions :: [Token]
 allPrepositions =
     [
-        TokenPreposition ["in", "inside", "within"],
-        TokenPreposition ["into"],
-        TokenPreposition ["out", "outside"],
-        TokenPreposition ["on", "on top", "upon"],
-        TokenPreposition ["on", "with"],
-        TokenPreposition ["above", "over"],
-        TokenPreposition ["over"],
-        TokenPreposition ["below", "under", "underneath", "beneath"],
-        TokenPreposition ["across"],
-        TokenPreposition ["before"],
-        TokenPreposition ["after"],
-        TokenPreposition ["against"],
-        TokenPreposition ["around"],
-        TokenPreposition ["among"],
-        TokenPreposition ["at"],
-        TokenPreposition ["in front"],
-        TokenPreposition ["from"],
-        TokenPreposition ["behind"],
-        TokenPreposition ["beside", "by", "next to"],
-        TokenPreposition ["beyond"],
-        TokenPreposition ["near"],
-        TokenPreposition ["down"],
-        TokenPreposition ["up"],
-        TokenPreposition ["past"],
-        TokenPreposition ["through"],
-        TokenPreposition ["to", "toward"],
-        TokenPreposition ["until"],
-        TokenPreposition ["with"],
-        TokenPreposition ["together with"]
+        TokenPreposition "in" ["in", "inside", "within"],
+        TokenPreposition "into" ["into"],
+        TokenPreposition "out" ["out", "outside"],
+        TokenPreposition "on" ["on", "on top", "upon"],
+        TokenPreposition "on" ["on", "with"],
+        TokenPreposition "above" ["above", "over"],
+        TokenPreposition "over" ["over"],
+        TokenPreposition "below" ["below", "under", "underneath", "beneath"],
+        TokenPreposition "across" ["across"],
+        TokenPreposition "before" ["before"],
+        TokenPreposition "after" ["after"],
+        TokenPreposition "against" ["against"],
+        TokenPreposition "around" ["around"],
+        TokenPreposition "among" ["among"],
+        TokenPreposition "at" ["at"],
+        TokenPreposition "in front" ["in front"],
+        TokenPreposition "from" ["from"],
+        TokenPreposition "behind" ["behind"],
+        TokenPreposition "beside" ["beside", "by", "next to"],
+        TokenPreposition "beyond" ["beyond"],
+        TokenPreposition "near" ["near"],
+        TokenPreposition "down" ["down"],
+        TokenPreposition "up" ["up"],
+        TokenPreposition "past" ["past"],
+        TokenPreposition "through" ["through"],
+        TokenPreposition "to" ["to", "toward"],
+        TokenPreposition "until" ["until"],
+        TokenPreposition "with" ["with"],
+        TokenPreposition "together with" ["together with"]
     ]
+
+--Helper functions to make sentences from the unambigous token names
+findVerb :: String -> [Token]
+findVerb verb = case Data.List.find (\(TokenVerb v _) -> v == verb) allVerbs of
+                Just tokenVerb@(TokenVerb _ _) -> [tokenVerb]
+                Nothing -> []
+
+findNoun :: String -> [Token]
+findNoun noun = case Data.List.find (\(TokenNoun n _) -> n == noun) allNouns of
+                Just tokenNoun@(TokenNoun _ _) -> [tokenNoun]
+                Nothing -> []
+
+findPreposition :: String -> [Token]
+findPreposition preposition = case Data.List.find (\(TokenPreposition p _) -> p == preposition) allPrepositions of
+                              Just tokenPreposition@(TokenPreposition _ _) -> [tokenPreposition]
+                              Nothing -> []
+
+makeUnambiguousSentence :: [Token] -> Sentence
+makeUnambiguousSentence [verb] = Phrase verb
+makeUnambiguousSentence [verb, noun] = SimpleSentence verb noun
+makeUnambiguousSentence [verb, preposition, noun] = SimplePrepositionSentence verb preposition noun
+makeUnambiguousSentence [verb, noun0, preposition, noun1] = ComplexSentence verb noun0 preposition noun1
+makeUnambiguousSentence [verb, preposition0, noun0, preposition1, noun1] = ComplexPrepositionSentence verb preposition0 noun0 preposition1 noun1
+makeUnambiguousSentence _ = NullSentence
+
+sentence :: [String] -> Sentence
+sentence [] = NullSentence
+sentence [verb]
+    = makeUnambiguousSentence (findVerb verb)
+sentence [verb, noun]
+    = makeUnambiguousSentence (concat [(findVerb verb), (findNoun noun)])
+sentence [verb, preposition, noun]
+    = makeUnambiguousSentence (concat [(findVerb verb), (findPreposition preposition), (findNoun noun)])
+sentence [verb, noun0, preposition, noun1]
+    = makeUnambiguousSentence (concat [(findVerb verb), (findNoun noun0), (findPreposition preposition), (findNoun noun1)])
+sentence [verb, preposition0, noun0, preposition1, noun1]
+    = makeUnambiguousSentence (concat [(findVerb verb), (findPreposition preposition0), (findNoun noun0), (findPreposition preposition1), (findNoun noun1)])
+sentence _ = NullSentence
 
 allTokens :: [Token]
 allTokens = allNouns ++ allVerbs ++ allPrepositions
@@ -135,7 +175,7 @@ scene0 =
             [
                 Interaction
                 {
-                    sentences = [SimpleSentence (TokenVerb ["get", "take", "pick up"]) (TokenNoun ["key"])],
+                    sentences = [sentence ["get", "key"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -154,7 +194,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimpleSentence (TokenVerb ["open"]) (TokenNoun ["white door", "door"])],
+                    sentences = [sentence ["open", "white door"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -185,7 +225,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimpleSentence (TokenVerb ["close", "shut"]) (TokenNoun ["white door", "door"])],
+                    sentences = [sentence ["close", "white door"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -204,7 +244,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimplePrepositionSentence (TokenVerb ["look"]) (TokenPreposition ["at"]) (TokenNoun ["white door", "door"])],
+                    sentences = [sentence ["look", "at", "white door"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -223,7 +263,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimplePrepositionSentence (TokenVerb ["look"]) (TokenPreposition ["at"]) (TokenNoun ["key"])],
+                    sentences = [sentence ["look", "at", "key"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -236,7 +276,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [Phrase (TokenVerb ["look around"])],
+                    sentences = [sentence ["look around"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -249,7 +289,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [ComplexSentence (TokenVerb ["use"]) (TokenNoun ["key"]) (TokenPreposition ["on", "with"]) (TokenNoun ["white door", "door"])],
+                    sentences = [sentence ["use", "key", "on", "white door"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -276,8 +316,8 @@ scene0 =
                 {
                     sentences =
                         [
-                            SimpleSentence (TokenVerb ["lock"]) (TokenNoun ["white door", "door"]),
-                            ComplexSentence (TokenVerb ["lock"]) (TokenNoun ["white door", "door"]) (TokenPreposition ["with"]) (TokenNoun ["key"])
+                            sentence ["lock", "white door"],
+                            sentence ["lock", "white door", "with", "key"]
                         ],
                     conditionalActions =
                         [
@@ -305,8 +345,8 @@ scene0 =
                 {
                     sentences =
                         [
-                            SimpleSentence (TokenVerb ["unlock"]) (TokenNoun ["white door", "door"]),
-                            ComplexSentence (TokenVerb ["unlock"]) (TokenNoun ["white door", "door"]) (TokenPreposition ["with"]) (TokenNoun ["key"])
+                            sentence ["unlock", "white door"],
+                            sentence ["unlock", "white door", "with", "key"]
                         ],
                     conditionalActions =
                         [
@@ -332,7 +372,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [ComplexSentence (TokenVerb ["open"]) (TokenNoun ["white door", "door"]) (TokenPreposition ["with"]) (TokenNoun ["key"])],
+                    sentences = [sentence ["open", "white door", "with", "key"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -363,11 +403,11 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimplePrepositionSentence (TokenVerb ["move", "walk", "go"]) (TokenPreposition ["through"]) (TokenNoun ["white door", "door"]),
-                                 SimplePrepositionSentence (TokenVerb ["leave", "exit"]) (TokenPreposition ["through"]) (TokenNoun ["white door", "door"]),
-                                 SimpleSentence (TokenVerb ["move", "walk", "go"]) (TokenNoun ["outside"]),
-                                 Phrase (TokenVerb ["leave", "exit"]),
-                                 SimpleSentence (TokenVerb ["leave", "exit"]) (TokenNoun ["green room", "room"])],
+                    sentences = [sentence ["walk", "through", "white door"],
+                                 sentence ["leave", "through", "white door"],
+                                 sentence ["walk", "outside"],
+                                 sentence ["leave"],
+                                 sentence ["leave", "green room"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -386,7 +426,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [SimplePrepositionSentence (TokenVerb ["run", "jog", "sprint", "dash"]) (TokenPreposition ["through"]) (TokenNoun ["white door", "door"])],
+                    sentences = [sentence ["run", "through", "white door"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -423,7 +463,7 @@ defaultScene =
             [
                 Interaction
                 {
-                    sentences = [Phrase (TokenVerb ["jump"])],
+                    sentences = [sentence ["jump"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -436,7 +476,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [Phrase (TokenVerb ["move", "walk", "go"])],
+                    sentences = [sentence ["walk"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -449,7 +489,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [Phrase (TokenVerb ["run", "jog", "sprint", "dash"])],
+                    sentences = [sentence ["run"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -462,7 +502,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [SimplePrepositionSentence (TokenVerb ["look"]) (TokenPreposition ["at"]) (TokenNoun ["key"])],
+                    sentences = [sentence ["look", "at", "key"]],
                     conditionalActions =
                         [
                             ConditionalAction

@@ -8,7 +8,8 @@ module NaturalLanguageParser (Sentence(..),
 import Data.List
 import NaturalLanguageLexer
 
-data Sentence = Phrase Token |
+data Sentence = NullSentence | --Exists for completeness
+                Phrase Token |
                 SimpleSentence Token Token |
                 SimplePrepositionSentence Token Token Token |
                 ComplexSentence Token Token Token Token |
@@ -16,17 +17,17 @@ data Sentence = Phrase Token |
 
 verbsInTokenList :: [Token] -> [Token]
 verbsInTokenList [] = []
-verbsInTokenList ((TokenVerb synonyms) : ts) = (TokenVerb synonyms) : verbsInTokenList ts
+verbsInTokenList (verb@(TokenVerb _ _) : ts) = verb : verbsInTokenList ts
 verbsInTokenList (_ : ts) = verbsInTokenList ts
 
 nounsInTokenList :: [Token] -> [Token]
 nounsInTokenList [] = []
-nounsInTokenList ((TokenNoun synonyms) : ts) = (TokenNoun synonyms) : nounsInTokenList ts
+nounsInTokenList (noun@(TokenNoun _ _) : ts) = noun : nounsInTokenList ts
 nounsInTokenList (_ : ts) = nounsInTokenList ts
 
 prepositionsInTokenList :: [Token] -> [Token]
 prepositionsInTokenList [] = []
-prepositionsInTokenList ((TokenPreposition synonyms) : ts) = (TokenPreposition synonyms) : prepositionsInTokenList ts
+prepositionsInTokenList (preposition@(TokenPreposition _ _) : ts) = preposition : prepositionsInTokenList ts
 prepositionsInTokenList (_ : ts) = prepositionsInTokenList ts
 
 makeSentence :: [[Token]] -> [Sentence]

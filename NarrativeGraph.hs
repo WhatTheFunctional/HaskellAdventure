@@ -16,6 +16,7 @@ module NarrativeGraph (SceneIndex,
                        evaluateCondition,
                        printConditionalDescription,
                        printSceneDescription,
+                       printInvalidInteractions,
                        performInteraction) where
 
 import System.IO
@@ -218,6 +219,20 @@ processInteraction charsToSplit
     = performConditionalActions charsToSplit columnWidth currentScene endScenes inventory flags interaction defaultInteraction
         where interaction = findInteraction thisSceneInteractions sentences
               defaultInteraction = findInteraction defaultSceneInteractions sentences
+
+hasInvalidInteractions :: [Interaction] -> Maybe Interaction
+hasInvalidInteractions [] = Nothing
+hasInvalidInteractions (interaction@(Interaction {sentences = thisSentences}) : remainingInteractions)
+    | NullSentence `elem` thisSentences = Just interaction
+    | otherwise = hasInvalidInteractions remainingInteractions
+
+printInvalidInteractions :: NarrativeGraph -> Int -> IO ()
+printInvalidInteractions narrativeGraph@(NarrativeGraph {nodes = graphNodes}) sceneIndex
+    = case hasInvalidInteractions sceneInteractions of
+          Nothing -> return ()
+          Just interaction@(Interaction {sentences = thisSentences}) -> putStrLn ("Invalid interaction: " ++  (show interaction))
+        where (Scene {sceneDescription = _,
+                      interactions = sceneInteractions}) = graphNodes ! sceneIndex
 
 --Perform an interaction with the current scene
 --Takes the narrative graph, current scene index, inventory, and sentence as input
