@@ -58,7 +58,7 @@ reflowLine columnWidth words
 
 --Reflow a set of lines
 reflowLines :: [Char] -> Int -> [String] -> [String]
-reflowLines delimiters columnWidth [] = [] --No lines to reflow
+reflowLines _ _ [] = [] --No lines to reflow
 reflowLines delimiters columnWidth (line : lines)
     = (reflowLine columnWidth (splitStringWithDelimiters delimiters line [])) ++ (reflowLines delimiters columnWidth lines)
 
