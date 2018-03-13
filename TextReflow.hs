@@ -44,16 +44,16 @@ splitStringWithDelimiters delimiters (c : cs) currentWord@(cw : cws)
 
 --Split a single line after the column width limit
 splitLine :: Int -> Int -> [String] -> [String] -> ([String], [String])
-splitLine _ _ wordsBeforeSplit [] = (wordsBeforeSplit, []) --No words remaining
+splitLine _ _ wordsBeforeSplit [] = (reverse wordsBeforeSplit, []) --No words remaining
 splitLine c columnWidth wordsBeforeSplit (word : wordsAfterSplit)
     | c + (length word) < columnWidth = splitLine (c + (length word)) columnWidth (word : wordsBeforeSplit) wordsAfterSplit
-    | otherwise = (wordsBeforeSplit, (word : wordsAfterSplit)) --Exceeded column width, add a newline
+    | otherwise = (reverse wordsBeforeSplit, (word : wordsAfterSplit)) --Exceeded column width, add a newline
 
 --Reflow a single line
 reflowLine :: Int -> [String] -> [String]
 reflowLine _ [] = [] --No words to join
 reflowLine columnWidth words
-    = (concat (reverse wordsBeforeSplit)) : (reflowLine columnWidth wordsAfterSplit)
+    = (concat wordsBeforeSplit) : (reflowLine columnWidth wordsAfterSplit)
         where (wordsBeforeSplit, wordsAfterSplit) = splitLine 0 columnWidth [] words
 
 --Reflow a set of lines
