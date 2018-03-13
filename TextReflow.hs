@@ -44,7 +44,7 @@ splitStringWithDelimiters delimiters (c : cs) currentWord@(cw : cws)
 
 --Split a single line after the column width limit
 splitLine :: Int -> Int -> [String] -> [String] -> ([String], [String])
-splitLine c columnWidth wordsBeforeSplit [] = (wordsBeforeSplit, []) --No words remaining
+splitLine _ _ wordsBeforeSplit [] = (wordsBeforeSplit, []) --No words remaining
 splitLine c columnWidth wordsBeforeSplit (word : wordsAfterSplit)
     | c + (length word) < columnWidth = splitLine (c + (length word)) columnWidth (word : wordsBeforeSplit) wordsAfterSplit
     | otherwise = (wordsBeforeSplit, (word : wordsAfterSplit)) --Exceeded column width, add a newline
