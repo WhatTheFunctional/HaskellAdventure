@@ -119,7 +119,7 @@ parseInput inventory flags line
     | otherwise = --printWordTokens sentenceTokenMatches >>
                   --printSentences sentences >>
                   return (Just sentences)
-        where inputWords = splitString allCharsToSplit line [] []
+        where inputWords = splitString allCharsToSplit line []
               sentenceTokenMatches = lexInput allTokens inputWords
               sentences = parseSentence sentenceTokenMatches
 
