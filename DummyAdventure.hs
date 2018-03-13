@@ -115,44 +115,9 @@ allPrepositions =
         TokenPreposition "together with" ["together with"]
     ]
 
---Helper functions to make sentences from the unambigous token names
-findVerb :: String -> [Token]
-findVerb verb = case Data.List.find (\(TokenVerb v _) -> v == verb) allVerbs of
-                Just tokenVerb@(TokenVerb _ _) -> [tokenVerb]
-                Nothing -> []
-
-findNoun :: String -> [Token]
-findNoun noun = case Data.List.find (\(TokenNoun n _) -> n == noun) allNouns of
-                Just tokenNoun@(TokenNoun _ _) -> [tokenNoun]
-                Nothing -> []
-
-findPreposition :: String -> [Token]
-findPreposition preposition = case Data.List.find (\(TokenPreposition p _) -> p == preposition) allPrepositions of
-                              Just tokenPreposition@(TokenPreposition _ _) -> [tokenPreposition]
-                              Nothing -> []
-
-makeUnambiguousSentence :: [Token] -> Sentence
-makeUnambiguousSentence [verb] = Phrase verb
-makeUnambiguousSentence [verb, noun] = SimpleSentence verb noun
-makeUnambiguousSentence [verb, preposition, noun] = SimplePrepositionSentence verb preposition noun
-makeUnambiguousSentence [verb, noun0, preposition, noun1] = ComplexSentence verb noun0 preposition noun1
-makeUnambiguousSentence [verb, preposition0, noun0, preposition1, noun1] = ComplexPrepositionSentence verb preposition0 noun0 preposition1 noun1
-makeUnambiguousSentence _ = NullSentence
-
 --Helper function to make unambiguous sentences
 uSentence :: [String] -> Sentence
-uSentence [] = NullSentence
-uSentence [verb]
-    = makeUnambiguousSentence (findVerb verb)
-uSentence [verb, noun]
-    = makeUnambiguousSentence (concat [(findVerb verb), (findNoun noun)])
-uSentence [verb, preposition, noun]
-    = makeUnambiguousSentence (concat [(findVerb verb), (findPreposition preposition), (findNoun noun)])
-uSentence [verb, noun0, preposition, noun1]
-    = makeUnambiguousSentence (concat [(findVerb verb), (findNoun noun0), (findPreposition preposition), (findNoun noun1)])
-uSentence [verb, preposition0, noun0, preposition1, noun1]
-    = makeUnambiguousSentence (concat [(findVerb verb), (findPreposition preposition0), (findNoun noun0), (findPreposition preposition1), (findNoun noun1)])
-uSentence _ = NullSentence
+uSentence words = unambiguousSentence allVerbs allNouns allPrepositions words
 
 allTokens :: [Token]
 allTokens = allNouns ++ allVerbs ++ allPrepositions
