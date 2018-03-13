@@ -41,8 +41,7 @@ printIntro :: IO ()
 printIntro = reflowPutStrs allCharsToSplit 
                            allColumnWidth
                            ["Haskell Text Adventure Engine v1.0\n",
-                            "Copyright Laurence Emms 2018\n"] >>
-             putStr "\n" >>
+                            "Copyright Laurence Emms 2018\n\n"] >>
              hFlush stdout
 
 --Print help text
@@ -57,9 +56,8 @@ printHelp = reflowPutStrs allCharsToSplit
                            "Prepositions - Print all available prepositions.\n",
                            "Inventory - Print all current inventory items.\n",
                            "Flags - Print all current flags. Warning, this contains spoilers!\n",
-                           "Quit - Exit the game.\n",
-                           "--------------------\n"] >>
-            putStr "\n" >>
+                           "Quit - Exit the  game.\n",
+                           "--------------------\n\n"] >>
             hFlush stdout
 
 printGrammar :: IO ()

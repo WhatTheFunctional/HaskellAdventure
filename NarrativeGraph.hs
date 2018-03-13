@@ -77,6 +77,7 @@ evaluateCondition (CNot condition) inventory flags = not (evaluateCondition cond
 evaluateCondition (COr condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) || (evaluateCondition condition1 inventory flags)
 evaluateCondition (CAnd condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) && (evaluateCondition condition1 inventory flags)
 
+--Print a conditional description by evaluating which conditions are true, concatenating the description, and printing it with reflowPutStrs
 printConditionalDescription :: [Char] -> Int -> Inventory -> Flags -> ConditionalDescription -> [String] -> IO ()
 printConditionalDescription charsToSplit columnWidth
                             inventory flags (ConditionalDescription []) linesToPrint
@@ -85,7 +86,7 @@ printConditionalDescription charsToSplit columnWidth
                             inventory flags (ConditionalDescription ((condition, subDescription) : remainingDescriptions)) linesToPrint
     | evaluateCondition condition inventory flags
         = printConditionalDescription charsToSplit columnWidth
-                                      inventory flags (ConditionalDescription remainingDescriptions) (subDescription : linesToPrint) --Condition is true, add sub-description to print
+                                      inventory flags (ConditionalDescription remainingDescriptions) ((subDescription ++ " ") : linesToPrint) --Condition is true, add sub-description to print
     | otherwise
         = printConditionalDescription charsToSplit columnWidth inventory flags (ConditionalDescription remainingDescriptions) linesToPrint
 
