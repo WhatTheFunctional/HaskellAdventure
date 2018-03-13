@@ -139,19 +139,20 @@ makeUnambiguousSentence [verb, noun0, preposition, noun1] = ComplexSentence verb
 makeUnambiguousSentence [verb, preposition0, noun0, preposition1, noun1] = ComplexPrepositionSentence verb preposition0 noun0 preposition1 noun1
 makeUnambiguousSentence _ = NullSentence
 
-sentence :: [String] -> Sentence
-sentence [] = NullSentence
-sentence [verb]
+--Helper function to make unambiguous sentences
+uSentence :: [String] -> Sentence
+uSentence [] = NullSentence
+uSentence [verb]
     = makeUnambiguousSentence (findVerb verb)
-sentence [verb, noun]
+uSentence [verb, noun]
     = makeUnambiguousSentence (concat [(findVerb verb), (findNoun noun)])
-sentence [verb, preposition, noun]
+uSentence [verb, preposition, noun]
     = makeUnambiguousSentence (concat [(findVerb verb), (findPreposition preposition), (findNoun noun)])
-sentence [verb, noun0, preposition, noun1]
+uSentence [verb, noun0, preposition, noun1]
     = makeUnambiguousSentence (concat [(findVerb verb), (findNoun noun0), (findPreposition preposition), (findNoun noun1)])
-sentence [verb, preposition0, noun0, preposition1, noun1]
+uSentence [verb, preposition0, noun0, preposition1, noun1]
     = makeUnambiguousSentence (concat [(findVerb verb), (findPreposition preposition0), (findNoun noun0), (findPreposition preposition1), (findNoun noun1)])
-sentence _ = NullSentence
+uSentence _ = NullSentence
 
 allTokens :: [Token]
 allTokens = allNouns ++ allVerbs ++ allPrepositions
@@ -175,7 +176,7 @@ scene0 =
             [
                 Interaction
                 {
-                    sentences = [sentence ["get", "key"]],
+                    sentences = [uSentence ["get", "key"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -194,7 +195,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["open", "white door"]],
+                    sentences = [uSentence ["open", "white door"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -225,7 +226,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["close", "white door"]],
+                    sentences = [uSentence ["close", "white door"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -244,7 +245,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["look", "at", "white door"]],
+                    sentences = [uSentence ["look", "at", "white door"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -263,7 +264,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["look", "at", "key"]],
+                    sentences = [uSentence ["look", "at", "key"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -276,7 +277,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["look around"]],
+                    sentences = [uSentence ["look around"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -289,7 +290,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["use", "key", "on", "white door"]],
+                    sentences = [uSentence ["use", "key", "on", "white door"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -316,8 +317,8 @@ scene0 =
                 {
                     sentences =
                         [
-                            sentence ["lock", "white door"],
-                            sentence ["lock", "white door", "with", "key"]
+                            uSentence ["lock", "white door"],
+                            uSentence ["lock", "white door", "with", "key"]
                         ],
                     conditionalActions =
                         [
@@ -345,8 +346,8 @@ scene0 =
                 {
                     sentences =
                         [
-                            sentence ["unlock", "white door"],
-                            sentence ["unlock", "white door", "with", "key"]
+                            uSentence ["unlock", "white door"],
+                            uSentence ["unlock", "white door", "with", "key"]
                         ],
                     conditionalActions =
                         [
@@ -372,7 +373,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["open", "white door", "with", "key"]],
+                    sentences = [uSentence ["open", "white door", "with", "key"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -403,11 +404,11 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["walk", "through", "white door"],
-                                 sentence ["leave", "through", "white door"],
-                                 sentence ["walk", "outside"],
-                                 sentence ["leave"],
-                                 sentence ["leave", "green room"]],
+                    sentences = [uSentence ["walk", "through", "white door"],
+                                 uSentence ["leave", "through", "white door"],
+                                 uSentence ["walk", "outside"],
+                                 uSentence ["leave"],
+                                 uSentence ["leave", "green room"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -426,7 +427,7 @@ scene0 =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["run", "through", "white door"]],
+                    sentences = [uSentence ["run", "through", "white door"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -463,7 +464,7 @@ defaultScene =
             [
                 Interaction
                 {
-                    sentences = [sentence ["jump"]],
+                    sentences = [uSentence ["jump"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -476,7 +477,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["walk"]],
+                    sentences = [uSentence ["walk"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -489,7 +490,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["run"]],
+                    sentences = [uSentence ["run"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -502,7 +503,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [sentence ["look", "at", "key"]],
+                    sentences = [uSentence ["look", "at", "key"]],
                     conditionalActions =
                         [
                             ConditionalAction
