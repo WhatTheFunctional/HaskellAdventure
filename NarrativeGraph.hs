@@ -204,16 +204,16 @@ findInteraction interactions sentences = (find matchInteraction ((\x -> (\y -> (
 
 filterInteraction :: [Char] -> Int -> Scene -> Scene -> SceneIndex -> [SceneIndex] -> Inventory -> Flags -> [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
 filterInteraction delimiters
-                   columnWidth
-                   (Scene {sceneDescription = _,
-                           interactions = thisSceneInteractions})
-                   (Scene {sceneDescription = _,
-                           interactions = defaultSceneInteractions})
-                   currentScene
-                   endScenes
-                   inventory
-                   flags
-                   sentences
+                  columnWidth
+                  (Scene {sceneDescription = _,
+                          interactions = thisSceneInteractions})
+                  (Scene {sceneDescription = _,
+                          interactions = defaultSceneInteractions})
+                  currentScene
+                  endScenes
+                  inventory
+                  flags
+                  sentences
     = performConditionalActions delimiters columnWidth currentScene endScenes inventory flags interaction defaultInteraction
         where interaction = findInteraction thisSceneInteractions sentences
               defaultInteraction = findInteraction defaultSceneInteractions sentences
