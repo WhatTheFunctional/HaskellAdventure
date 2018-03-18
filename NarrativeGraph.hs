@@ -202,8 +202,8 @@ findInteraction :: [Interaction] -> [Sentence] -> Maybe Interaction
 findInteraction interactions sentences = (find matchInteraction ((\x -> (\y -> (x, y))) <$> interactions <*> sentences)) >>=
                                          (\(x, y) -> Just x)
 
-processInteraction :: [Char] -> Int -> Scene -> Scene -> SceneIndex -> [SceneIndex] -> Inventory -> Flags -> [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
-processInteraction delimiters
+filterInteraction :: [Char] -> Int -> Scene -> Scene -> SceneIndex -> [SceneIndex] -> Inventory -> Flags -> [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
+filterInteraction delimiters
                    columnWidth
                    (Scene {sceneDescription = _,
                            interactions = thisSceneInteractions})
@@ -246,4 +246,4 @@ performInteraction delimiters columnWidth narrativeGraph@(NarrativeGraph {nodes 
                                    (\(newSceneIndex, newSceneInventory, newSceneFlags) -> Just (narrativeGraph, newSceneIndex, newSceneInventory, newSceneFlags)))
       ioMaybeNewSceneTuple
         where currentScene = graphNodes ! sceneIndex
-              ioMaybeNewSceneTuple = processInteraction delimiters columnWidth currentScene thisDefaultScene sceneIndex graphEndScenes inventory flags sentences
+              ioMaybeNewSceneTuple = filterInteraction delimiters columnWidth currentScene thisDefaultScene sceneIndex graphEndScenes inventory flags sentences
