@@ -57,7 +57,7 @@ data Interaction = Interaction {sentences :: [Sentence],
 data Scene = Scene {sceneDescription :: ConditionalDescription,
                     interactions :: [Interaction]} deriving (Show, Eq)
 
---By definition the first node in the narrative graph is the start
+--By definition the first node in the narrative graph is the starting scene of the game
 data NarrativeGraph = NarrativeGraph {nodes :: Array SceneIndex Scene,
                                       endScenes :: [SceneIndex],
                                       graphDefaultScene :: Scene} deriving (Show, Eq)
