@@ -20,6 +20,7 @@ module NarrativeGraph (SceneIndex,
                        performInteraction) where
 
 import System.IO
+import Data.List
 import Data.Array
 import qualified Data.List
 
@@ -192,18 +193,14 @@ performConditionalActions delimiters
                                             (Just (Interaction {sentences = thisSentences,
                                                                 conditionalActions = remainingConditionalActions})) --The condition for the action failed, attempt other actions
 
---Find an interaction in the interactions list which matches the head of the sentences list
-findSentenceInteraction :: [Interaction] -> [Sentence] -> [Sentence] -> Maybe Interaction
-findSentenceInteraction [] _ _ = Nothing --You can't match no interactions
-findSentenceInteraction (interaction : remainingInteractions) [] allSentences = findInteraction remainingInteractions allSentences --None of the sentences matched this enteraction, try with remaining interactions
-findSentenceInteraction allInteractions@(interaction@(Interaction {sentences = thisSentences}) : remainingInteractions) (sentence : remainingSentences) allSentences
-    | sentence `elem` thisSentences = Just interaction --This interaction matches this sentence
-    | otherwise = findSentenceInteraction allInteractions remainingSentences allSentences --This interaction doesn't match this sentence, try all remaining sentences
+matchInteraction :: (Interaction, Sentence) -> Bool
+matchInteraction ((Interaction {sentences = thisSentences}), sentence)
+    | sentence `elem` thisSentences = True
+    | otherwise = False
 
 findInteraction :: [Interaction] -> [Sentence] -> Maybe Interaction
-findInteraction [] _ = Nothing --You can't match no interactions
-findInteraction _ [] = Nothing --You can't match no sentences
-findInteraction interactions sentences = findSentenceInteraction interactions sentences sentences
+findInteraction interactions sentences = (find matchInteraction ((\x -> (\y -> (x, y))) <$> interactions <*> sentences)) >>=
+                                         (\(x, y) -> Just x)
 
 processInteraction :: [Char] -> Int -> Scene -> Scene -> SceneIndex -> [SceneIndex] -> Inventory -> Flags -> [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
 processInteraction delimiters
