@@ -123,15 +123,15 @@ parseInput inventory flags line
               sentenceTokenMatches = lexInput allTokens inputWords
               sentences = parseSentence sentenceTokenMatches
 
-doAdventureLoop :: NarrativeGraph -> SceneIndex -> Inventory -> Flags -> Maybe [Sentence] -> IO (Maybe (NarrativeGraph, SceneIndex, Inventory, Flags))
+doAdventureLoop :: NarrativeGraph -> SceneIndex -> Inventory -> Flags -> Maybe [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
 doAdventureLoop _ _ _ _ Nothing = return Nothing -- End state of the game
-doAdventureLoop narrativeGraph sceneIndex inventory flags (Just []) = adventure (Just (narrativeGraph, sceneIndex, inventory, flags)) --Failed to parse any sentences
+doAdventureLoop narrativeGraph sceneIndex inventory flags (Just []) = adventure narrativeGraph (Just (sceneIndex, inventory, flags)) --Failed to parse any sentences
 doAdventureLoop narrativeGraph sceneIndex inventory flags (Just sentences) = performInteraction allDelimiters allColumnWidth narrativeGraph sceneIndex inventory flags sentences >>=
-                                                                             adventure --Perform the adventure loop
+                                                                             adventure narrativeGraph --Perform the adventure loop
 
-adventure :: Maybe (NarrativeGraph, SceneIndex, Inventory, Flags) -> IO (Maybe (NarrativeGraph, SceneIndex, Inventory, Flags))
-adventure Nothing = reflowPutStr allDelimiters allColumnWidth "Game over. Thanks for playing!" >> hFlush stdout >> return Nothing
-adventure (Just (narrativeGraph, sceneIndex, inventory, flags)) = printSceneDescription allDelimiters allColumnWidth narrativeGraph sceneIndex inventory flags >>
+adventure :: NarrativeGraph ->Maybe (SceneIndex, Inventory, Flags) -> IO (Maybe (SceneIndex, Inventory, Flags))
+adventure _ Nothing = reflowPutStr allDelimiters allColumnWidth "Game over. Thanks for playing!" >> hFlush stdout >> return Nothing
+adventure narrativeGraph (Just (sceneIndex, inventory, flags)) = printSceneDescription allDelimiters allColumnWidth narrativeGraph sceneIndex inventory flags >>
                                                                   putStr "\n" >>
                                                                   printInvalidInteractions narrativeGraph sceneIndex >>
                                                                   getLine >>=
@@ -142,6 +142,6 @@ main = printIntro >>
        putStr "\n" >>
        printHelp >>
        hFlush stdout >>
-       adventure (Just (makeNarrativeGraph adventureScenes endScenes defaultScene, 0, startInventory, startFlags)) >>
+       adventure (makeNarrativeGraph adventureScenes endScenes defaultScene) (Just (0, startInventory, startFlags)) >>
        return ()
            where (adventureScenes, endScenes) = allScenes

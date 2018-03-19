@@ -235,15 +235,12 @@ printInvalidInteractions narrativeGraph@(NarrativeGraph {nodes = graphNodes}) sc
 --Perform an interaction with the current scene
 --Takes the narrative graph, current scene index, inventory, and sentence as input
 --Evaluates to Maybe of the next scene index and inventory state
-performInteraction :: [Char] -> Int -> NarrativeGraph -> SceneIndex -> Inventory -> Flags -> [Sentence] -> IO (Maybe (NarrativeGraph, SceneIndex, Inventory, Flags))
+performInteraction :: [Char] -> Int -> NarrativeGraph -> SceneIndex -> Inventory -> Flags -> [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
 performInteraction _ _ narrativeGraph sceneIndex inventory flags []
     = putStrLn "Please enter a command." >>
       hFlush stdout >>
-      return (Just (narrativeGraph, sceneIndex, inventory, flags)) --If there are no valid sentences, just continue.
+      return (Just (sceneIndex, inventory, flags)) --If there are no valid sentences, just continue.
 performInteraction delimiters columnWidth narrativeGraph@(NarrativeGraph {nodes = graphNodes, endScenes = graphEndScenes, graphDefaultScene = thisDefaultScene}) sceneIndex inventory flags sentences
     = hFlush stdout >>
-      fmap (\maybeNewSceneTuple -> maybeNewSceneTuple >>=
-                                   (\(newSceneIndex, newSceneInventory, newSceneFlags) -> Just (narrativeGraph, newSceneIndex, newSceneInventory, newSceneFlags)))
-      ioMaybeNewSceneTuple
+      filterInteraction delimiters columnWidth currentScene thisDefaultScene sceneIndex graphEndScenes inventory flags sentences
         where currentScene = graphNodes ! sceneIndex
-              ioMaybeNewSceneTuple = filterInteraction delimiters columnWidth currentScene thisDefaultScene sceneIndex graphEndScenes inventory flags sentences
