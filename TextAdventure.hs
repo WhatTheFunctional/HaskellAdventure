@@ -129,7 +129,7 @@ doAdventureLoop narrativeGraph sceneIndex inventory flags (Just []) = adventure 
 doAdventureLoop narrativeGraph sceneIndex inventory flags (Just sentences) = performInteraction allDelimiters allColumnWidth narrativeGraph sceneIndex inventory flags sentences >>=
                                                                              adventure narrativeGraph --Perform the adventure loop
 
-adventure :: NarrativeGraph ->Maybe (SceneIndex, Inventory, Flags) -> IO (Maybe (SceneIndex, Inventory, Flags))
+adventure :: NarrativeGraph -> Maybe (SceneIndex, Inventory, Flags) -> IO (Maybe (SceneIndex, Inventory, Flags))
 adventure _ Nothing = reflowPutStr allDelimiters allColumnWidth "Game over. Thanks for playing!" >> hFlush stdout >> return Nothing
 adventure narrativeGraph (Just (sceneIndex, inventory, flags)) = printSceneDescription allDelimiters allColumnWidth narrativeGraph sceneIndex inventory flags >>
                                                                   putStr "\n" >>
