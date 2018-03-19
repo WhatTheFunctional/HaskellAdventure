@@ -236,7 +236,7 @@ printInvalidInteractions narrativeGraph@(NarrativeGraph {nodes = graphNodes}) sc
 --Takes the narrative graph, current scene index, inventory, and sentence as input
 --Evaluates to Maybe of the next scene index and inventory state
 performInteraction :: [Char] -> Int -> NarrativeGraph -> SceneIndex -> Inventory -> Flags -> [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
-performInteraction _ _ narrativeGraph sceneIndex inventory flags []
+performInteraction _ _ _ sceneIndex inventory flags []
     = putStrLn "Please enter a command." >>
       hFlush stdout >>
       return (Just (sceneIndex, inventory, flags)) --If there are no valid sentences, just continue.
