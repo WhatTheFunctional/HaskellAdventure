@@ -133,10 +133,10 @@ scene0 =
     Scene
     {
         sceneDescription =
-            ConditionalDescription [(CTrue, "You're standing in a green room. The room has a <white door>."),
-                                    (CNot (FlagSet "opened white door"), "The <white door> is closed."),
-                                    (FlagSet "opened white door", "The <white door> is open."),
-                                    (CNot (InInventory "key"), "There is a <key> on the floor.")],
+            ConditionalDescription [(CTrue, "You're standing in a green room. The room has a <white door>.", []),
+                                    (CNot (FlagSet "opened white door"), "The <white door> is closed.", []),
+                                    (FlagSet "opened white door", "The <white door> is open.", []),
+                                    (CNot (InInventory "key"), "There is a <key> on the floor.", [])],
         interactions =
             [
                 Interaction
@@ -147,13 +147,13 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --The player does not have the key
-                                conditionalDescription = ConditionalDescription [(CTrue, "You pick up the <key>.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You pick up the <key>.", [])],
                                 stateChanges = [AddToInventory "key"]
                             },
                             ConditionalAction
                             {
                                 condition = CTrue, --The player has the key
-                                conditionalDescription = ConditionalDescription [(CTrue, "You already have the <key>.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You already have the <key>.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -166,25 +166,25 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is locked
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already opened.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already opened.", [])],
                                 stateChanges = []
                             },
                             ConditionalAction
                             {
                                 condition = (CNot (FlagSet "unlocked white door")) `CAnd` (InInventory "key"), --The white door is locked and the player has a key
-                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with your <key>.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with your <key>.", [])],
                                 stateChanges = [SetFlag "unlocked white door", SetFlag "opened white door"]
                             },
                             ConditionalAction
                             {
                                 condition = FlagSet "unlocked white door", --The white door is unlocked
-                                conditionalDescription = ConditionalDescription [(CTrue, "You open the <white door>.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You open the <white door>.", [])],
                                 stateChanges = [SetFlag "opened white door"]
                             },
                             ConditionalAction
                             {
                                 condition = (CNot (FlagSet "unlocked white door")) `CAnd` (CNot (InInventory "key")), --The white door is locked player and the player doesn't have a key
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is locked.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is locked.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -197,13 +197,13 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is open
-                                conditionalDescription = ConditionalDescription [(CTrue, "You close the <white door>.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You close the <white door>.", [])],
                                 stateChanges = [RemoveFlag "opened white door"]
                             },
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already closed.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already closed.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -216,13 +216,13 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is open
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is open.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is open.", [])],
                                 stateChanges = []
                             },
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is closed.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is closed.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -235,7 +235,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --Otherwise
-                                conditionalDescription = ConditionalDescription [(CTrue, "There's a <key> on the floor.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "There's a <key> on the floor.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -248,7 +248,7 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription [(CTrue, "You take a look around. You don't like the color scheme of this room.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You take a look around. You don't like the color scheme of this room.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -261,19 +261,19 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --Player does not have a key
-                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to use with the <white door>.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to use with the <white door>.", [])],
                                 stateChanges = [RemoveFlag "unlocked white door"]
                             },
                             ConditionalAction
                             {
                                 condition = CNot (FlagSet "unlocked white door"), --The player has a key and the door is locked
-                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with your <key>.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with your <key>.", [])],
                                 stateChanges = [SetFlag "unlocked white door"]
                             },
                             ConditionalAction
                             {
                                 condition = (FlagSet "unlocked white door"), --The player has a key and the door is unlocked
-                                conditionalDescription = ConditionalDescription [(CTrue, "You lock the <white door> with your <key>.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You lock the <white door> with your <key>.", [])],
                                 stateChanges = [RemoveFlag "unlocked white door"]
                             }
                         ]
@@ -290,19 +290,19 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = (FlagSet "unlocked white door") `CAnd` (InInventory "key"), --Player has a key and the white door is unlocked
-                                conditionalDescription = ConditionalDescription [(CTrue, "You lock the <white door> with your <key>.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You lock the <white door> with your <key>.", [])],
                                 stateChanges = [RemoveFlag "unlocked white door"]
                             },
                             ConditionalAction
                             {
                                 condition = CNot (FlagSet "unlocked white door"), --The door is already locked
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already locked.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already locked.", [])],
                                 stateChanges = []
                             },
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --Otherwise
-                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to lock the <white door> with.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to lock the <white door> with.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -319,19 +319,19 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = (CNot (FlagSet "unlocked white door")) `CAnd` (InInventory "key"), --Player has a key and the white door is locked
-                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with your <key>.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with your <key>.", [])],
                                 stateChanges = [SetFlag "unlocked white door"]
                             },
                             ConditionalAction
                             {
                                 condition = (FlagSet "unlocked white door"), --The door is already unlocked
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already unlocked.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already unlocked.", [])],
                                 stateChanges = [SetFlag "unlocked white door"]
                             },
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --Otherwise
-                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to unlock the <white door> with.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to unlock the <white door> with.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -344,25 +344,25 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = (CNot (FlagSet "unlocked white door")) `CAnd` (InInventory "key"), --Player has a key and the white door is locked
-                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with the <key> and open it.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You unlock the <white door> with the <key> and open it.", [])],
                                 stateChanges = [SetFlag "unlocked white door", SetFlag "opened white door"]
                             },
                             ConditionalAction
                             {
                                 condition = (CNot (FlagSet "opened white door")) `CAnd` (FlagSet "unlocked white door"), --Player has a key and the white door is locked
-                                conditionalDescription = ConditionalDescription [(CTrue, "You open the <white door>.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You open the <white door>.", [])],
                                 stateChanges = [SetFlag "opened white door"]
                             },
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is already opened
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already open.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <white door> is already open.", [])],
                                 stateChanges = []
                             },
                             ConditionalAction
                             {
                                 condition = CNot (InInventory "key"), --The player does not have the key
-                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to open the <white door> with.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <key> to open the <white door> with.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -371,6 +371,8 @@ scene0 =
                 {
                     sentences = [uSentence ["walk", "through", "white door"],
                                  uSentence ["leave", "through", "white door"],
+                                 uSentence ["leave", "out", "white door"],
+                                 uSentence ["walk", "out", "white door"],
                                  uSentence ["walk", "outside"],
                                  uSentence ["leave"],
                                  uSentence ["leave", "green room"]],
@@ -379,13 +381,13 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is opened
-                                conditionalDescription = ConditionalDescription [(CTrue, "You walk through the <white door>. Congratulations, you escaped the green room!")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You walk through the <white door>. Congratulations, you escaped the green room!", [])],
                                 stateChanges = [SceneChange 1]
                             },
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription [(CTrue, "You can't leave. The <white door> is closed.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You can't leave. The <white door> is closed.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -398,13 +400,13 @@ scene0 =
                             ConditionalAction
                             {
                                 condition = FlagSet "opened white door", --The white door is opened
-                                conditionalDescription = ConditionalDescription [(CTrue, "You dash through the <white door>. Congratulations, you escaped the green room!")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You dash through the <white door>. Congratulations, you escaped the green room!", [])],
                                 stateChanges = [SceneChange 1]
                             },
                             ConditionalAction
                             {
                                 condition = CTrue, --Otherwise
-                                conditionalDescription = ConditionalDescription [(CTrue, "You can't leave. The <white door> is closed.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You can't leave. The <white door> is closed.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -435,7 +437,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription [(CTrue, "You jump up and down in place.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You jump up and down in place.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -448,7 +450,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription [(CTrue, "You walk around a bit.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You walk around a bit.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -461,7 +463,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription [(CTrue, "You jog in place.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You jog in place.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -474,7 +476,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "key", --The key is in your inventory
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <key> is in your pocket where you left it.")],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <key> is in your pocket where you left it.", [])],
                                 stateChanges = []
                             }
                         ]

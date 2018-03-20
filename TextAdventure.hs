@@ -11,7 +11,7 @@ import TextReflow
 import NaturalLanguageLexer
 import NaturalLanguageParser
 import NarrativeGraph
-import DummyAdventure
+import NightmareAdventure
 
 allDelimiters :: [Char]
 allDelimiters = [' ', '\t']
@@ -129,14 +129,20 @@ doAdventureLoop narrativeGraph sceneIndex inventory flags (Just []) = adventure 
 doAdventureLoop narrativeGraph sceneIndex inventory flags (Just sentences) = performInteraction allDelimiters allColumnWidth narrativeGraph sceneIndex inventory flags sentences >>=
                                                                              adventure narrativeGraph --Perform the adventure loop
 
+updateAdventure :: NarrativeGraph -> Maybe (SceneIndex, Inventory, Flags) -> IO (Maybe (SceneIndex, Inventory, Flags))
+updateAdventure _ Nothing = return Nothing
+updateAdventure narrativeGraph (Just (sceneIndex, inventory, flags))
+    = putStr "\n" >>
+      printInvalidInteractions narrativeGraph sceneIndex >>
+      getLine >>=
+      parseInput inventory flags >>=
+      doAdventureLoop narrativeGraph sceneIndex inventory flags
+
 adventure :: NarrativeGraph -> Maybe (SceneIndex, Inventory, Flags) -> IO (Maybe (SceneIndex, Inventory, Flags))
 adventure _ Nothing = reflowPutStr allDelimiters allColumnWidth "Game over. Thanks for playing!" >> hFlush stdout >> return Nothing
-adventure narrativeGraph (Just (sceneIndex, inventory, flags)) = printSceneDescription allDelimiters allColumnWidth narrativeGraph sceneIndex inventory flags >>
-                                                                  putStr "\n" >>
-                                                                  printInvalidInteractions narrativeGraph sceneIndex >>
-                                                                  getLine >>=
-                                                                  parseInput inventory flags >>=
-                                                                  doAdventureLoop narrativeGraph sceneIndex inventory flags
+adventure narrativeGraph (Just (sceneIndex, inventory, flags)) = printSceneDescription allDelimiters allColumnWidth narrativeGraph (Just (sceneIndex, inventory, flags)) >>=
+                                                                 updateAdventure narrativeGraph
+
 main = printIntro >>
        reflowPutStr allDelimiters allColumnWidth gameIntro >>
        putStr "\n" >>
