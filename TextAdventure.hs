@@ -73,35 +73,35 @@ printVerbs :: [Token] -> IO ()
 printVerbs [] = putStr "\n" >> hFlush stdout
 printVerbs ((TokenVerb name synonyms) : tokens) = reflowPutStr allDelimiters
                                                                allColumnWidth
-                                                               ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".") >>
+                                                               ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".\n") >>
                                              printVerbs tokens
 
 printNouns :: [Token] -> IO ()
 printNouns [] = putStr "\n" >> hFlush stdout
 printNouns ((TokenNoun name synonyms) : tokens) = reflowPutStr allDelimiters
                                                                allColumnWidth
-                                                               ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".") >>
+                                                               ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".\n") >>
                                              printNouns tokens
 
 printPrepositions :: [Token] -> IO ()
 printPrepositions [] = putStr "\n" >> hFlush stdout
 printPrepositions ((TokenPreposition name synonyms) : tokens) = reflowPutStr allDelimiters
                                                                              allColumnWidth
-                                                                             ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".") >>
+                                                                             ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".\n") >>
                                                            printPrepositions tokens
 
 printInventory :: Inventory -> IO ()
 printInventory (Inventory []) = putStr "\n" >> hFlush stdout
 printInventory (Inventory (object : remainingInventory)) = reflowPutStr allDelimiters
                                                                         allColumnWidth
-                                                                        (object ++ ".") >>
+                                                                        (object ++ ".\n") >>
                                                            printInventory (Inventory remainingInventory)
 
 printFlags :: Flags -> IO ()
 printFlags (Flags []) = putStr "\n" >> hFlush stdout
 printFlags (Flags (flag : remainingFlags)) = reflowPutStr allDelimiters
                                                           allColumnWidth
-                                                          (flag ++ ".") >>
+                                                          (flag ++ ".\n") >>
                                              printFlags (Flags remainingFlags)
 
 parseInput :: Inventory -> Flags -> String -> IO (Maybe [Sentence])

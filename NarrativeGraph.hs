@@ -81,11 +81,11 @@ evaluateCondition (CAnd condition0 condition1) inventory flags = (evaluateCondit
 --Print a conditional description by evaluating which conditions are true, concatenating the description, and printing it with reflowPutStrs
 printConditionalDescription :: [Char] -> Int -> [SceneIndex] -> ConditionalDescription -> [String] -> Maybe (SceneIndex, Inventory, Flags) -> IO (Maybe (SceneIndex, Inventory, Flags))
 printConditionalDescription delimiters columnWidth _ (ConditionalDescription []) linesToPrint Nothing
-    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n" >> return Nothing --Game reached an end state
+    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n\n" >> return Nothing --Game reached an end state
 printConditionalDescription delimiters columnWidth _ (ConditionalDescription []) linesToPrint (Just (sceneIndex, inventory, flags))
-    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n" >> hFlush stdout >> return (Just (sceneIndex, inventory, flags)) --No more descriptions to print
+    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n\n" >> hFlush stdout >> return (Just (sceneIndex, inventory, flags)) --No more descriptions to print
 printConditionalDescription delimiters columnWidth _ (ConditionalDescription ((_, _, _) : remainingDescriptions)) linesToPrint Nothing
-    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n" >> return Nothing --Game reached an end state
+    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n\n" >> return Nothing --Game reached an end state
 printConditionalDescription delimiters columnWidth endScenes
                             (ConditionalDescription ((condition, subDescription, stateChanges) : remainingDescriptions)) linesToPrint (Just (sceneIndex, inventory, flags))
     | evaluateCondition condition inventory flags =

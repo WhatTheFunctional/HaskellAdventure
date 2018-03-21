@@ -30,6 +30,7 @@ allVerbs =
         TokenVerb "give" ["give"],
         TokenVerb "select" ["select", "pick"],
         TokenVerb "look" ["look"],
+        TokenVerb "inspect" ["inspect"],
         TokenVerb "look around" ["look around"],
         TokenVerb "use" ["use"],
         TokenVerb "jump" ["jump"],
@@ -67,7 +68,9 @@ allNouns =
         TokenNoun "outside" ["outside"],
         TokenNoun "me" ["me"],
         TokenNoun "myself" ["myself"],
-        TokenNoun "chrome amulet" ["chrome amulet", "amulet"]
+        TokenNoun "chrome amulet" ["chrome amulet", "amulet"],
+        TokenNoun "door" ["door", "front door", "doorway"],
+        TokenNoun "home" ["home", "my house", "cottage", "mud-brick cottage"]
     ]
 
 allPrepositions :: [Token]
@@ -117,14 +120,44 @@ startInventory = Inventory ["chrome amulet"]
 startFlags :: Flags
 startFlags = Flags []
 
-scene0 :: Scene
-scene0 =
+cottageScene :: Scene
+cottageScene =
     Scene
     {
         sceneDescription =
-            ConditionalDescription [(CNot (FlagSet "intro"), "After a long day working at the moisture farms outside of the village, you return home. You open the door to your mud-brick cottage to find your brother lying on the dirt floor just inside the <doorway>.\nAt first, you fear the worst; life on the edge of The Beyond can be dangerous.\nBut as you lean down to inspect your brother, <Jorryn>, you realize that he is not dead, but asleep.\nYou rush to check your parents, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them.", [SetFlag "intro"])],
+            ConditionalDescription
+            [
+                (CNot (FlagSet "intro"), "It's been a long day working at the moisture farms outside of your village, your aldeia. You return home just as the sun is setting. You open the door to your mud-brick cottage to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of The Beyond can be dangerous.\nBut as you lean down to inspect your brother you realize that he is not dead, but asleep.\nYou rush to check your parents, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them.", [SetFlag "intro"]),
+                (CTrue, "You're standing in your home. <Jorryn> is lying by the <front door> to the <east>. Your parents are on the floor by the <stove>. Your room is to the <west>.", [])
+            ],
         interactions =
             [
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "through", "door"],
+                                 uSentence ["leave", "through", "door"],
+                                 uSentence ["leave", "out", "door"],
+                                 uSentence ["walk", "out", "door"],
+                                 uSentence ["walk", "outside"],
+                                 uSentence ["walk", "east"],
+                                 uSentence ["leave", "east"],
+                                 uSentence ["leave"],
+                                 uSentence ["leave", "home"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                        [
+                                            (FlagSet "square visited", "You walk through the front door of your home out into the aldeia. Everyone you pass is still asleep. Your friend, <Evanna>, is still asleep at the base of the <Ancient Clock>.", []),
+                                            (CNot (FlagSet "square visited"), "You walk through the front door of your home out into your aldeia. As you walk through the aldeia, you come across several people asleep on the ground. You arrive at the aldeia square and you notice that, for the first time in your life, the <Ancient Clock> has stopped. You see your friend, <Evanna>, walking slowly through the square in a dazed stupor. As you approach, she collapses to the ground. The <Ancient Clock> chimes and her body starts to glow a deep green color, the glowing aura shoots quickly into the <Ancient Clock> and it falls silent.", [])
+                                        ],
+                                stateChanges = [SceneChange 2, SetFlag "square visited"]
+                            }
+                        ]
+                }
             ]
     }
 
@@ -134,6 +167,34 @@ winScene =
     {
         sceneDescription = ConditionalDescription [],
         interactions = []
+    }
+
+aldeiaScene :: Scene
+aldeiaScene =
+    Scene
+    {
+        sceneDescription = ConditionalDescription [(CTrue, "You are standing in the aldeia square. It is a dusty open area surrounded by mud-brick buildings. The <Ancient Clock> stands silent in the center of the square. Your friend, <Evanna>, is lying at the base of the clock. Your <home> is to the <west>. You see the <Aeon Tower> to the <south> at the edge of the Kethar desert.", [])],
+        interactions =
+            [
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "west"],
+                                 uSentence ["walk", "home"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                        [
+                                            (CTrue, "You walk through the deserted streets of your aldeia, passing several sleeping bodies on your way home.", [])
+                                        ],
+                                stateChanges = [SceneChange 0]
+                            }
+                        ]
+                }
+            ]
     }
 
 defaultScene :: Scene
@@ -213,5 +274,5 @@ defaultScene =
     }
 
 allScenes :: ([Scene], [SceneIndex])
-allScenes = ([scene0, winScene], --List of scenes
+allScenes = ([cottageScene, winScene, aldeiaScene], --List of scenes
              [1]) --End scenes
