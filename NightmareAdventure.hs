@@ -70,7 +70,9 @@ allNouns =
         TokenNoun "myself" ["myself"],
         TokenNoun "chrome amulet" ["chrome amulet", "amulet"],
         TokenNoun "door" ["door", "front door", "doorway"],
-        TokenNoun "home" ["home", "my house", "cottage", "mud-brick cottage"]
+        TokenNoun "home" ["home", "my house", "cottage", "mud-brick cottage"],
+        TokenNoun "tower" ["tower", "aeon tower", "crystal tower"],
+        TokenNoun "square" ["square", "aldeia square"]
     ]
 
 allPrepositions :: [Token]
@@ -193,6 +195,52 @@ aldeiaScene =
                                 stateChanges = [SceneChange 0]
                             }
                         ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "south"],
+                                 uSentence ["walk", "to", "tower"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                        [
+                                            (CTrue, "You walk towards the looming <crystal tower>.", [])
+                                        ],
+                                stateChanges = [SceneChange 3]
+                            }
+                        ]
+                }
+            ]
+    }
+
+towerScene :: Scene
+towerScene =
+    Scene
+    {
+        sceneDescription = ConditionalDescription [(CTrue, "You are standing at the base of the <Aeon Tower>, inhabited by <Isvald>, the aldeia's resident Aeon Priest. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is Kethar desert, which stretches to the horizon. The <aledeia square> is to the <north>.", [])],
+        interactions =
+            [
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "north"],
+                                 uSentence ["walk", "to", "square"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                        [
+                                            (CTrue, "You walk back to the <aldeia square>.", [])
+                                        ],
+                                stateChanges = [SceneChange 2]
+                            }
+                        ]
                 }
             ]
     }
@@ -274,5 +322,5 @@ defaultScene =
     }
 
 allScenes :: ([Scene], [SceneIndex])
-allScenes = ([cottageScene, winScene, aldeiaScene], --List of scenes
+allScenes = ([cottageScene, winScene, aldeiaScene, towerScene], --List of scenes
              [1]) --End scenes
