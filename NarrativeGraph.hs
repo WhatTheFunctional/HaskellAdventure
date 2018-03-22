@@ -93,10 +93,8 @@ printConditionalDescription delimiters columnWidth endScenes
                                              (SceneChange _) -> True
                                              otherwise -> False) stateChanges)
                        endScenes
-                       sceneIndex
-                       inventory
-                       flags
-                       stateChanges >>= --This conditional description passed all of the preconditions, check whether we need to transition to a new state
+                       stateChanges
+                       (Just (sceneIndex, inventory, flags)) >>= --This conditional description passed all of the preconditions, check whether we need to transition to a new state
           printConditionalDescription delimiters columnWidth endScenes (ConditionalDescription remainingDescriptions) ((subDescription ++ " ") : linesToPrint) --Condition is true, add sub-description to print
     | otherwise
         = printConditionalDescription delimiters columnWidth endScenes (ConditionalDescription remainingDescriptions) linesToPrint (Just (sceneIndex, inventory, flags))
@@ -112,23 +110,31 @@ printSceneDescription delimiters columnWidth (NarrativeGraph {nodes = graphNodes
 updateFlags :: Flags -> [StateChange] -> Flags
 updateFlags (Flags flags) [] = Flags flags
 updateFlags (Flags flags) ((RemoveFlag flag) : remainingChanges) = updateFlags (Flags (filter (\x -> x /= flag) flags)) remainingChanges
-updateFlags (Flags flags) ((SetFlag flag) : remainingChanges) = updateFlags (Flags (flag : flags)) remainingChanges
+updateFlags (Flags flags) ((SetFlag flag) : remainingChanges)
+    | flag `elem` flags = updateFlags (Flags flags) remainingChanges
+    | otherwise = updateFlags (Flags (flag : flags)) remainingChanges
 updateFlags (Flags flags) (_ : remainingChanges) = updateFlags (Flags flags) remainingChanges
 
 updateInventory :: Inventory -> [StateChange] -> Inventory
 updateInventory (Inventory inventory) [] = Inventory inventory
 updateInventory (Inventory inventory) ((RemoveFromInventory object) : remainingChanges) = updateInventory (Inventory (filter (\x -> x /= object) inventory)) remainingChanges
-updateInventory (Inventory inventory) ((AddToInventory object) : remainingChanges) = updateInventory (Inventory (object : inventory)) remainingChanges
+updateInventory (Inventory inventory) ((AddToInventory object) : remainingChanges)
+    | object `elem` inventory = updateInventory (Inventory inventory) remainingChanges
+    | otherwise = updateInventory (Inventory (object : inventory)) remainingChanges
 updateInventory (Inventory inventory) (_ : remainingChanges) = updateInventory (Inventory inventory) remainingChanges
 
 --State change takes the next scene index, the end scene index list, the current scene index, the inventory and flags, and a conditional action
 --State change evaluates to the next state of the game
-stateChange :: Maybe StateChange -> [SceneIndex] -> SceneIndex -> Inventory -> Flags -> [StateChange] -> IO (Maybe (SceneIndex, Inventory, Flags))
-stateChange Nothing _ currentSceneIndex inventory flags stateChanges
-    = return (Just (currentSceneIndex,
+stateChange :: Maybe StateChange -> [SceneIndex] -> [StateChange] -> Maybe (SceneIndex, Inventory, Flags) -> IO (Maybe (SceneIndex, Inventory, Flags))
+stateChange Nothing _  stateChanges Nothing
+    = return Nothing
+stateChange _ endScenes stateChanges Nothing 
+    = return Nothing
+stateChange Nothing _  stateChanges (Just (sceneIndex, inventory, flags))
+    = return (Just (sceneIndex,
                     updateInventory inventory stateChanges,
                     updateFlags flags stateChanges)) --If there is no scene transition, return to the current scene with updated inventory and flags
-stateChange (Just (SceneChange nextScene)) endScenes  _ inventory flags stateChanges
+stateChange (Just (SceneChange nextScene)) endScenes stateChanges (Just (sceneIndex, inventory, flags)) 
     = if nextScene `elem` endScenes
       then return Nothing --This is an end state for the game
       else return (Just (nextScene,
@@ -140,14 +146,11 @@ stateChange (Just (SceneChange nextScene)) endScenes  _ inventory flags stateCha
 updateGameState :: [Char] -> Int -> [SceneIndex] -> SceneIndex -> Inventory -> Flags -> ConditionalAction -> IO (Maybe (SceneIndex, Inventory, Flags))
 updateGameState delimiters columnWidth endScenes currentSceneIndex inventory flags conditionalAction@(ConditionalAction {conditionalDescription = thisConditionalDescription,
                                                                                                       stateChanges = thisStateChanges})
-    = printConditionalDescription delimiters columnWidth endScenes thisConditionalDescription [] (Just (currentSceneIndex, inventory, flags)) >>
+    = printConditionalDescription delimiters columnWidth endScenes thisConditionalDescription [] (Just (currentSceneIndex, inventory, flags)) >>=
       stateChange (Data.List.find (\x -> case x of
                                          (SceneChange _) -> True
                                          otherwise -> False) thisStateChanges)
                    endScenes
-                   currentSceneIndex
-                   inventory
-                   flags
                    thisStateChanges --This conditional action passed all of the preconditions, check whether we need to transition to a new scene
 
 --Perform the interaction and return a tuple of (new scene index, new inventory, new flags)
