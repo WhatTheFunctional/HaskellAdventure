@@ -229,6 +229,24 @@ aldeiaScene =
             [
                 Interaction
                 {
+                    sentences = [uSentence ["look", "at", "clock"],
+                                 uSentence ["inspect", "clock"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You inspect the <Ancient Clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in The Beyond. The clock is not ticking, and the hands have stopped. You notice that something appears to have bored a a perfectly round hole in the marble. Inside, you see that the clock operates with a complicated set of gears. One of the gears appears to be missing.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["look"],
                                  uSentence ["look around"],
                                  uSentence ["look", "at", "square"]],
