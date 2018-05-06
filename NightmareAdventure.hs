@@ -19,7 +19,7 @@ import NaturalLanguageParser
 import NarrativeGraph
 
 gameIntro :: String
-gameIntro = "Nightmare Adventure by Vibha Laljani, Raji Venkat, and Laurence Emms\n"
+gameIntro = "Nightmare Adventure by Vibha Laljani, Raji Venkat, and Laurence Emms\n\n"
 
 allVerbs :: [Token]
 allVerbs =
