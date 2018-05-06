@@ -76,7 +76,8 @@ allNouns =
         TokenNoun "door" ["door", "front door", "doorway"],
         TokenNoun "home" ["home", "my house", "cottage", "mud-brick cottage"],
         TokenNoun "tower" ["tower", "aeon tower", "crystal tower"],
-        TokenNoun "square" ["square", "aldeia square"]
+        TokenNoun "square" ["square", "aldeia square"],
+        TokenNoun "star" ["star", "stars"]
     ]
 
 allPrepositions :: [Token]
@@ -405,6 +406,39 @@ towerScene =
             ]
     }
 
+starFieldDescriptionString :: String
+starFieldDescriptionString = "You open your eyes and find yourself floating in a sea of stars. To your left you see a constellation which looks like a [Clock]." ++
+                             "To your right you see a constellation which you know is called [Hypnotism]. Above you is a constellation called [Cup Cake]."
+
+starFieldScene :: Scene
+starFieldScene =
+    Scene
+    {
+        sceneDescription = ConditionalDescription [(CNot (FlagSet "star field described"), starFieldDescriptionString, [SetFlag "star field described"])],
+        interactions =
+            [
+                Interaction
+                {
+                    sentences = [uSentence ["get", "star"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "star",
+                                conditionalDescription = ConditionalDescription [(CTrue, "You already have a star.", [])],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You pluck a star out of the sky and put it in your pocket.", [])],
+                                stateChanges = [AddToInventory "star"]
+                            }
+                        ]
+                }
+            ]
+    }
+
 defaultScene :: Scene
 defaultScene =
     Scene
@@ -534,5 +568,5 @@ defaultScene =
     }
 
 allScenes :: ([Scene], [SceneIndex])
-allScenes = ([cottageScene, winScene, aldeiaScene, towerScene], --List of scenes
+allScenes = ([cottageScene, winScene, aldeiaScene, towerScene, starFieldScene], --List of scenes
              [1]) --End scenes
