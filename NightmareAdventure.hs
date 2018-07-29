@@ -77,7 +77,11 @@ allNouns =
         TokenNoun "home" ["home", "my house", "cottage", "mud-brick cottage"],
         TokenNoun "tower" ["tower", "aeon tower", "crystal tower"],
         TokenNoun "square" ["square", "aldeia square"],
-        TokenNoun "star" ["star", "stars"]
+        TokenNoun "star" ["star", "stars"],
+        TokenNoun "clock" ["clock"],
+        TokenNoun "clock constellation" ["clock", "clock constellation"],
+        TokenNoun "hypnotism constellation" ["hypnotism", "hypnotism constellation"],
+        TokenNoun "cupcake constellation" ["cupcake", "cup cake", "cupcake constellation", "cup cake constellation"]
     ]
 
 allPrepositions :: [Token]
@@ -113,6 +117,16 @@ allPrepositions =
         TokenPreposition "with" ["with"],
         TokenPreposition "together with" ["together with"]
     ]
+
+cottageSceneIndex = 0
+winSceneIndex = 1
+aldeiaSceneIndex = 2
+towerSceneIndex = 3
+starFieldSceneIndex = 4
+--TODO: fix index or make scenes list into a map - Laurence
+clockSceneIndex = 1000
+hypnotismSceneIndex = 1000
+cupcakeSceneIndex = 1000
 
 --Helper function to make unambiguous sentences
 uSentence :: [String] -> Sentence
@@ -203,7 +217,7 @@ cottageScene =
                                             (FlagSet "square visited", "You walk through the front door of your home out into the aldeia. Everyone you pass is still asleep. Your friend, <Evanna>, is still asleep at the base of the <Ancient Clock>.", []),
                                             (CNot (FlagSet "square visited"), "You walk through the front door of your home out into your aldeia. As you walk through the aldeia, you come across several people asleep on the ground. You arrive at the aldeia square and you notice that, for the first time in your life, the <Ancient Clock> has stopped. You see your friend, <Evanna>, walking slowly through the square in a dazed stupor. As you approach, she collapses to the ground. The <Ancient Clock> chimes and her body starts to glow a deep green color, the glowing aura shoots quickly into the <Ancient Clock> and it falls silent.", [])
                                         ],
-                                stateChanges = [SceneChange 2, SetFlag "square visited", RemoveFlag "cottage described"]
+                                stateChanges = [SceneChange aldeiaSceneIndex, SetFlag "square visited", RemoveFlag "cottage described"]
                             }
                         ]
                 }
@@ -314,7 +328,7 @@ aldeiaScene =
                                         [
                                             (CTrue, "You walk through the deserted streets of your aldeia, passing several sleeping bodies on your way home.", [RemoveFlag "aldeia described"])
                                         ],
-                                stateChanges = [SceneChange 0]
+                                stateChanges = [SceneChange cottageSceneIndex]
                             }
                         ]
                 },
@@ -332,7 +346,7 @@ aldeiaScene =
                                         [
                                             (CTrue, "You walk towards the looming <Aeon Tower>.", [RemoveFlag "aldeia described"])
                                         ],
-                                stateChanges = [SceneChange 3]
+                                stateChanges = [SceneChange towerSceneIndex]
                             }
                         ]
                 }
@@ -399,7 +413,7 @@ towerScene =
                                         [
                                             (CTrue, "You walk back to the <aldeia square>.", [RemoveFlag "tower described"])
                                         ],
-                                stateChanges = [SceneChange 2]
+                                stateChanges = [SceneChange aldeiaSceneIndex]
                             }
                         ]
                 }
@@ -435,6 +449,45 @@ starFieldScene =
                                 stateChanges = [AddToInventory "star"]
                             }
                         ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "to", "clock constellation"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription = ConditionalDescription [(CTrue, "You float towards the [Clock] constellation", [])],
+                            stateChanges = [SceneChange clockSceneIndex]
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "to", "hypnotism constellation"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription = ConditionalDescription [(CTrue, "You float towards the [Hypnotism] constellation", [])],
+                            stateChanges = [SceneChange hypnotismSceneIndex]
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "to", "cupcake constellation"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription = ConditionalDescription [(CTrue, "You float towards the [Cup Cake] constellation", [])],
+                            stateChanges = [SceneChange cupcakeSceneIndex]
+                        }
+                    ]
                 }
             ]
     }
