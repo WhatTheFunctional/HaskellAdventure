@@ -2,7 +2,7 @@
 --Copyright Laurence Emms 2018
 --Module with a dummy vocabulary and adventure for testing
 
-module DummyAdventure (gameIntro, allVerbs, allNouns, allPrepositions, allTokens, startInventory, startFlags, defaultScene, allScenes) where
+module DummyAdventure (gameIntro, allVerbs, allNouns, allPrepositions, allTokens, startScene, startInventory, startFlags, defaultScene, allScenes) where
 
 import qualified Data.List
 
@@ -121,6 +121,9 @@ uSentence words = unambiguousSentence allVerbs allNouns allPrepositions words
 
 allTokens :: [Token]
 allTokens = allNouns ++ allVerbs ++ allPrepositions
+
+startScene :: String
+startScene = "scene0"
 
 startInventory :: Inventory
 startInventory = Inventory ["fork"]
@@ -484,6 +487,6 @@ defaultScene =
             ]
     }
 
-allScenes :: ([Scene], [SceneIndex])
-allScenes = ([scene0, scene1], --List of scenes
-             [1]) --End scenes
+allScenes :: (Data.Map.Map SceneKey Scene, [SceneKey])
+allScenes = (Data.Map.fromList [("scene0", scene0), ("scene1", scene1)], --List of scenes
+             ["scene1"]) --End scenes

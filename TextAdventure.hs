@@ -123,24 +123,24 @@ parseInput inventory flags line
               sentenceTokenMatches = lexInput allTokens inputWords
               sentences = parseSentence sentenceTokenMatches
 
-doAdventureLoop :: NarrativeGraph -> SceneIndex -> Inventory -> Flags -> Maybe [Sentence] -> IO (Maybe (SceneIndex, Inventory, Flags))
+doAdventureLoop :: NarrativeGraph -> SceneKey -> Inventory -> Flags -> Maybe [Sentence] -> IO (Maybe (SceneKey, Inventory, Flags))
 doAdventureLoop _ _ _ _ Nothing = return Nothing -- End state of the game
-doAdventureLoop narrativeGraph sceneIndex inventory flags (Just []) = adventure narrativeGraph (Just (sceneIndex, inventory, flags)) --Failed to parse any sentences
-doAdventureLoop narrativeGraph sceneIndex inventory flags (Just sentences) = performInteraction allDelimiters allColumnWidth narrativeGraph sceneIndex inventory flags sentences >>=
+doAdventureLoop narrativeGraph sceneKey inventory flags (Just []) = adventure narrativeGraph (Just (sceneKey, inventory, flags)) --Failed to parse any sentences
+doAdventureLoop narrativeGraph sceneKey inventory flags (Just sentences) = performInteraction allDelimiters allColumnWidth narrativeGraph sceneKey inventory flags sentences >>=
                                                                              adventure narrativeGraph --Perform the adventure loop
 
-updateAdventure :: NarrativeGraph -> Maybe (SceneIndex, Inventory, Flags) -> IO (Maybe (SceneIndex, Inventory, Flags))
+updateAdventure :: NarrativeGraph -> Maybe (SceneKey, Inventory, Flags) -> IO (Maybe (SceneKey, Inventory, Flags))
 updateAdventure _ Nothing = return Nothing
-updateAdventure narrativeGraph (Just (sceneIndex, inventory, flags))
+updateAdventure narrativeGraph (Just (sceneKey, inventory, flags))
     = putStr "\n" >>
-      printInvalidInteractions narrativeGraph sceneIndex >>
+      printInvalidInteractions narrativeGraph sceneKey >>
       getLine >>=
       parseInput inventory flags >>=
-      doAdventureLoop narrativeGraph sceneIndex inventory flags
+      doAdventureLoop narrativeGraph sceneKey inventory flags
 
-adventure :: NarrativeGraph -> Maybe (SceneIndex, Inventory, Flags) -> IO (Maybe (SceneIndex, Inventory, Flags))
+adventure :: NarrativeGraph -> Maybe (SceneKey, Inventory, Flags) -> IO (Maybe (SceneKey, Inventory, Flags))
 adventure _ Nothing = reflowPutStr allDelimiters allColumnWidth "Game over. Thanks for playing!" >> hFlush stdout >> return Nothing
-adventure narrativeGraph (Just (sceneIndex, inventory, flags)) = printSceneDescription allDelimiters allColumnWidth narrativeGraph (Just (sceneIndex, inventory, flags)) >>=
+adventure narrativeGraph (Just (sceneKey, inventory, flags)) = printSceneDescription allDelimiters allColumnWidth narrativeGraph (Just (sceneKey, inventory, flags)) >>=
                                                                  updateAdventure narrativeGraph
 
 main = printIntro >>
@@ -148,6 +148,6 @@ main = printIntro >>
        putStr "\n" >>
        printHelp >>
        hFlush stdout >>
-       adventure (makeNarrativeGraph adventureScenes endScenes defaultScene) (Just (0, startInventory, startFlags)) >>
+       adventure (makeNarrativeGraph adventureScenes endScenes defaultScene) (Just (startScene, startInventory, startFlags)) >>
        return ()
            where (adventureScenes, endScenes) = allScenes
