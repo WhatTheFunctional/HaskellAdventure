@@ -29,11 +29,12 @@ allVerbs =
         TokenVerb "throw" ["throw", "pitch"],
         TokenVerb "give" ["give"],
         TokenVerb "select" ["select", "pick"],
-        TokenVerb "look" ["look"],
+        TokenVerb "look" ["look", "observe"],
         TokenVerb "inspect" ["inspect"],
         TokenVerb "look around" ["look around"],
         TokenVerb "use" ["use"],
         TokenVerb "jump" ["jump"],
+        TokenVerb "go" ["move", "proceed"],
         TokenVerb "walk" ["walk", "move", "go"],
         TokenVerb "walk down" ["walk down", "move down", "go down"],
         TokenVerb "walk up" ["walk up", "move up", "go up"],
@@ -56,7 +57,8 @@ allVerbs =
         TokenVerb "leave" ["leave", "exit"],
         TokenVerb "eat" ["eat", "consume"],
         TokenVerb "drink" ["drink", "consume"],
-        TokenVerb "do something" ["do something"]
+        TokenVerb "do something" ["do something"],
+        TokenVerb "press" ["press", "hit", "push"]
     ]
 
 allNouns :: [Token]
@@ -82,6 +84,14 @@ allNouns =
         TokenNoun "clock constellation" ["clock", "clock constellation"],
         TokenNoun "hypnotism constellation" ["hypnotism", "hypnotism constellation"],
         TokenNoun "cupcake constellation" ["cupcake", "cup cake", "cupcake constellation", "cup cake constellation"]
+        TokenNoun "gateway" ["gate", "cloaked gateway"],
+        TokenNoun "elevator" ["elevator"],
+        TokenNoun "ground floor" ["ground floor"],
+        TokenNoun "bedroom" ["bedroom"],
+        TokenNoun "music room" ["music room"],
+        TokenNoun "guest room" ["guest room"],
+        TokenNoun "button panel" ["button panel"],
+        TokenNoun "button" ["button"]
     ]
 
 allPrepositions :: [Token]
@@ -420,6 +430,333 @@ towerScene =
             ]
     }
 
+wizardTowerGroundFloorDescriptionString :: String
+wizardTowerGroundFloorDescriptionString = "You are inside <Aeon Tower>, inhabited by Isvald, the aldeia's resident Aeon Priest. The tall tower’s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your east, is an elevator with a <button> to summon it, which seems to be the only way to get past the foyer."
+
+wizardTowerGroundFloorScene :: Scene
+wizardTowerGroundFloorScene =
+    Scene
+    {
+        sceneDescription = ConditionalDescription [(CNot (FlagSet "wizardTowerGroundFloor described"), wizardTowerGroundFloorDescriptionString, [SetFlag "wizardTowerGroundFloor described"])],
+        interactions =
+            [
+                Interaction
+                {
+                    sentences = [uSentence ["look"],
+                                 uSentence ["look around"],
+                                 uSentence ["look", "at", "tower"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, wizardTowerGroundFloorDescriptionString, [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "west"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You see the cloaked <gateway> that let you in.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "through", "gateway"],
+                                 uSentence ["leave", "through", "gateway"],
+                                 uSentence ["walk", "out", "gateway"],
+                                 uSentence ["leave", "out", "gateway"],
+                                 uSentence ["walk", "outside"],
+                                 uSentence ["walk", "west"],
+                                 uSentence ["leave", "west"],
+                                 uSentence ["leave"],
+                                 uSentence ["leave", "tower"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                        [
+                                            (CTrue, "You exit through the cloaked gateway, and find yourself at the base of <Aeon Tower>.", [RemoveFlag "wizardTowerGroundFloor described"])
+                                        ],
+                                stateChanges = [SceneChange 3]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["press", "button"],
+                                 uSentence ["use", "button"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = (CNot (FlagSet "elevator arrived")),
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "The <elevator> arrives with a *ping* sound, and opens its arms to welcome you in.", [SetFlag "elevator arrived"]) 
+                                       ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = (FlagSet "elevator arrived"),
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "The <elevator> is already waiting for you with open arms! Go on in before it tires out.", [])
+                                       ],
+                                stateChanges = []
+                            }
+                        ]   
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "elevator"],
+                                 uSentence ["look", "in", "elevator"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = (FlagSet "elevator arrived"),
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.", [])
+                                       ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "into", "elevator"],
+                                 uSentence ["use", "elevator"],
+                                 uSentence ["enter", "elevator"],
+                                 uSentence ["go", "in", "elevator"],
+                                 uSentence ["go", "into", "elevator"],
+                                 uSentence ["get", "into", "elevator"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = (FlagSet "elevator arrived"),
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "You enter the cool glass cube elevator. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
+                                       ],
+                                stateChanges = [SceneChange 6, SetFlag "elevator ground floor"]
+                            }
+                        ]
+                }
+            ]
+    }
+
+elevatorDescriptionString :: String
+elevatorDescriptionString = "The elevator has a magic <button panel> so you can pick a destination for your ride."
+elevatorScene :: Scene
+elevatorScene = 
+    Scene
+    {
+        sceneDescription = ConditionalDescription [(CNot (FlagSet "elevator described"), elevatorDescriptionString, [SetFlag "elevator described"])],
+        interactions = 
+            [
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "button panel"],
+                                 uSentence ["observe", "button panel"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = (FlagSet "elevator ground floor"),
+                                conditionalDescription = 
+                                    ConditionalDescription 
+                                       [
+                                           (CTrue, "You may go to the <Bedroom>, the <Music Room>, or the <Guest Room>", []) 
+                                       ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = (FlagSet "elevator bedroom"),
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "You may go to the <Ground Floor>, the <Music Room>, or the <Guest Room>", [])
+                                       ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = (FlagSet "elevator music room"),
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "You may go to the <Ground Floor>, the <Bedroom>, or the <Guest Room>", [])
+                                       ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = (FlagSet "elevator guest room"),
+                                conditionalDescription =
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "You may go to the <Ground Floor>, the <Bedroom>, or the <Music Room>", [])
+                                       ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["go", "to", "Ground Floor"],
+                                 uSentence ["press", "Ground Floor"],
+                                 uSentence ["ride", "to", "Ground Floor"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = (CNot (FlagSet "elevator ground floor")),
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "The <elevator> whisks you off, and brings you to the ground floor with a gentle bounce. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
+                                       ],
+                                stateChanges = [SetFlag "elevator ground floor"]
+                            }
+                        ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["go", "to", "Bedroom"],
+                                uSentence ["press", "Bedroom"],
+                                uSentence ["ride", "to", "Bedroom"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = (CNot (FlagSet "elevator bedroom")),
+                               conditionalDescription = 
+                                   ConditionalDescription
+                                      [
+                                          (CTrue, "The <elevator> zooms across the tower, and comes to a floating stop at the bedroom. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
+                                      ],
+                               stateChanges = [SetFlag "elevator bedroom"]
+                           }
+                       ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["go", "to", "Music Room"],
+                                uSentence ["press", "Music Room"],
+                                uSentence ["ride", "to", "Music Room"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = (CNot (FlagSet "elevator music room")),
+                               conditionalDescription = 
+                                   ConditionalDescription
+                                      [
+                                          (CTrue, "The <elevator> glides away, and comes to a rest at the music room. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", []) 
+                                      ],
+                               stateChanges = [SetFlag "elevator music room"]
+                           }
+                       ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["go", "to", "Guest Room"],
+                                uSentence ["press", "Guest Room"],
+                                uSentence ["ride", "to", "Guest Room"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = (CNot (FlagSet "elevator guest room")),
+                               conditionalDescription = 
+                                   ConditionalDescription 
+                                      [
+                                          (CTrue, "The <elevator> sails across the tower, and docks at the guest room. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
+                                      ],
+                               stateChanges = [SetFlag "elevator guest room"]
+                           }
+                      ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["exit", "elevator"],
+                                uSentence ["walk", "out", "elevator"],
+                                uSentence ["leave", "elevator"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = (FlagSet "elevator ground floor"),
+                               conditionalDescription = 
+                                   ConditionalDescription 
+                                      [
+                                          (CTrue, "You step out to the ground floor, and the elevator lifts off.", [])
+                                      ],
+                               stateChanges = [SceneChange 5, RemoveFlag "elevator ground floor"]
+                           },
+                           ConditionalAction
+                           {
+                               condition = (FlagSet "elevator bedroom"),
+                               conditionalDescription = 
+                                   ConditionalDescription
+                                      [
+                                          (CTrue, "You step out into the bedroom, and the elevator drifts away.", [])
+                                      ],
+                               stateChanges = [SetFlag "wizardTowerBedroomScene", RemoveFlag "elevator bedroom"]
+                           },
+                           ConditionalAction
+                           {
+                               condition = (FlagSet "elevator music room"),
+                               conditionalDescription = 
+                                   ConditionalDescription
+                                      [
+                                          (CTrue, "You step out into the music room, and the elevator cruises away.", [])
+                                      ],
+                               stateChanges = [SetFlag "wizardTowerMusicRoomScene", RemoveFlag "elevator music room"]
+                           },
+                           ConditionalAction
+                           {
+                               condition = (FlagSet "elevator guest room"),
+                               conditionalDescription =
+                                   ConditionalDescription
+                                      [
+                                          (CTrue, "You step out into the guest room, and the elevator slides away.", [])
+                                      ],
+                               stateChanges = [SetFlag "wizardTowerGuestRoomScene", RemoveFlag "elevator guest room"]
+                           }
+                       ]
+               }
+            ]
+    }    
+
 starFieldDescriptionString :: String
 starFieldDescriptionString = "You open your eyes and find yourself floating in a sea of stars. To your left you see a constellation which looks like a [Clock]." ++
                              "To your right you see a constellation which you know is called [Hypnotism]. Above you is a constellation called [Cup Cake]."
@@ -621,5 +958,5 @@ defaultScene =
     }
 
 allScenes :: ([Scene], [SceneIndex])
-allScenes = ([cottageScene, winScene, aldeiaScene, towerScene, starFieldScene], --List of scenes
+allScenes = ([cottageScene, winScene, aldeiaScene, towerScene, starFieldScene, wizardTowerGroundFloorScene, elevatorScene], --List of scenes
              [1]) --End scenes
