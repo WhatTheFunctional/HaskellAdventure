@@ -66,7 +66,7 @@ allVerbs =
 allNouns :: [Token]
 allNouns =
     [
-        TokenNoun "north" ["north"],
+        TokenNoun "north" ["north"], --General nouns
         TokenNoun "south" ["south"],
         TokenNoun "west" ["west"],
         TokenNoun "east" ["east"],
@@ -76,19 +76,17 @@ allNouns =
         TokenNoun "outside" ["outside"],
         TokenNoun "me" ["me"],
         TokenNoun "myself" ["myself"],
-        TokenNoun "chrome amulet" ["chrome amulet", "amulet"],
+        TokenNoun "chrome amulet" ["chrome amulet"],
         TokenNoun "front door" ["front door"],
-        TokenNoun "door" ["door", "front door", "doorway"],
-        TokenNoun "home" ["home", "my house", "cottage", "mud-brick cottage"],
+        TokenNoun "door" ["door", "doorway"],
+        TokenNoun "home" ["home", "my house", "cottage", "mud-brick cottage"], --Cottage nouns
         TokenNoun "Jorryn" ["Jorryn"],
         TokenNoun "parents" ["parents"],
-        TokenNoun "tower" ["tower", "aeon tower", "crystal tower"],
-        TokenNoun "square" ["square", "aldeia square"],
-        TokenNoun "star" ["star", "stars"],
-        TokenNoun "clock" ["clock"],
-        TokenNoun "clock constellation" ["clock", "clock constellation"],
-        TokenNoun "hypnotism constellation" ["hypnotism", "hypnotism constellation"],
-        TokenNoun "cupcake constellation" ["cupcake", "cup cake", "cupcake constellation", "cup cake constellation"],
+        TokenNoun "square" ["square", "aldeia square"], --Aldeia square nouns
+        TokenNoun "clock" ["ancient clock", "clock"],
+        TokenNoun "Evanna" ["Evanna"],
+        TokenNoun "jade amulet" ["jade amulet"],
+        TokenNoun "tower" ["tower", "aeon tower", "crystal tower"], --Tower nouns
         TokenNoun "gateway" ["gate", "cloaked gateway"],
         TokenNoun "elevator" ["elevator"],
         TokenNoun "ground floor" ["ground floor"],
@@ -96,7 +94,11 @@ allNouns =
         TokenNoun "music room" ["music room"],
         TokenNoun "guest room" ["guest room"],
         TokenNoun "button panel" ["button panel"],
-        TokenNoun "button" ["button"]
+        TokenNoun "button" ["button"],
+        TokenNoun "star" ["star", "stars"], -- Star field nouns
+        TokenNoun "clock constellation" ["clock", "clock constellation"],
+        TokenNoun "hypnotism constellation" ["hypnotism", "hypnotism constellation"],
+        TokenNoun "cupcake constellation" ["cupcake", "cup cake", "cupcake constellation", "cup cake constellation"]
     ]
 
 allPrepositions :: [Token]
@@ -309,7 +311,8 @@ cottageScene =
                                  uSentence ["walk", "east"],
                                  uSentence ["leave", "east"],
                                  uSentence ["leave"],
-                                 uSentence ["leave", "home"]],
+                                 uSentence ["leave", "home"],
+                                 uSentence ["walk", "to", "square"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -342,7 +345,7 @@ winScene :: Scene
 winScene =
     Scene
     {
-        sceneDescription = ConditionalDescription [],
+        sceneDescription = ConditionalDescription [(CTrue, "Game over", [])],
         interactions = []
     }
 
@@ -371,6 +374,43 @@ aldeiaScene =
                                         (CTrue, "You inspect the <Ancient Clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in The Beyond. The clock is not ticking, and the hands have stopped. You notice that something appears to have bored a a perfectly round hole in the marble. Inside, you see that the clock operates with a complicated set of gears. One of the gears appears to be missing.", [])
                                     ],
                                 stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "Evanna"],
+                                 uSentence ["inspect", "Evanna"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CNot (InInventory "jade amulet"), "Your friend Evanna, lies in a deep slumber at the base of the Ancient clock. You call her name and shake her, but nothing you do can wake her. You notice that her <jade amulet> is gently glowing.", []),
+                                        (InInventory "jade amulet", "Your friend Evanna, lies in a deep slumber at the base of the Ancient clock. You call her name and shake her, but nothing you do can wake her.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["get", "jade amulet"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CNot (InInventory "jade amulet"), "You reach down and remove Evanna's jade amulet.", []),
+                                        (InInventory "jade amulet", "You have already take Evanna's jade amulet.", [])
+                                    ],
+                                stateChanges = [AddToInventory "jade amulet"]
                             }
                         ]
                 },
