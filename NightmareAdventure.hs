@@ -77,8 +77,11 @@ allNouns =
         TokenNoun "me" ["me"],
         TokenNoun "myself" ["myself"],
         TokenNoun "chrome amulet" ["chrome amulet", "amulet"],
+        TokenNoun "front door" ["front door"],
         TokenNoun "door" ["door", "front door", "doorway"],
         TokenNoun "home" ["home", "my house", "cottage", "mud-brick cottage"],
+        TokenNoun "Jorryn" ["Jorryn"],
+        TokenNoun "parents" ["parents"],
         TokenNoun "tower" ["tower", "aeon tower", "crystal tower"],
         TokenNoun "square" ["square", "aldeia square"],
         TokenNoun "star" ["star", "stars"],
@@ -150,7 +153,7 @@ introString :: String
 introString = "It's been a long day working at the moisture farms outside of your village, your aldeia. You return home just as the sun is setting. You open the door to your mud-brick cottage to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of The Beyond can be dangerous.\nBut as you lean down to inspect your brother you realize that he is not dead, but asleep.\nYou rush to check your parents, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them."
 
 cottageDescriptionString :: String
-cottageDescriptionString = "You're standing in your home. <Jorryn> is lying by the <front door> to the <east>. Your parents are on the floor by the <stove>. Your room is to the <west>."
+cottageDescriptionString = "You're standing in your home. <Jorryn> is lying by the <front door> to the <east>. Your parents are on the floor by the stove."
 
 cottageScene :: Scene
 cottageScene =
@@ -185,6 +188,40 @@ cottageScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["look", "at", "parents"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "Your parents are unhurt but you can't wake them from their slumber.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "Jorryn"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "Jorryn lies asleep on the floor, you can't seem to wake him.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["look", "east"]],
                     conditionalActions =
                         [
@@ -194,9 +231,67 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You peer out of your <front door>. You see the path to the <aldeia square>.", [])
+                                        (CNot (FlagSet "front door closed"), "You peer out of your <front door>. You see the path to the <aldeia square>.", []),
+                                        ((FlagSet "front door closed"), "You look at your <front door>. It's closed.", [])
                                     ],
                                 stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "door"],
+                                 uSentence ["look", "at", "front door"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CNot (FlagSet "front door closed"), "It's your <front door>. The door is open.", []),
+                                        ((FlagSet "front door closed"), "It's your <front door>. The door is closed.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["close", "door"],
+                                 uSentence ["close", "front door"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CNot (FlagSet "front door closed"), "You close your front door.", []),
+                                        ((FlagSet "front door closed"), "Your front door is already closed.", [])
+                                    ],
+                                stateChanges = [SetFlag "front door closed"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["open", "door"],
+                                 uSentence ["open", "front door"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CNot (FlagSet "front door closed"), "Your front door is already open.", []),
+                                        ((FlagSet "front door closed"), "You open your front door.", [])
+                                    ],
+                                stateChanges = [RemoveFlag "front door closed"]
                             }
                         ]
                 },
@@ -206,6 +301,10 @@ cottageScene =
                                  uSentence ["leave", "through", "door"],
                                  uSentence ["leave", "out", "door"],
                                  uSentence ["walk", "out", "door"],
+                                 uSentence ["walk", "through", "front door"],
+                                 uSentence ["leave", "through", "front door"],
+                                 uSentence ["leave", "out", "front door"],
+                                 uSentence ["walk", "out", "front door"],
                                  uSentence ["walk", "outside"],
                                  uSentence ["walk", "east"],
                                  uSentence ["leave", "east"],
@@ -215,7 +314,7 @@ cottageScene =
                         [
                             ConditionalAction
                             {
-                                condition = CTrue,
+                                condition = CNot (FlagSet "front door closed"),
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
@@ -223,6 +322,16 @@ cottageScene =
                                             (CNot (FlagSet "square visited"), "You walk through the front door of your home out into your aldeia. As you walk through the aldeia, you come across several people asleep on the ground. You arrive at the aldeia square and you notice that, for the first time in your life, the <Ancient Clock> has stopped. You see your friend, <Evanna>, walking slowly through the square in a dazed stupor. As you approach, she collapses to the ground. The <Ancient Clock> chimes and her body starts to glow a deep green color, the glowing aura shoots quickly into the <Ancient Clock> and it falls silent.", [])
                                         ],
                                 stateChanges = [SceneChange "aldeia", SetFlag "square visited", RemoveFlag "cottage described"]
+                            },
+                            ConditionalAction
+                            {
+                                condition = FlagSet "front door closed",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                        [
+                                            (CTrue, "Your front door is closed, blocking your way.", [])
+                                        ],
+                                stateChanges = []
                             }
                         ]
                 }
