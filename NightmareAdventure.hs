@@ -1304,7 +1304,20 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "chrome amulet", --The key is in your inventory
-                                conditionalDescription = ConditionalDescription [(CTrue, "You are wearing the Chrome Amulet your grandfather gave you as a child. It shimmers as you inspect it.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You are wearing the chrome amulet your grandfather gave you as a child. It shimmers as you inspect it.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "jade amulet"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "jade amulet", --The key is in your inventory
+                                conditionalDescription = ConditionalDescription [(CTrue, "You look at Evanna's jade amulet. It shimmers as you inspect it.", [])],
                                 stateChanges = []
                             }
                         ]
