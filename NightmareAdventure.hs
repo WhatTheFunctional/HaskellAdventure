@@ -95,6 +95,9 @@ allNouns =
         TokenNoun "guest room" ["guest room"],
         TokenNoun "button panel" ["button panel"],
         TokenNoun "button" ["button"],
+        TokenNoun "gear" ["gear"],
+        TokenNoun "chest of drawers" ["chest of drawers", "drawers"],
+        TokenNoun "bed" ["bed"],
         TokenNoun "star" ["star", "stars"], -- Star field nouns
         TokenNoun "clock constellation" ["clock", "clock constellation"],
         TokenNoun "hypnotism constellation" ["hypnotism", "hypnotism constellation"],
@@ -899,7 +902,241 @@ elevatorScene =
                        ]
                }
             ]
-    }    
+    }
+
+wizardTowerBedroomDescriptionString :: String
+wizardTowerBedroomDescriptionString = "You are in the ornate bedroom. The <wizard>, Isvald, is sleeping on the <bed>. One corner of the room is inhabited by a <chest of drawers>, with a mirror atop. You hear music floating up to the bedroom, presumably from the music room. It sounds like a lullaby, and is making you sleepy. Behind you is the <elevator>, with a call <button> to summon it."
+
+wizardTowerBedroomScene :: Scene
+wizardTowerBedroomScene =
+    Scene
+    {
+        sceneDescription = ConditionalDescription [(CNot (FlagSet "wizardTowerBedroom described"), wizardTowerBedroomDescriptionString, [SetFlag "wizardTowerBedroom described"])],
+        interactions =
+            [
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "wizard"],
+                                 uSentence ["see", "wizard"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "gear",
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <wizard> has a big smile on his face because he is dreaming. A luxurious purple velvet blanket envelopes him.", [])],
+                                stateChanges = [SetFlag "wizard seen"]
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <wizard> has a big smile on his face because he is dreaming. He is clutching a <gear> to his chest. A luxurious purple velvet blanket envelopes him.", [])],
+                                stateChanges = [SetFlag "wizard seen"]
+                            }
+                        ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["look", "at", "bed"],
+                                uSentence ["see", "bed"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = CTrue,
+                               conditionalDescription = ConditionalDescription [(CTrue, "The magnificent four poster bed looks quite comfortable. Alas, no one save the <wizard> can be in it. The bed's canopy looks lovely even drawn aside.", [])],
+                               stateChanges = []
+                           }
+                       ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["look", "at", "chest of drawers"],
+                                uSentence ["see", "chest of drawers"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = CTrue,
+                               conditionalDescription = ConditionalDescription [(CTrue, "The eye-catching distressed dresser has a gold-hued finish that accents the jewel-toned tabletop trinkets. It has three <drawers> to stow away unwanted clutter.", [])],
+                               stateChanges = []
+                           }
+                       ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["look", "at", "elevator"],
+                                uSentence ["see", "elevator"]],
+                   conditionalActions =
+                       [
+                           ConditionalAction
+                           {
+                               condition = FlagSet "elevator arrived",
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.", [])],
+                               stateChanges = []
+                           },
+                           ConditionalAction
+                           {
+                               condition = CTrue,
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is not here. Use the call <button> to summon it.", [])],
+                               stateChanges = []
+                           }
+                       ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["open", "drawers"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = CTrue,
+                               conditionalDescription = ConditionalDescription [(CTrue, "You see clothes that don't seem like the right size. You also find dusty old books written in a language you don't understand. The magical drawers tuck themselves away upon noticing your disinterest.", [])],
+                               stateChanges = [SetFlag "at chest of drawers", RemoveFlag "at wizard", RemoveFlag "at elevator"]
+                           }
+                       ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["take", "gear"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = InInventory "gear",
+                               conditionalDescription = ConditionalDescription [(CTrue, "There's only one gear, and you have it.", [])],
+                               stateChanges = [SetFlag "at wizard", RemoveFlag "at chest of drawers", RemoveFlag "at elevator"]
+                           },
+                           ConditionalAction
+                           {
+                               condition = FlagSet "wizard seen",
+                               conditionalDescription = ConditionalDescription [(CTrue, "You gently take the gear out of the wizard's hand, and put it in your pocket.", [])],
+                               stateChanges = [AddToInventory "gear", SetFlag "at wizard", RemoveFlag "at chest of drawers", RemoveFlag "at elevator"]
+                           }
+                       ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["walk", "to", "wizard"],
+                                uSentence ["walk", "to", "bed"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = CNot (FlagSet "at wizard"),
+                               conditionalDescription = ConditionalDescription [(CTrue, "You walk to the sleeping <wizard>.", [])],
+                               stateChanges = [SetFlag "at wizard", RemoveFlag "at chest of drawers", RemoveFlag "at elevator"]
+                           },
+                           ConditionalAction
+                           {
+                               condition = FlagSet "at wizard",
+                               conditionalDescription = ConditionalDescription [(CTrue, "You are close enough to the wizard that you can see his whiskers vibrate with every sleeping breath", [])],
+                               stateChanges = []
+                           }
+                       ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["walk", "to", "chest of drawers"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = CNot (FlagSet "at chest of drawers"),
+                               conditionalDescription = ConditionalDescription [(CTrue, "You noiselessly walk to the <chest of drawers>.", [])],
+                               stateChanges = [SetFlag "at chest of drawers", RemoveFlag "at wizard", RemoveFlag "at elevator"]
+                           },
+                           ConditionalAction
+                           {
+                               condition = FlagSet "at chest of drawers",
+                               conditionalDescription = ConditionalDescription [(CTrue, "To get any closer, you'd have to tuck yourself into a drawer", [])],
+                               stateChanges = []
+                           }
+                       ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["walk", "to", "elevator"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = CNot (FlagSet "at elevator"),
+                               conditionalDescription = ConditionalDescription [(CTrue, "You walk to the <elevator> and call <button>.", [])],
+                               stateChanges = [SetFlag "at elevator", RemoveFlag "at wizard", RemoveFlag "at chest of drawers"]
+                           },
+                           ConditionalAction
+                           {
+                               condition = FlagSet "elevator arrived",
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is waiting for you with open arms! Go on in before it tires out.", [])],
+                               stateChanges = []
+                           },
+                           ConditionalAction
+                           {
+                               condition = CTrue,
+                               conditionalDescription = ConditionalDescription [(CTrue, "You are at the <elevator>. Press the call <button> to summon it.", [])],
+                               stateChanges = []
+                           }
+                       ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["press", "button"],
+                                 uSentence ["use", "button"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = (CNot (FlagSet "elevator arrived")),
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "The <elevator> arrives with a *ping* sound, and opens its arms to welcome you in.", [SetFlag "elevator arrived"]) 
+                                       ],
+                                stateChanges = [SetFlag "at elevator", RemoveFlag "at wizard", RemoveFlag "at chest of drawers"]
+                            },
+                            ConditionalAction
+                            {
+                                condition = (FlagSet "elevator arrived"),
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "The <elevator> is already waiting for you with open arms! Go on in before it tires out.", [])
+                                       ],
+                                stateChanges = [SetFlag "at elevator", RemoveFlag "at wizard", RemoveFlag "at chest of drawers"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "into", "elevator"],
+                                 uSentence ["use", "elevator"],
+                                 uSentence ["enter", "elevator"],
+                                 uSentence ["go", "in", "elevator"],
+                                 uSentence ["go", "into", "elevator"],
+                                 uSentence ["get", "into", "elevator"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = (FlagSet "elevator arrived"),
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "You enter the cool glass cube elevator. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
+                                       ],
+                                stateChanges = [SetFlag "at elevator", RemoveFlag "at wizard", RemoveFlag "at chest of drawers", SceneChange "elevator", SetFlag "elevator bedroom"]
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is not here. Use the call <button> to summon it.", [])],
+                                stateChanges = [SetFlag "at elevator", RemoveFlag "at wizard", RemoveFlag "at chest of drawers"]
+                            }
+                        ]
+                }
+            ]
+    }
+ 
 
 starFieldDescriptionString :: String
 starFieldDescriptionString = "You open your eyes and find yourself floating in a sea of stars. To your left you see a constellation which looks like a [Clock]." ++
