@@ -922,12 +922,6 @@ wizardTowerBedroomScene =
                         [
                             ConditionalAction
                             {
-                                condition = InInventory "gear",
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <wizard> has a big smile on his face because he is dreaming. A luxurious purple velvet blanket envelopes him.", [])],
-                                stateChanges = [SetFlag "wizard seen"]
-                            },
-                            ConditionalAction
-                            {
                                 condition = CTrue,
                                 conditionalDescription = ConditionalDescription [(CTrue, "The <wizard> has a big smile on his face because he is dreaming. He is clutching a <gear> to his chest. A luxurious purple velvet blanket envelopes him.", [])],
                                 stateChanges = [SetFlag "wizard seen"]
@@ -1002,15 +996,9 @@ wizardTowerBedroomScene =
                        [
                            ConditionalAction
                            {
-                               condition = InInventory "gear",
-                               conditionalDescription = ConditionalDescription [(CTrue, "There's only one gear, and you have it.", [])],
-                               stateChanges = [SetFlag "at wizard", RemoveFlag "at chest of drawers", RemoveFlag "at elevator"]
-                           },
-                           ConditionalAction
-                           {
                                condition = FlagSet "wizard seen",
-                               conditionalDescription = ConditionalDescription [(CTrue, "You gently take the gear out of the wizard's hand, and put it in your pocket.", [])],
-                               stateChanges = [AddToInventory "gear", SetFlag "at wizard", RemoveFlag "at chest of drawers", RemoveFlag "at elevator"]
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <wizard> is holding the <gear> magically. Thus, you are not able to pry it free.", [])],
+                               stateChanges = [SetFlag "at wizard", RemoveFlag "at chest of drawers", RemoveFlag "at elevator"]
                            }
                        ]
                },
