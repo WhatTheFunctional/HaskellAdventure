@@ -60,7 +60,9 @@ allVerbs =
         TokenVerb "eat" ["eat", "consume"],
         TokenVerb "drink" ["drink", "consume"],
         TokenVerb "do something" ["do something"],
-        TokenVerb "press" ["press", "hit", "push"]
+        TokenVerb "press" ["press", "hit", "push"],
+        TokenVerb "lift" ["lift", "remove"],
+        TokenVerb "touch" ["touch"]
     ]
 
 allNouns :: [Token]
@@ -98,6 +100,8 @@ allNouns =
         TokenNoun "gear" ["gear"],
         TokenNoun "chest of drawers" ["chest of drawers", "drawers"],
         TokenNoun "bed" ["bed"],
+        TokenNoun "gramophone" ["gramophone", "phonograph"],
+        TokenNoun "needle" ["needle", "stylus"],
         TokenNoun "star" ["star", "stars"], -- Star field nouns
         TokenNoun "clock constellation" ["clock", "clock constellation"],
         TokenNoun "hypnotism constellation" ["hypnotism", "hypnotism constellation"],
