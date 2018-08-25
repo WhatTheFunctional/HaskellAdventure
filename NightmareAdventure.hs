@@ -31,16 +31,17 @@ allVerbs =
         TokenVerb "throw" ["throw", "pitch"],
         TokenVerb "give" ["give"],
         TokenVerb "select" ["select", "pick"],
-        TokenVerb "look" ["look", "observe"],
-        TokenVerb "inspect" ["inspect"],
+        TokenVerb "look" ["look", "see", "view", "scan", "spy", "observe"],
+        TokenVerb "inspect" ["inspect", "check out", "observe", "scan"],
         TokenVerb "look around" ["look around"],
         TokenVerb "use" ["use"],
         TokenVerb "jump" ["jump"],
         TokenVerb "go" ["move", "proceed"],
-        TokenVerb "walk" ["walk", "move", "go"],
+        TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "perambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go"],
         TokenVerb "walk down" ["walk down", "move down", "go down"],
         TokenVerb "walk up" ["walk up", "move up", "go up"],
-        TokenVerb "run" ["run", "jog", "sprint", "dash"],
+        TokenVerb "fly" ["fly", "float", "drift", "glide", "move", "go"],
+        TokenVerb "run" ["run", "race", "jog", "sprint", "dash"],
         TokenVerb "run down" ["run down", "jog down", "sprint down", "dash down"],
         TokenVerb "run up" ["run up", "jog up", "sprint up", "dash up"],
         TokenVerb "dance" ["dance"],
@@ -60,9 +61,11 @@ allVerbs =
         TokenVerb "eat" ["eat", "consume"],
         TokenVerb "drink" ["drink", "consume"],
         TokenVerb "do something" ["do something"],
-        TokenVerb "press" ["press", "hit", "push"],
+        TokenVerb "press" ["press", "hit", "push", "depress", "poke"],
         TokenVerb "lift" ["lift", "remove"],
-        TokenVerb "touch" ["touch"]
+        TokenVerb "touch" ["touch", "stroke", "grab", "feel", "handle", "pat", "brush", "tap"],
+        TokenVerb "ask" ["ask", "question", "query", "inquire", "quiz", "interrogate"],
+        TokenVerb "talk" ["talk", "chat", "converse", "communicate", "speak", "parley"]
     ]
 
 allNouns :: [Token]
@@ -125,6 +128,7 @@ allPrepositions =
         TokenPreposition "against" ["against"],
         TokenPreposition "around" ["around"],
         TokenPreposition "among" ["among"],
+        TokenPreposition "about" ["about"],
         TokenPreposition "at" ["at"],
         TokenPreposition "in front" ["in front"],
         TokenPreposition "from" ["from"],
@@ -1298,7 +1302,8 @@ starFieldScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["walk", "to", "clock constellation"]],
+                    sentences = [uSentence ["walk", "to", "clock constellation"],
+                                 uSentence ["fly", "to", "clock constellation"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -1311,7 +1316,8 @@ starFieldScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["walk", "to", "hypnotism constellation"]],
+                    sentences = [uSentence ["walk", "to", "hypnotism constellation"],
+                                 uSentence ["fly", "to", "hypnotism constellation"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -1324,7 +1330,8 @@ starFieldScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["walk", "to", "cupcake constellation"]],
+                    sentences = [uSentence ["walk", "to", "cupcake constellation"],
+                                 uSentence ["fly", "to", "cupcake constellation"]],
                     conditionalActions =
                     [
                         ConditionalAction
