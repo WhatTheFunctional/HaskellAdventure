@@ -67,7 +67,7 @@ allVerbs =
         TokenVerb "lift" ["lift", "remove"],
         TokenVerb "touch" ["touch", "stroke", "grab", "feel", "handle", "pat", "brush", "tap"],
         TokenVerb "ask" ["ask", "question", "query", "inquire", "quiz", "interrogate"],
-        TokenVerb "talk" ["talk", "chat", "converse", "communicate", "speak", "parley"]
+        TokenVerb "talk" ["talk", "chat", "converse", "communicate", "speak", "parley"],
         TokenVerb "call" ["call", "summon"],
         TokenVerb "sleep" ["sleep"],
         TokenVerb "lie" ["lie", "lay", "sleep"],
