@@ -1574,10 +1574,16 @@ hypnotismScene =
                         [
                             ConditionalAction
                             {
+                                condition = InInventory "pendulum",
+                                conditionalDescription =
+                                    ConditionalDescription [(CTrue, "The rabbit speaks to you, \"You took my pendulum, so I can't do my trick anymore, but it was worth swapping it for that cake. It was delicious!\"", [])],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
                                 condition = CTrue,
                                 conditionalDescription =
-                                    ConditionalDescription [((InInventory "pendulum"), "The <rabbit> speaks to you, \"You took my pendulum, so I can't do my trick anymore, but it was worth swapping it for that <cake>. It was delicious!\"", []),
-                                                            (CNot (InInventory "pendulum"), "The <rabbit> asks, \"Are you volunteering for my trick?, just lie down on the <couch>.\"", [])],
+                                    ConditionalDescription [(CTrue, "The rabbit asks, \"Are you volunteering for my trick?, just lie down on the couch.\"", [])],
                                 stateChanges = []
                             }
                         ]
@@ -1590,9 +1596,16 @@ hypnotismScene =
                         [
                             ConditionalAction
                             {
+                                condition = CNot (InInventory "pendulum"),
+                                conditionalDescription =
+                                    ConditionalDescription [(CTrue, "You lie down on the couch. The rabbit walks up to you and swings it before you. You feel your eyes growing heavy. You fall into a deep slumber, never to awake again.", [SceneChange "lose"])],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CNot (InInventory "pendulum"), "You lie down on the <couch>. The <rabbit> walks up to you and swings it before you. You feel your eyes growing heavy. You fall into a deep slumber, never to awake again.", [SceneChange "winScene"]),
-                                                                                 (InInventory "pendulum", "You lie down on the <couch>. The <rabbit> walks up to you says \"I hope you're enjoying yourself, I can't do my trick without that <pendulum>.\".", [])],
+                                conditionalDescription =
+                                    ConditionalDescription [(CTrue, "You lie down on the couch. The rabbit walks up to you says \"I hope you're enjoying yourself, I can't do my trick without that pendulum.\".", [])],
                                 stateChanges = []
                             }
                         ]
@@ -1621,11 +1634,38 @@ hypnotismScene =
                     [
                         ConditionalAction
                         {
+                            condition = CNot (InInventory "pendulum"),
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "You reach for the rabbit's pendulum. It pulls it away and wags its finger at you. \"Not so fast, if you want this, I want a treat in exchange!\"", [])],
+                            stateChanges = []
+                        },
+                        ConditionalAction
+                        {
                             condition = CTrue,
                             conditionalDescription =
-                                ConditionalDescription [(CNot (InInventory "pendulum"), "You reach for the rabbit's pendulum. It pulls it away and wags its finger at you. \"Not so fast, if you want this, I want a treat in exchange!\"", []),
-                                                        (InInventory "pendulum", "You already have the rabbit's pendulum.", [])],
+                                ConditionalDescription [(CTrue, "You already have the rabbit's pendulum.", [])],
                             stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["give", "pendulum", "to", "rabbit"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CNot (InInventory "pendulum"),
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "\"You don't have a pendulum.\"", [])],
+                            stateChanges = []
+                        },
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "You give the pendulum to the rabbit. She says \"I thought you needed that. Well, thanks for giving it back to me!\"", [])],
+                            stateChanges = [RemoveFromInventory "pendulum"]
                         }
                     ]
                 },
@@ -1636,10 +1676,16 @@ hypnotismScene =
                     [
                         ConditionalAction
                         {
+                            condition = InInventory "pendulum",
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit tells you \"That was my favorite pendulum, but I have some more backstage.\"", [])],
+                            stateChanges = []
+                        },
+                        ConditionalAction
+                        {
                             condition = CTrue,
                             conditionalDescription =
-                                ConditionalDescription [(InInventory "pendulum", "The rabbit tells you \"That was my favorite pendulum, but I have some more backstage.\"", []),
-                                                        (CNot (InInventory "pendulum"), "The rabbit tells you \"Oh, this is what I use to hypnotize my volunteers!\".", [])],
+                                ConditionalDescription [CTrue, "The rabbit tells you \"Oh, this is what I use to hypnotize my volunteers!\".", [])],
                             stateChanges = []
                         }
                     ]
@@ -1674,6 +1720,22 @@ hypnotismScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["ask", "rabbit", "about", "chocolate cake"],
+                                 uSentence ["ask", "rabbit", "about", "lemon cake"],
+                                 uSentence ["ask", "rabbit", "about", "cupcake"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit tells you \"Those are nice I guess, but not my favorite flavor.\"", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["ask", "rabbit", "about", "hypnotism constellation"],
                                  uSentence ["ask", "rabbit", "about", "hypnosis"]],
                     conditionalActions =
@@ -1689,189 +1751,115 @@ hypnotismScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["give", "rabbit", "carrot cake"]],
+                    sentences = [uSentence ["give", "carrot cake", "to", "rabbit"]],
                     conditionalActions =
                     [
                         ConditionalAction
                         {
+                            condition = InInventory "pendulum",
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit says \"Thanks but I already gave you my pendulum!\"", [])],
+                            stateChanges = [RemoveFromInventory "carrot cake"]
+                        },
+                        ConditionalAction
+                        {
+                            condition = InInventory "carrot cake",
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit takes the cake. She says \"I love carrots! You've got a deal, take my pendulum!\"", [])],
+                            stateChanges = [AddToInventory "pendulum", RemoveFromInventory "carrot cake"]
+                        },
+                        ConditionalAction
+                        {
                             condition = CTrue,
                             conditionalDescription =
-                                ConditionalDescription [(InInventory "carrot cake", "The rabbit takes the cake. \"I love carrots! You've got a deal, take my pendulum!\"", [AddToInventory "pendulum", RemoveFromInventory "carrot cake"]),
-                                                        (CNot (InInventory "carrot cake"), "You don't have a carrot cake.", [])],
+                                ConditionalDescription [(CTrue, "You don't have a carrot cake.", [])],
                             stateChanges = []
                         }
                     ]
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["give", "rabbit", "chocolate cake"]],
+                    sentences = [uSentence ["give", "chocolate cake", "to", "rabbit"]],
                     conditionalActions =
                     [
                         ConditionalAction
                         {
+                            condition = InInventory "pendulum",
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit says \"Thanks but I already gave you my pendulum!\"", [])],
+                            stateChanges = [RemoveFromInventory "chocolate cake"]
+                        },
+                        ConditionalAction
+                        {
+                            condition = InInventory "chocolate cake",
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit says \"I don't like this flavor, no deal!\"", [])],
+                            stateChanges = []
+                        },
+                        ConditionalAction
+                        {
                             condition = CTrue,
                             conditionalDescription =
-                                ConditionalDescription [(InInventory "chocolate cake", "I don't like this flavor, no deal!", []),
-                                                        (CNot (InInventory "chocolate cake"), "You don't have a chocolate cake.", [])],
+                                ConditionalDescription [(CTrue, "You don't have a chocolate cake.", [])],
                             stateChanges = []
                         }
                     ]
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["give", "rabbit", "lemon cake"]],
+                    sentences = [uSentence ["give", "lemon cake", "to", "rabbit"]],
                     conditionalActions =
                     [
                         ConditionalAction
                         {
+                            condition = InInventory "pendulum",
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit says \"Thanks but I already gave you my pendulum!\"", [])],
+                            stateChanges = [RemoveFromInventory "lemon cake"]
+                        },
+                        ConditionalAction
+                        {
+                            condition = InInventory "lemon cake",
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit says \"I don't like this flavor, no deal!\"", [])],
+                            stateChanges = []
+                        }
+                        ConditionalAction
+                        {
                             condition = CTrue,
                             conditionalDescription =
-                                ConditionalDescription [(InInventory "lemon cake", "I don't like this flavor, no deal!", []),
-                                                        (CNot (InInventory "lemon cake"), "You don't have a lemon cake.", [])],
+                                ConditionalDescription [(CTrue, "You don't have a lemon cake.", [])],
                             stateChanges = []
                         }
                     ]
-                }
-            ]
-    }
-
-defaultScene :: Scene
-defaultScene =
-    Scene
-    {
-        sceneDescription = ConditionalDescription [],
-        interactions =
-            [
-                Interaction
-                {
-                    sentences = [uSentence ["jump"]],
-                    conditionalActions =
-                        [
-                            ConditionalAction
-                            {
-                                condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription [(CTrue, "You jump up and down in place.", [])],
-                                stateChanges = []
-                            }
-                        ]
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["walk"]],
+                    sentences = [uSentence ["give", "cupcake", "to", "rabbit"]],
                     conditionalActions =
-                        [
-                            ConditionalAction
-                            {
-                                condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription [(CTrue, "You walk around a bit.", [])],
-                                stateChanges = []
-                            }
-                        ]
-                },
-                Interaction
-                {
-                    sentences = [uSentence ["run"]],
-                    conditionalActions =
-                        [
-                            ConditionalAction
-                            {
-                                condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription [(CTrue, "You jog in place.", [])],
-                                stateChanges = []
-                            }
-                        ]
-                },
-                Interaction
-                {
-                    sentences = [uSentence ["dance"]],
-                    conditionalActions =
-                        [
-                            ConditionalAction
-                            {
-                                condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription [(CTrue, "You dance a happy dance.", [])],
-                                stateChanges = []
-                            }
-                        ]
-                },
-                Interaction
-                {
-                    sentences = [uSentence ["smile"]],
-                    conditionalActions =
-                        [
-                            ConditionalAction
-                            {
-                                condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription [(CTrue, "You smile.", [])],
-                                stateChanges = []
-                            }
-                        ]
-                },
-                Interaction
-                {
-                    sentences = [uSentence ["frown"]],
-                    conditionalActions =
-                        [
-                            ConditionalAction
-                            {
-                                condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription [(CTrue, "You frown.", [])],
-                                stateChanges = []
-                            }
-                        ]
-                },
-                Interaction
-                {
-                    sentences = [uSentence ["do something"]],
-                    conditionalActions =
-                        [
-                            ConditionalAction
-                            {
-                                condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription [(CTrue, "That does something.", [])],
-                                stateChanges = []
-                            }
-                        ]
-                },
-                Interaction
-                {
-                    sentences = [uSentence ["look", "at", "chrome amulet"]],
-                    conditionalActions =
-                        [
-                            ConditionalAction
-                            {
-                                condition = InInventory "chrome amulet", --The key is in your inventory
-                                conditionalDescription = ConditionalDescription [(CTrue, "You are wearing the chrome amulet your grandfather gave you as a child. It shimmers as you inspect it.", [])],
-                                stateChanges = []
-                            }
-                        ]
-                },
-                Interaction
-                {
-                    sentences = [uSentence ["look", "at", "jade amulet"]],
-                    conditionalActions =
-                        [
-                            ConditionalAction
-                            {
-                                condition = InInventory "jade amulet", --The key is in your inventory
-                                conditionalDescription = ConditionalDescription [(CTrue, "You look at Evanna's jade amulet. It shimmers as you inspect it.", [])],
-                                stateChanges = []
-                            }
-                        ]
-                },
-                Interaction
-                {
-                    sentences = [uSentence ["look", "at", "me"],
-                                 uSentence ["look", "at", "myself"]],
-                    conditionalActions =
-                        [
-                            ConditionalAction
-                            {
-                                condition = CTrue, --Always do this
-                                conditionalDescription = ConditionalDescription [(CTrue, "You look fine.", [])],
-                                stateChanges = []
-                            }
-                        ]
+                    [
+                        ConditionalAction
+                        {
+                            condition = InInventory "pendulum",
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit says \"Thanks but I already gave you my pendulum!\"", [])],
+                            stateChanges = [RemoveFromInventory "cupcake"]
+                        },
+                        ConditionalAction
+                        {
+                            condition = InInventory "cupcake",
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit says \"I don't like this flavor, no deal!\"", [])],
+                            stateChanges = []
+                        }
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(Ctrue, "You don't have a cupcake.", [])],
+                            stateChanges = []
+                        }
+                    ]
                 }
             ]
     }
@@ -1914,6 +1902,32 @@ cupcakeScene =
                                 condition = CTrue,
                                 conditionalDescription = ConditionalDescription [(CTrue, "The table has three cakes on it. Each cake is covered in pink frosting and chocolate sprinkles. The <left cake> has a <red card> in front of it, the <middle cake> has a <green card> in front of it, and the <right cake> has a <blue card> in front of it.", [])],
                                 stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "cupcake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "Instead of flowers, there are cupcakes on stems growing out of the ground.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["get", "cupcake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You pluck a cupcake off its stem.", [])],
+                                stateChanges = [AddToInventory "cupcake"]
                             }
                         ]
                 },
@@ -2080,9 +2094,255 @@ cupcakeScene =
             ]
     }
 
+defaultScene :: Scene
+defaultScene =
+    Scene
+    {
+        sceneDescription = ConditionalDescription [],
+        interactions =
+            [
+                Interaction
+                {
+                    sentences = [uSentence ["jump"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue, --Always do this
+                                conditionalDescription = ConditionalDescription [(CTrue, "You jump up and down in place.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["walk"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue, --Always do this
+                                conditionalDescription = ConditionalDescription [(CTrue, "You walk around a bit.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["run"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue, --Always do this
+                                conditionalDescription = ConditionalDescription [(CTrue, "You jog in place.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["dance"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue, --Always do this
+                                conditionalDescription = ConditionalDescription [(CTrue, "You dance a happy dance.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["smile"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue, --Always do this
+                                conditionalDescription = ConditionalDescription [(CTrue, "You smile.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["frown"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue, --Always do this
+                                conditionalDescription = ConditionalDescription [(CTrue, "You frown.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["do something"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue, --Always do this
+                                conditionalDescription = ConditionalDescription [(CTrue, "That does something.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "chrome amulet"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "chrome amulet",
+                                conditionalDescription = ConditionalDescription [(CTrue, "You are wearing the chrome amulet your grandfather gave you as a child. It shimmers as you inspect it.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "jade amulet"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "jade amulet",
+                                conditionalDescription = ConditionalDescription [(CTrue, "You look at Evanna's jade amulet. It shimmers as you inspect it.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "chocolate cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "chocolate cake",
+                                conditionalDescription = ConditionalDescription [(CTrue, "It's a slice of chocolate cake.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "carrot cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "carrot cake",
+                                conditionalDescription = ConditionalDescription [(CTrue, "It's a slice of carrot cake.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "lemon cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "lemon cake",
+                                conditionalDescription = ConditionalDescription [(CTrue, "It's a slice of lemon cake.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "cupcake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "cupcake",
+                                conditionalDescription = ConditionalDescription [(CTrue, "It's a multi-colored cupcake.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["eat", "chocolate cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "chocolate cake",
+                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the chocolate cake. It's delicious!", [])],
+                                stateChanges = [RemoveFromInventory "chocolate cake"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["eat", "carrot cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "carrot cake",
+                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the carrot cake. It's delicious!", [])],
+                                stateChanges = [RemoveFromInventory "carrot cake"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["eat", "lemon cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "lemon cake",
+                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the lemon cake. It's delicious!", [])],
+                                stateChanges = [RemoveFromInventory "lemon cake"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["eat", "cupcake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "cupcake",
+                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the cupcake. It's delicious!", [])],
+                                stateChanges = [RemoveFromInventory "cupcake"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "me"],
+                                 uSentence ["look", "at", "myself"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue, --Always do this
+                                conditionalDescription = ConditionalDescription [(CTrue, "You look fine.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                }
+            ]
+    }
+
 allScenes :: (Data.Map.Map String Scene, [String])
 allScenes = (Data.Map.fromList [("cottage", cottageScene),
                                 ("win", winScene),
+                                ("lose", loseScene),
                                 ("aldeia", aldeiaScene),
                                 ("tower", towerScene),
                                 ("starfield", starFieldScene),
@@ -2093,4 +2353,4 @@ allScenes = (Data.Map.fromList [("cottage", cottageScene),
                                 ("tower music room", wizardTowerMusicRoomScene),
                                 ("tower guest room", wizardTowerGuestRoomScene),
                                 ("elevator", elevatorScene)], --List of scenes
-             ["win"]) --End scenes
+             ["win", "lose"]) --End scenes
