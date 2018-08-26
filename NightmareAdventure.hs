@@ -69,7 +69,6 @@ allVerbs =
         TokenVerb "ask" ["ask", "question", "query", "inquire", "quiz", "interrogate"],
         TokenVerb "talk" ["talk", "chat", "converse", "communicate", "speak", "parley"],
         TokenVerb "call" ["call", "summon"],
-        TokenVerb "sleep" ["sleep"],
         TokenVerb "fall asleep" ["fall asleep"],
         TokenVerb "sleep" ["sleep"]
     ]
