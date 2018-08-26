@@ -37,7 +37,7 @@ allVerbs =
         TokenVerb "use" ["use"],
         TokenVerb "jump" ["jump"],
         TokenVerb "sit" ["sit"],
-        TokenVerb "lie" ["lie", "lie down"],
+        TokenVerb "lie down" ["lie", "lie down"],
         TokenVerb "go" ["move", "proceed"],
         TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "perambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go"],
         TokenVerb "walk down" ["walk down", "move down", "go down"],
@@ -70,9 +70,8 @@ allVerbs =
         TokenVerb "talk" ["talk", "chat", "converse", "communicate", "speak", "parley"],
         TokenVerb "call" ["call", "summon"],
         TokenVerb "sleep" ["sleep"],
-        TokenVerb "lie" ["lie", "lay", "sleep"],
-        TokenVerb "fall" ["fall"],
-        TokenVerb "asleep" ["asleep", "sleep"]
+        TokenVerb "fall asleep" ["fall asleep"],
+        TokenVerb "sleep" ["sleep"]
     ]
 
 allNouns :: [Token]
@@ -1309,8 +1308,9 @@ wizardTowerGuestRoomScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["fall", "asleep"],
-                                 uSentence ["sleep", "on", "bed"],
+                    sentences = [uSentence ["fall asleep"],
+                                 uSentence ["sleep", "upon", "bed"],
+                                 uSentence ["lie down", "upon", "bed"],
                                  uSentence ["go", "to", "sleep"]],
                     conditionalActions =
                         [
@@ -1537,7 +1537,7 @@ hypnotismScene =
                 Interaction
                 {
                     sentences = [uSentence ["sit", "upon", "couch"],
-                                 uSentence ["lie", "upon", "couch"]],
+                                 uSentence ["lie down", "upon", "couch"]],
                     conditionalActions =
                         [
                             ConditionalAction
