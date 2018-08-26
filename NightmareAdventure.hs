@@ -69,6 +69,7 @@ allVerbs =
         TokenVerb "ask" ["ask", "question", "query", "inquire", "quiz", "interrogate"],
         TokenVerb "talk" ["talk", "chat", "converse", "communicate", "speak", "parley"],
         TokenVerb "call" ["call", "summon"],
+        TokenVerb "buy" ["buy", "purchase"],
         TokenVerb "fall asleep" ["fall asleep"],
         TokenVerb "sleep" ["sleep"]
     ]
@@ -119,7 +120,18 @@ allNouns =
         TokenNoun "couch" ["couch", "red couch"],
         TokenNoun "star field" ["star field"],
         TokenNoun "pendulum" ["pendulum"],
-        TokenNoun "carrot cake" ["carrot cake"]
+        TokenNoun "carrot cake" ["carrot cake"],
+        TokenNoun "chocolate cake" ["chocolate cake"],
+        TokenNoun "lemon cake" ["lemon cake"],
+        TokenNoun "left cake" ["left cake"],
+        TokenNoun "middle cake" ["middle cake"],
+        TokenNoun "right cake" ["right cake"],
+        TokenNoun "red card" ["red card"],
+        TokenNoun "green card" ["green card"],
+        TokenNoun "blue card" ["blue card"],
+        TokenNoun "table" ["table"],
+        TokenNoun "cupcake" ["cupcake"],
+        TokenNoun "elderly woman" ["elderly woman", "old woman", "elderly lady", "old lady"]
     ]
 
 allPrepositions :: [Token]
@@ -1438,6 +1450,24 @@ starFieldScene =
             [
                 Interaction
                 {
+                    sentences = [uSentence ["look"],
+                                 uSentence ["look around"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, starFieldDescriptionString, [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["get", "star"]],
                     conditionalActions =
                         [
@@ -1517,6 +1547,25 @@ hypnotismScene =
                                                    ((CAnd (CNot (FlagSet "hypnotism described")) (InInventory "pendulum")), hypnotismDescriptionString, [SetFlag "hypnotism described"])],
         interactions =
             [
+                Interaction
+                {
+                    sentences = [uSentence ["look"],
+                                 uSentence ["look around"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CNot (InInventory "pendulum"), hypnotismDescriptionStringBefore, []),
+                                        (InInventory "pendulum", hypnotismDescriptionString, [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
                 Interaction
                 {
                     sentences = [uSentence ["talk", "to", "rabbit"],
@@ -1827,6 +1876,207 @@ defaultScene =
             ]
     }
 
+cupcakeDescriptionString :: String
+cupcakeDescriptionString = "You step out onto a green field that stretches to the horizon, above you is a <star field> in the sky. There are cupcake flowers growing all over the field, in every color of the rainbow. Before you, an elderly woman sits at a <table> with a red and white polkadot tablecloth."
+
+cupcakeScene :: Scene
+cupcakeScene =
+    Scene
+    {
+        sceneDescription = ConditionalDescription [(CNot (FlagSet "cupcake described"), cupcakeDescriptionString, [SetFlag "cupcake described"])],
+        interactions =
+            [
+                Interaction
+                {
+                    sentences = [uSentence ["look"],
+                                 uSentence ["look around"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, cupcakeDescriptionString, [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "table"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The table has three cakes on it. Each cake is covered in pink frosting and chocolate sprinkles. The <left cake> has a <red card> in front of it, the <middle cake> has a <green card> in front of it, and the <right cake> has a <blue card> in front of it.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "left cake"],
+                                 uSentence ["look", "at", "middle cake"],
+                                 uSentence ["look", "at", "right cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The cake is covered in pink frosting and chocolate sprinkles. Nothing distinguishes it from the other cakes.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "red card"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The red card in front of the left cake reads:\n\"Most people think I'm sweet but really I'm bitter. I I take many forms, I flow and snap when it's hot or cold. I soften when it's warm but enough heat makes me brittle. Sweet, bitter, or spicy, I'm universally loved!\nPrice: 1 star\"", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "green card"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The green card in front of the middle cake reads:\n\"I have a tough life. I'm born in darkness, you'll see my rosette first. It takes two years to show my true form, and when I do show myself I might get chopped to bits, strung up in front of someone, or shoved into a pile of snow.\nPrice: 1 star\"", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "blue card"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The blue card in front of the right cake reads:\n\"I'm loved by many for my brilliant hue but parts of me are practical too. I clean stains, help sailors stay healthy at sea, but when I write, my words disappear!\nPrice: 1 star\"", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["get", "red card"],
+                                 uSentence ["get", "green card"],
+                                 uSentence ["get", "blue card"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The elderly lady says \"Those cards are not for sale.\"", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "elderly woman"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You see an elderly lady sitting behind a table with three cakes. Her hair is tied in a bun and she's wearing a blue apron and a hair net.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["get", "left cake"],
+                                 uSentence ["get", "middle cake"],
+                                 uSentence ["get", "right cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You reach out to take one of the cakes. The elderly woman says \"Those cakes aren't free, you have to pay for them you know!\".", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["buy", "left cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription [(InInventory "star", "You give the elderly woman a star and in exchange she cuts a slice of the left cake and hands it to you. \"Good choice.\" she says \"That one's my favorite!\".", [RemoveFromInventory "star", AddToInventory "chocolate cake"]),
+                                                            (CNot (InInventory "star"), "The elderly woman says \"The cakes aren't free, come back when you can pay.\".", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["buy", "middle cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription [(InInventory "star", "You give the elderly woman a star and in exchange she cuts a slice of the middle cake and hands it to you. \"That one huh?\" she says \"I'm not a big fan of that one, but I hear it's popular with some folks.\".", [RemoveFromInventory "star", AddToInventory "carrot cake"]),
+                                                            (CNot (InInventory "star"), "The elderly woman says \"The cakes aren't free, come back when you can pay.\".", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["buy", "right cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription [(InInventory "star", "You give the elderly woman a star and in exchange she cuts a slice of the right cake and hands it to you. The elderly woman says \"What a strange choice, well I'm sure you'll enjoy it anyway.\".", [RemoveFromInventory "star", AddToInventory "lemon cake"]),
+                                                            (CNot (InInventory "star"), "The elderly woman says \"The cakes aren't free, come back when you can pay.\".", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["go", "to", "star field"],
+                                 uSentence ["fly", "to", "star field"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription = ConditionalDescription [(CTrue, "You float back to the star field.", [])],
+                            stateChanges = [SceneChange "star field",
+                                            RemoveFlag "cupcake described"]
+                        }
+                    ]
+                }
+            ]
+    }
+
 allScenes :: (Data.Map.Map String Scene, [String])
 allScenes = (Data.Map.fromList [("cottage", cottageScene),
                                 ("win", winScene),
@@ -1834,6 +2084,7 @@ allScenes = (Data.Map.fromList [("cottage", cottageScene),
                                 ("tower", towerScene),
                                 ("starfield", starFieldScene),
                                 ("hypnotism", hypnotismScene),
+                                ("cupcake", cupcakeScene),
                                 ("tower ground floor", wizardTowerGroundFloorScene),
                                 ("tower bedroom", wizardTowerBedroomScene),
                                 ("tower music room", wizardTowerMusicRoomScene),
