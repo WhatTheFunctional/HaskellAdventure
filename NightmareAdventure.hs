@@ -1940,7 +1940,7 @@ cupcakeScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The red card in front of the left cake reads:\n\"Most people think I'm sweet but really I'm bitter. I take many forms, I flow and snap when it's hot or cold. I soften when it's warm but enough heat makes me brittle. Sweet, bitter, or spicy, I'm universally loved!\nPrice: 1 star\"", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The red card in front of the left cake reads:\n\"Most people think I'm sweet but really I'm bitter. I take many forms, I flow when it's hot and snap when it's cold. I soften when it's warm but enough heat makes me brittle. Sweet, bitter, or spicy, I'm universally loved!\nPrice: 1 star\"", [])],
                                 stateChanges = []
                             }
                         ]
