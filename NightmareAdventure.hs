@@ -36,6 +36,8 @@ allVerbs =
         TokenVerb "look around" ["look around"],
         TokenVerb "use" ["use"],
         TokenVerb "jump" ["jump"],
+        TokenVerb "sit" ["sit"],
+        TokenVerb "lie" ["lie", "lie down"],
         TokenVerb "go" ["move", "proceed"],
         TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "perambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go"],
         TokenVerb "walk down" ["walk down", "move down", "go down"],
@@ -108,7 +110,13 @@ allNouns =
         TokenNoun "star" ["star", "stars"], -- Star field nouns
         TokenNoun "clock constellation" ["clock", "clock constellation"],
         TokenNoun "hypnotism constellation" ["hypnotism", "hypnotism constellation"],
-        TokenNoun "cupcake constellation" ["cupcake", "cup cake", "cupcake constellation", "cup cake constellation"]
+        TokenNoun "hypnosis" ["hypnosis", "hypnotism"],
+        TokenNoun "cupcake constellation" ["cupcake", "cup cake", "cupcake constellation", "cup cake constellation"],
+        TokenNoun "rabbit" ["rabbit", "white rabbit"],
+        TokenNoun "couch" ["couch", "red couch"],
+        TokenNoun "star field" ["star field"],
+        TokenNoun "pendulum" ["pendulum"],
+        TokenNoun "carrot cake" ["carrot cake"]
     ]
 
 allPrepositions :: [Token]
@@ -117,8 +125,7 @@ allPrepositions =
         TokenPreposition "in" ["in", "inside", "within"],
         TokenPreposition "into" ["into"],
         TokenPreposition "out" ["out", "outside"],
-        TokenPreposition "on" ["on", "on top", "upon"],
-        TokenPreposition "on" ["on", "with"],
+        TokenPreposition "upon" ["on", "on top", "upon"],
         TokenPreposition "above" ["above", "over"],
         TokenPreposition "over" ["over"],
         TokenPreposition "below" ["below", "under", "underneath", "beneath"],
@@ -1269,7 +1276,6 @@ wizardTowerMusicRoomScene =
             ]
     }
  
-
 starFieldDescriptionString :: String
 starFieldDescriptionString = "You open your eyes and find yourself floating in a sea of stars. To your left you see a constellation which looks like a [Clock]." ++
                              "To your right you see a constellation which you know is called [Hypnotism]. Above you is a constellation called [Cup Cake]."
@@ -1310,7 +1316,8 @@ starFieldScene =
                         {
                             condition = CTrue,
                             conditionalDescription = ConditionalDescription [(CTrue, "You float towards the [Clock] constellation", [])],
-                            stateChanges = [SceneChange "clock"]
+                            stateChanges = [SceneChange "clock",
+                                            RemoveFlag "star field described"]
                         }
                     ]
                 },
@@ -1324,7 +1331,8 @@ starFieldScene =
                         {
                             condition = CTrue,
                             conditionalDescription = ConditionalDescription [(CTrue, "You float towards the [Hypnotism] constellation", [])],
-                            stateChanges = [SceneChange "hypnotism"]
+                            stateChanges = [SceneChange "hypnotism",
+                                            RemoveFlag "star field described"]
                         }
                     ]
                 },
@@ -1338,7 +1346,191 @@ starFieldScene =
                         {
                             condition = CTrue,
                             conditionalDescription = ConditionalDescription [(CTrue, "You float towards the [Cup Cake] constellation", [])],
-                            stateChanges = [SceneChange "cupcake"]
+                            stateChanges = [SceneChange "cupcake",
+                                            RemoveFlag "star field described"]
+                        }
+                    ]
+                }
+            ]
+    }
+
+hypnotismDescriptionString :: String
+hypnotismDescriptionString = "You step up onto the stage, the lights overhead are blindingly bright. Before you is a ghostly audience, to your right on the stage is a <white rabbit> wearing a tuxedo and a top hat. Next to the <white rabbit> there's a giant red <couch>. You can see the <star field> off stage to your <left>. "
+
+hypnotismDescriptionStringBefore :: String
+hypnotismDescriptionStringBefore = hypnotismDescriptionString ++ "The <white rabbit> has a <pendulum> in its paw."
+
+hypnotismScene :: Scene
+hypnotismScene =
+    Scene
+    {
+        sceneDescription = ConditionalDescription [((CAnd (CNot (FlagSet "hypnotism described")) (CNot (InInventory "pendulum"))), hypnotismDescriptionStringBefore, [SetFlag "hypnotism described"]),
+                                                   ((CAnd (CNot (FlagSet "hypnotism described")) (InInventory "pendulum")), hypnotismDescriptionString, [SetFlag "hypnotism described"])],
+        interactions =
+            [
+                Interaction
+                {
+                    sentences = [uSentence ["talk", "to", "rabbit"],
+                                 uSentence ["talk", "with", "rabbit"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription [((InInventory "pendulum"), "The <rabbit> speaks to you, \"You took my pendulum, so I can't do my trick anymore, but it was worth swapping it for that <cake>. It was delicious!\"", []),
+                                                            (CNot (InInventory "pendulum"), "The <rabbit> asks, \"Are you volunteering for my trick?, just lie down on the <couch>.\"", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["sit", "upon", "couch"],
+                                 uSentence ["lie", "upon", "couch"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CNot (InInventory "pendulum"), "You lie down on the <couch>. The <rabbit> walks up to you and swings it before you. You feel your eyes growing heavy. You fall into a deep slumber, never to awake again.", [SceneChange "winScene"]),
+                                                                                 (InInventory "pendulum", "You lie down on the <couch>. The <rabbit> walks up to you says \"I hope you're enjoying yourself, I can't do my trick without that <pendulum>.\".", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "to", "star field"],
+                                 uSentence ["go", "to", "star field"],
+                                 uSentence ["walk", "left"],
+                                 uSentence ["go", "left"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription = ConditionalDescription [(CTrue, "You walk off stage and your vision fades to black.", [])],
+                            stateChanges = [SceneChange "star field",
+                                            RemoveFlag "hypnotism described"]
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["get", "pendulum"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(CNot (InInventory "pendulum"), "You reach for the rabbit's pendulum. It pulls it away and wags its finger at you. \"Not so fast, if you want this, I want a treat in exchange!\"", []),
+                                                        (InInventory "pendulum", "You already have the rabbit's pendulum.", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["ask", "rabbit", "about", "pendulum"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(InInventory "pendulum", "The rabbit tells you \"That was my favorite pendulum, but I have some more backstage.\"", []),
+                                                        (CNot (InInventory "pendulum"), "The rabbit tells you \"Oh, this is what I use to hypnotize my volunteers!\".", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["ask", "rabbit", "about", "clock"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit tells you \"The time now is 6pm.\"", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["ask", "rabbit", "about", "carrot cake"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit tells you \"I love carrots!\"", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["ask", "rabbit", "about", "hypnotism constellation"],
+                                 uSentence ["ask", "rabbit", "about", "hypnosis"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The rabbit tells you \"If you want to watch the show, you've got to buy a ticket like everyone else. You can join the audience if you volunteer for my trick though! Just lie down on the couch.\"", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["give", "rabbit", "carrot cake"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(InInventory "carrot cake", "The rabbit takes the cake. \"I love carrots! You've got a deal, take my pendulum!\"", [AddToInventory "pendulum", RemoveFromInventory "carrot cake"]),
+                                                        (CNot (InInventory "carrot cake"), "You don't have a carrot cake.", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["give", "rabbit", "chocolate cake"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(InInventory "chocolate cake", "I don't like this flavor, no deal!", []),
+                                                        (CNot (InInventory "chocolate cake"), "You don't have a chocolate cake.", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["give", "rabbit", "lemon cake"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(InInventory "lemon cake", "I don't like this flavor, no deal!", []),
+                                                        (CNot (InInventory "lemon cake"), "You don't have a lemon cake.", [])],
+                            stateChanges = []
                         }
                     ]
                 }
