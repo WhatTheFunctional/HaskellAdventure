@@ -39,6 +39,7 @@ data StateChange = AddToInventory String |
 
 data NarrativeCondition = InInventory String | --Inventory has an item
                           FlagSet String | --Flag is set
+                          SceneIs String | --Current scene is X
                           CTrue | --Always true
                           CFalse | --Always false
                           CNot NarrativeCondition |
@@ -69,14 +70,15 @@ makeNarrativeGraph scenes scenesEndScenes defaultScene
                       endScenes = scenesEndScenes,
                       graphDefaultScene = defaultScene}
 
-evaluateCondition :: NarrativeCondition -> Inventory -> Flags -> Bool
-evaluateCondition CTrue _ _ = True
-evaluateCondition CFalse _ _ = False
-evaluateCondition (FlagSet flag) _ (Flags flags) = flag `elem` flags
-evaluateCondition (InInventory object) (Inventory inventory) _ = object `elem` inventory
-evaluateCondition (CNot condition) inventory flags = not (evaluateCondition condition inventory flags)
-evaluateCondition (COr condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) || (evaluateCondition condition1 inventory flags)
-evaluateCondition (CAnd condition0 condition1) inventory flags = (evaluateCondition condition0 inventory flags) && (evaluateCondition condition1 inventory flags)
+evaluateCondition :: NarrativeCondition -> SceneKey -> Inventory -> Flags -> Bool
+evaluateCondition CTrue _ _ _ = True
+evaluateCondition CFalse _ _ _ = False
+evaluateCondition (FlagSet flag) _ _ (Flags flags) = flag `elem` flags
+evaluateCondition (SceneIs scene) currentScene _ _ = scene == currentScene
+evaluateCondition (InInventory object) _ (Inventory inventory) _ = object `elem` inventory
+evaluateCondition (CNot condition) scene inventory flags = not (evaluateCondition condition scene inventory flags)
+evaluateCondition (COr condition0 condition1) scene inventory flags = (evaluateCondition condition0 scene inventory flags) || (evaluateCondition condition1 scene inventory flags)
+evaluateCondition (CAnd condition0 condition1) scene inventory flags = (evaluateCondition condition0 scene inventory flags) && (evaluateCondition condition1 scene inventory flags)
 
 --Print a conditional description by evaluating which conditions are true, concatenating the description, and printing it with reflowPutStrs
 printConditionalDescription :: [Char] -> Int -> [SceneKey] -> ConditionalDescription -> [String] -> Maybe (SceneKey, Inventory, Flags) -> IO (Maybe (SceneKey, Inventory, Flags))
@@ -88,7 +90,7 @@ printConditionalDescription delimiters columnWidth _ (ConditionalDescription ((_
     = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n\n" >> return Nothing --Game reached an end state
 printConditionalDescription delimiters columnWidth endScenes
                             (ConditionalDescription ((condition, subDescription, stateChanges) : remainingDescriptions)) linesToPrint (Just (sceneKey, inventory, flags))
-    | evaluateCondition condition inventory flags =
+    | evaluateCondition condition sceneKey inventory flags =
           stateChange (Data.List.find (\x -> case x of
                                              (SceneChange _) -> True
                                              otherwise -> False) stateChanges)
@@ -180,7 +182,7 @@ performConditionalActions delimiters
                           (Just (Interaction {sentences = thisSentences,
                                               conditionalActions = (conditionalAction@(ConditionalAction {condition = thisCondition}) : remainingConditionalActions)}))
                           defaultSceneInteractions -- Ignore default scene interactions if there are still current scene interactions
-    | evaluateCondition thisCondition inventory flags = updateGameState delimiters columnWidth endScenes currentSceneKey inventory flags conditionalAction --The condition for the action passed, update the game state
+    | evaluateCondition thisCondition currentSceneKey inventory flags = updateGameState delimiters columnWidth endScenes currentSceneKey inventory flags conditionalAction --The condition for the action passed, update the game state
     | otherwise = performConditionalActions delimiters columnWidth currentSceneKey endScenes inventory flags
                                             (Just (Interaction {sentences = thisSentences,
                                                                 conditionalActions = remainingConditionalActions})) defaultSceneInteractions --The condition for the action failed, attempt other actions
@@ -203,7 +205,7 @@ performConditionalActions delimiters
                           Nothing --The current scene failed to have any interactions
                           (Just (Interaction {sentences = thisSentences,
                                               conditionalActions = (conditionalAction@(ConditionalAction {condition = thisCondition}) : remainingConditionalActions)}))
-    | evaluateCondition thisCondition inventory flags = updateGameState delimiters columnWidth endScenes currentSceneKey inventory flags conditionalAction --The condition for the action passed, update the game state
+    | evaluateCondition thisCondition currentSceneKey inventory flags = updateGameState delimiters columnWidth endScenes currentSceneKey inventory flags conditionalAction --The condition for the action passed, update the game state
     | otherwise = performConditionalActions delimiters columnWidth currentSceneKey endScenes inventory flags Nothing
                                             (Just (Interaction {sentences = thisSentences,
                                                                 conditionalActions = remainingConditionalActions})) --The condition for the action failed, attempt other actions
