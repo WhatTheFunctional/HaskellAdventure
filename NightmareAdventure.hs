@@ -63,6 +63,7 @@ allVerbs =
         TokenVerb "eat" ["eat", "consume"],
         TokenVerb "drink" ["drink", "consume"],
         TokenVerb "do something" ["do something"],
+        TokenVerb "do nothing" ["do nothing"],
         TokenVerb "press" ["press", "hit", "push", "depress", "poke"],
         TokenVerb "lift" ["lift", "remove"],
         TokenVerb "touch" ["touch", "stroke", "grab", "feel", "handle", "pat", "brush", "tap"],
@@ -376,6 +377,14 @@ cottageScene =
 
 winScene :: Scene
 winScene =
+    Scene
+    {
+        sceneDescription = ConditionalDescription [(CTrue, "Game over", [])],
+        interactions = []
+    }
+
+loseScene :: Scene
+loseScene =
     Scene
     {
         sceneDescription = ConditionalDescription [(CTrue, "Game over", [])],
@@ -1685,7 +1694,7 @@ hypnotismScene =
                         {
                             condition = CTrue,
                             conditionalDescription =
-                                ConditionalDescription [CTrue, "The rabbit tells you \"Oh, this is what I use to hypnotize my volunteers!\".", [])],
+                                ConditionalDescription [(CTrue, "The rabbit tells you \"Oh, this is what I use to hypnotize my volunteers!\".", [])],
                             stateChanges = []
                         }
                     ]
@@ -1823,7 +1832,7 @@ hypnotismScene =
                             conditionalDescription =
                                 ConditionalDescription [(CTrue, "The rabbit says \"I don't like this flavor, no deal!\"", [])],
                             stateChanges = []
-                        }
+                        },
                         ConditionalAction
                         {
                             condition = CTrue,
@@ -1851,12 +1860,12 @@ hypnotismScene =
                             conditionalDescription =
                                 ConditionalDescription [(CTrue, "The rabbit says \"I don't like this flavor, no deal!\"", [])],
                             stateChanges = []
-                        }
+                        },
                         ConditionalAction
                         {
                             condition = CTrue,
                             conditionalDescription =
-                                ConditionalDescription [(Ctrue, "You don't have a cupcake.", [])],
+                                ConditionalDescription [(CTrue, "You don't have a cupcake.", [])],
                             stateChanges = []
                         }
                     ]
@@ -2038,10 +2047,16 @@ cupcakeScene =
                         [
                             ConditionalAction
                             {
+                                condition = InInventory "star",
+                                conditionalDescription =
+                                    ConditionalDescription [(CTrue, "You give the elderly woman a star and in exchange she cuts a slice of the left cake and hands it to you. \"Good choice.\" she says \"That one's my favorite!\".", [])],
+                                stateChanges = [RemoveFromInventory "star", AddToInventory "chocolate cake"]
+                            },
+                            ConditionalAction
+                            {
                                 condition = CTrue,
                                 conditionalDescription =
-                                    ConditionalDescription [(InInventory "star", "You give the elderly woman a star and in exchange she cuts a slice of the left cake and hands it to you. \"Good choice.\" she says \"That one's my favorite!\".", [RemoveFromInventory "star", AddToInventory "chocolate cake"]),
-                                                            (CNot (InInventory "star"), "The elderly woman says \"The cakes aren't free, come back when you can pay.\".", [])],
+                                    ConditionalDescription [(CTrue, "The elderly woman says \"The cakes aren't free, come back when you can pay.\".", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2053,10 +2068,16 @@ cupcakeScene =
                         [
                             ConditionalAction
                             {
+                                condition = InInventory "star",
+                                conditionalDescription =
+                                    ConditionalDescription [(CTrue, "You give the elderly woman a star and in exchange she cuts a slice of the middle cake and hands it to you. \"That one huh?\" she says \"I'm not a big fan of that one, but I hear it's popular with some folks.\".", [])],
+                                stateChanges = [RemoveFromInventory "star", AddToInventory "carrot cake"]
+                            },
+                            ConditionalAction
+                            {
                                 condition = CTrue,
                                 conditionalDescription =
-                                    ConditionalDescription [(InInventory "star", "You give the elderly woman a star and in exchange she cuts a slice of the middle cake and hands it to you. \"That one huh?\" she says \"I'm not a big fan of that one, but I hear it's popular with some folks.\".", [RemoveFromInventory "star", AddToInventory "carrot cake"]),
-                                                            (CNot (InInventory "star"), "The elderly woman says \"The cakes aren't free, come back when you can pay.\".", [])],
+                                    ConditionalDescription [(CTrue, "The elderly woman says \"The cakes aren't free, come back when you can pay.\".", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2068,10 +2089,16 @@ cupcakeScene =
                         [
                             ConditionalAction
                             {
+                                condition = InInventory "star",
+                                conditionalDescription =
+                                    ConditionalDescription [(CTrue, "You give the elderly woman a star and in exchange she cuts a slice of the right cake and hands it to you. The elderly woman says \"What a strange choice, well I'm sure you'll enjoy it anyway.\".", [])],
+                                stateChanges = [RemoveFromInventory "star", AddToInventory "lemon cake"]
+                            },
+                            ConditionalAction
+                            {
                                 condition = CTrue,
                                 conditionalDescription =
-                                    ConditionalDescription [(InInventory "star", "You give the elderly woman a star and in exchange she cuts a slice of the right cake and hands it to you. The elderly woman says \"What a strange choice, well I'm sure you'll enjoy it anyway.\".", [RemoveFromInventory "star", AddToInventory "lemon cake"]),
-                                                            (CNot (InInventory "star"), "The elderly woman says \"The cakes aren't free, come back when you can pay.\".", [])],
+                                    ConditionalDescription [(CTrue, "The elderly woman says \"The cakes aren't free, come back when you can pay.\".", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2188,6 +2215,32 @@ defaultScene =
                             {
                                 condition = CTrue, --Always do this
                                 conditionalDescription = ConditionalDescription [(CTrue, "That does something.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["do nothing"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue, --Always do this
+                                conditionalDescription = ConditionalDescription [(CTrue, "You blink out of existence for a moment.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "star"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "star",
+                                conditionalDescription = ConditionalDescription [(CTrue, "You inspect the star, it twinkles in your hand.", [])],
                                 stateChanges = []
                             }
                         ]
