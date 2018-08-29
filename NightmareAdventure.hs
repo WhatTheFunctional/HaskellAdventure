@@ -99,6 +99,12 @@ allNouns =
         TokenNoun "Evanna" ["Evanna"],
         TokenNoun "jade amulet" ["jade amulet"],
         TokenNoun "tower" ["tower", "aeon tower", "crystal tower"], --Tower nouns
+        TokenNoun "pedestal" ["pedestal"],
+        TokenNoun "indentation" ["indentation"],
+        TokenNoun "chrome indentation" ["chrome indentation"],
+        TokenNoun "jade indentation" ["jade indentation"],
+        TokenNoun "ruby indentation" ["ruby indentation"],
+        TokenNoun "ruby amulet" ["ruby amulet"],
         TokenNoun "gateway" ["gate", "cloaked gateway"],
         TokenNoun "elevator" ["elevator"],
         TokenNoun "ground floor" ["ground floor"],
@@ -139,7 +145,7 @@ allPrepositions :: [Token]
 allPrepositions =
     [
         TokenPreposition "in" ["in", "inside", "within"],
-        TokenPreposition "into" ["into"],
+        TokenPreposition "into" ["into", "in", "inside"],
         TokenPreposition "out" ["out", "outside"],
         TokenPreposition "upon" ["on", "on top", "upon"],
         TokenPreposition "above" ["above", "over"],
@@ -163,6 +169,8 @@ allPrepositions =
         TokenPreposition "up" ["up"],
         TokenPreposition "past" ["past"],
         TokenPreposition "through" ["through"],
+        TokenPreposition "using" ["using"],
+        TokenPreposition "by" ["by"],
         TokenPreposition "to" ["to", "toward"],
         TokenPreposition "until" ["until"],
         TokenPreposition "with" ["with"],
@@ -346,7 +354,8 @@ cottageScene =
                                  uSentence ["leave", "east"],
                                  uSentence ["leave"],
                                  uSentence ["leave", "home"],
-                                 uSentence ["walk", "to", "square"]],
+                                 uSentence ["walk", "to", "square"],
+                                 uSentence ["leave", "to", "square"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -549,14 +558,19 @@ aldeiaScene =
             ]
     }
 
-towerDescriptionString :: String
-towerDescriptionString = "You are standing at the base of the <Aeon Tower>, inhabited by Isvald, the aldeia's resident Aeon Priest. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is Kethar desert, which stretches to the horizon. The <aledeia square> is to the <north>."
+towerExteriorDescriptionString :: String
+towerExteriorDescriptionString = "You are standing at the base of the <Aeon Tower>, inhabited by Isvald, the aldeia's resident Aeon Priest. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is Kethar desert, which stretches to the horizon. The <aledeia square> is to the <north>. In front of you is a <pedestal> with some strange indentations."
 
-towerScene :: Scene
-towerScene =
+gatewayDescriptionString :: String
+gatewayDescriptionString = " A cloaked <gateway> has been opened in the side of the tower."
+
+towerExteriorScene :: Scene
+towerExteriorScene =
     Scene
     {
-        sceneDescription = ConditionalDescription [(CNot (FlagSet "tower described"), towerDescriptionString, [SetFlag "tower described"])],
+        sceneDescription =
+            ConditionalDescription [(CAnd (CNot (FlagSet "tower described")) (CNot (FlagSet "gateway opened")), towerExteriorDescriptionString, [SetFlag "tower described"]),
+                                    (CAnd (CNot (FlagSet "tower described")) (FlagSet "gateway opened"), towerExteriorDescriptionString ++ gatewayDescriptionString, [SetFlag "tower described"])],
         interactions =
             [
                 Interaction
@@ -572,7 +586,8 @@ towerScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, towerDescriptionString, [])
+                                        (CTrue, towerExteriorDescriptionString, []),
+                                        (FlagSet "gateway opened", gatewayDescriptionString, [])
                                     ],
                                 stateChanges = []
                             }
@@ -610,6 +625,220 @@ towerScene =
                                             (CTrue, "You walk back to the <aldeia square>.", [RemoveFlag "tower described"])
                                         ],
                                 stateChanges = [SceneChange "aldeia"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "pedestal"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You see a pedestal made out of marble. It rises up to chest height and has three indentations: a chrome indentation, a jade indentation, and a ruby indentation. ", []),
+                                        (FlagSet "chrome amulet installed", "The chrome amulet is inserted into the chrome indentation.", []),
+                                        (FlagSet "jade amulet installed", "The jade amulet is inserted into the jade indentation.", []),
+                                        (FlagSet "ruby amulet installed", "The ruby amulet is inserted into the ruby indentation.", []),
+                                        (CNot (FlagSet "got ruby amulet"), "You notice that there is a <ruby amulet> at the base of the pedestal.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["get", "ruby amulet"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "got ruby amulet",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You already got the ruby amulet.", [])
+                                    ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You pick up the ruby amulet.", [])
+                                    ],
+                                stateChanges = [AddToInventory "ruby amulet", SetFlag "got ruby amulet"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["insert", "chrome amulet", "into", "pedestal"],
+                                 uSentence ["put", "chrome amulet", "into", "pedestal"],
+                                 uSentence ["use", "chrome amulet", "on", "pedestal"],
+                                 uSentence ["insert", "chrome amulet", "into", "indentation"],
+                                 uSentence ["put", "chrome amulet", "into", "indentation"],
+                                 uSentence ["use", "chrome amulet", "on", "indentation"],
+                                 uSentence ["insert", "chrome amulet", "into", "chrome indentation"],
+                                 uSentence ["put", "chrome amulet", "into", "chrome indentation"],
+                                 uSentence ["use", "chrome amulet", "on", "chrome indentation"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "chrome amulet installed",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You have already inserted the chrome amulet into the chrome indentation.", [])
+                                    ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CNot (InInventory "chrome amulet"),
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You don't have a chrome amulet.", [])
+                                    ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You insert the chrome amulet into the chrome indentation on the pedestal.", [SetFlag "chrome amulet installed"]),
+                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the Aeon Tower shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
+                                    ],
+                                stateChanges = [RemoveFromInventory "chrome amulet"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["insert", "jade amulet", "into", "pedestal"],
+                                 uSentence ["put", "jade amulet", "into", "pedestal"],
+                                 uSentence ["use", "jade amulet", "on", "pedestal"],
+                                 uSentence ["insert", "jade amulet", "into", "indentation"],
+                                 uSentence ["put", "jade amulet", "into", "indentation"],
+                                 uSentence ["use", "jade amulet", "on", "indentation"],
+                                 uSentence ["insert", "jade amulet", "into", "jade indentation"],
+                                 uSentence ["put", "jade amulet", "into", "jade indentation"],
+                                 uSentence ["use", "jade amulet", "on", "jade indentation"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "jade amulet installed",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You have already inserted the jade amulet into the jade indentation.", [])
+                                    ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CNot (InInventory "jade amulet"),
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You don't have a jade amulet.", [])
+                                    ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You insert the jade amulet into the jade indentation on the pedestal.", [SetFlag "jade amulet installed"]),
+                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the Aeon Tower shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
+                                    ],
+                                stateChanges = [RemoveFromInventory "jade amulet"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["insert", "ruby amulet", "into", "pedestal"],
+                                 uSentence ["put", "ruby amulet", "into", "pedestal"],
+                                 uSentence ["use", "ruby amulet", "on", "pedestal"],
+                                 uSentence ["insert", "ruby amulet", "into", "indentation"],
+                                 uSentence ["put", "ruby amulet", "into", "indentation"],
+                                 uSentence ["use", "ruby amulet", "on", "indentation"],
+                                 uSentence ["insert", "ruby amulet", "into", "ruby indentation"],
+                                 uSentence ["put", "ruby amulet", "into", "ruby indentation"],
+                                 uSentence ["use", "ruby amulet", "on", "ruby indentation"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "ruby amulet installed",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You have already inserted the ruby amulet into the ruby indentation.", [])
+                                    ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CNot (InInventory "ruby amulet"),
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You don't have a ruby amulet.", [])
+                                    ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You insert the ruby amulet into the ruby indentation on the pedestal.", [SetFlag "ruby amulet installed"]),
+                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the Aeon Tower shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
+                                    ],
+                                stateChanges = [RemoveFromInventory "ruby amulet"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "through", "gateway"],
+                                 uSentence ["walk", "into", "gateway"],
+                                 uSentence ["walk", "into", "tower"],
+                                 uSentence ["walk", "into", "tower", "through", "gateway"],
+                                 uSentence ["walk", "into", "tower", "using", "gateway"],
+                                 uSentence ["walk", "inside"],
+                                 uSentence ["enter"],
+                                 uSentence ["enter", "tower"],
+                                 uSentence ["enter", "through", "gateway"],
+                                 uSentence ["enter", "using", "gateway"],
+                                 uSentence ["enter", "tower", "through", "gateway"],
+                                 uSentence ["enter", "into", "tower"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "gateway opened",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You walk through the cloaked <gateway>.", [])
+                                    ],
+                                stateChanges = [SceneChange "tower ground floor"]
                             }
                         ]
                 }
@@ -2571,7 +2800,7 @@ allScenes = (Data.Map.fromList [("cottage", cottageScene),
                                 ("win", winScene),
                                 ("lose", loseScene),
                                 ("aldeia", aldeiaScene),
-                                ("tower", towerScene),
+                                ("tower", towerExteriorScene),
                                 ("starfield", starFieldScene),
                                 ("hypnotism", hypnotismScene),
                                 ("cupcake", cupcakeScene),
