@@ -379,7 +379,7 @@ winScene :: Scene
 winScene =
     Scene
     {
-        sceneDescription = ConditionalDescription [(CTrue, "Game over", [])],
+        sceneDescription = ConditionalDescription [(CTrue, "Everything swirls around, and you find yourself back in your cottage with your parents, and Jorryn. Jorryn is stretching out of his sleep. \"I feel so refreshed! Get ready, we have to go tend to the crops!\", he says.", [])],
         interactions = []
     }
 
@@ -1538,6 +1538,180 @@ starFieldScene =
                                             RemoveFlag "star field described"]
                         }
                     ]
+                }
+            ]
+    }
+
+clockDescriptionString :: String
+clockDescriptionString = "You are on the outside of a <prison> made of stars. Right across from the twinkling prison bars is a grandfather <clock> that's missing a pendulum."
+
+clockScene :: Scene
+clockScene = 
+    Scene
+    {
+        sceneDescription = ConditionalDescription [(CNot (FlagSet "clock described"), clockDescriptionString, [SetFlag "clock described"])],
+        interactions = 
+            [
+                Interaction
+                {
+                    sentences = [uSentence ["look"],
+                                 uSentence ["look around"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription[(CTrue, clockDescriptionString, [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "prison"],
+                                 uSentence ["go", "to", "prison"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription[(CTrue, "The <prison> holds all the people from the village. You spot your <parents>, <Jorryn>, and <Evanna>. Even the <wizard> is here.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "Jorryn"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription[(CTrue, "<Jorryn> appears unharmed. It seems like he wants to say something to you.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "parents"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription[(CTrue, "Your <parents> appear unharmed. It seems like they want to say something to you.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "Evanna"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription[(CTrue, "<Evanna> appears unharmed. It seems like she wants to talk to you.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "wizard"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription[(CTrue, "The <wizard> appears unharmed. It seems like he wants to talk to you.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["talk", "to", "parents"],
+                                 uSentence ["talk", "with", "parents"],
+                                 uSentence ["go", "to", "parents"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription[(CTrue, "Get us out of here! I hope our crops are not wilting away.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["talk", "to", "Jorryn"],
+                                 uSentence ["talk", "with", "Jorryn"],
+                                 uSentence ["go", "to", "Jorryn"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription[(CTrue, "Please get me out of this nightmare land!", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["talk", "to", "Evanna"],
+                                 uSentence ["talk", "with", "Evanna"],
+                                 uSentence ["go", "to", "Evanna"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription[(CTrue, "Oh my gosh, this gravel is so rough, why am I sleeping on the road?", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["talk", "to", "wizard"],
+                                 uSentence ["talk", "with", "wizard"],
+                                 uSentence ["go", "to", "wizard"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription[(CTrue, "Fix <clock> with pendulum! Everyone wakes up, and you win.", [])],
+                                stateChanges = [] 
+                            }
+                        ]
+                },
+                Interaction
+                {
+                   sentences = [uSentence ["fix", "clock", "with", "pendulum"],
+                               uSentence ["fix", "clock"],
+                               uSentence ["put", "pendulum", "in", "clock"]],
+                   conditionalActions =
+                       [
+                           ConditionalAction
+                           {
+                               condition = CNot (InInventory "pendulum"),
+                               conditionalDescription = ConditionalDescription[(CTrue, "Alas! You don't have a pendulum! Hurry, and find one!", [])],
+                               stateChanges = []
+                           },
+                           ConditionalAction
+                           {
+                               condition = InInventory "pendulum",
+                               conditionalDescription = ConditionalDescription[(CTrue, "Alas! The pendulum easily fits in the clock, and resumes its to-and-fro motion!", [])],
+                               stateChanges = [SceneChange "win"]
+                           }
+                       ]
                 }
             ]
     }
