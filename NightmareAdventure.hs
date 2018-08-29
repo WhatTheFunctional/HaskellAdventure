@@ -1713,7 +1713,7 @@ starFieldScene =
                 {
                     sentences = [uSentence ["walk", "into", "clock constellation"],
                                  uSentence ["walk", "to", "clock constellation"],
-                                 uSentence ["fly", "into", "clock constellation"]
+                                 uSentence ["fly", "into", "clock constellation"],
                                  uSentence ["fly", "to", "clock constellation"]],
                     conditionalActions =
                     [
@@ -1730,7 +1730,7 @@ starFieldScene =
                 {
                     sentences = [uSentence ["walk", "into", "hypnotism constellation"],
                                  uSentence ["walk", "to", "hypnotism constellation"],
-                                 uSentence ["fly", "into", "hypnotism constellation"]
+                                 uSentence ["fly", "into", "hypnotism constellation"],
                                  uSentence ["fly", "to", "hypnotism constellation"]],
                     conditionalActions =
                     [
