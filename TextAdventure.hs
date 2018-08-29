@@ -113,7 +113,6 @@ parseInput inventory flags line
     | map Data.Char.toLower line == "prepositions" = putStrLn "All prepositions:" >> printPrepositions allPrepositions >> return (Just [])
     | map Data.Char.toLower line == "inventory" = putStrLn "All items in inventory:" >> printInventory inventory >> return (Just [])
     | map Data.Char.toLower line == "flags" = putStrLn "All currently set flags:" >> printFlags flags >> return (Just [])
-    | map Data.Char.toLower line == "exit" = putStrLn "Thanks for playing!" >> hFlush stdout >> return Nothing
     | map Data.Char.toLower line == "quit" = putStrLn "Thanks for playing!" >> hFlush stdout >> return Nothing
     | sentences == [] = reflowPutStr allDelimiters allColumnWidth "I'm sorry, I don't understand what you said." >> putStr "\n" >> return (Just sentences)
     | otherwise = --printWordTokens sentenceTokenMatches >>

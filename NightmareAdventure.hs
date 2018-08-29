@@ -38,8 +38,8 @@ allVerbs =
         TokenVerb "jump" ["jump"],
         TokenVerb "sit" ["sit"],
         TokenVerb "lie down" ["lie", "lie down"],
-        TokenVerb "go" ["move", "proceed"],
-        TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "perambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go"],
+        TokenVerb "go" ["move", "proceed", "leave", "exit"],
+        TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "perambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go", "leave", "exit"],
         TokenVerb "walk down" ["walk down", "move down", "go down"],
         TokenVerb "walk up" ["walk up", "move up", "go up"],
         TokenVerb "fly" ["fly", "float", "drift", "glide", "move", "go"],
@@ -56,10 +56,10 @@ allVerbs =
         TokenVerb "lock" ["lock"],
         TokenVerb "open" ["open"],
         TokenVerb "close" ["close", "shut"],
-        TokenVerb "enter" ["enter"],
+        TokenVerb "enter" ["enter", "get into"],
         TokenVerb "insert" ["insert"],
         TokenVerb "remove" ["remove"],
-        TokenVerb "leave" ["leave", "exit"],
+        TokenVerb "leave" ["leave", "exit", "get out"],
         TokenVerb "eat" ["eat", "consume"],
         TokenVerb "drink" ["drink", "consume"],
         TokenVerb "do something" ["do something"],
@@ -342,20 +342,14 @@ cottageScene =
                 Interaction
                 {
                     sentences = [uSentence ["walk", "through", "door"],
-                                 uSentence ["leave", "through", "door"],
-                                 uSentence ["leave", "out", "door"],
                                  uSentence ["walk", "out", "door"],
                                  uSentence ["walk", "through", "front door"],
-                                 uSentence ["leave", "through", "front door"],
-                                 uSentence ["leave", "out", "front door"],
                                  uSentence ["walk", "out", "front door"],
                                  uSentence ["walk", "outside"],
                                  uSentence ["walk", "east"],
-                                 uSentence ["leave", "east"],
                                  uSentence ["leave"],
                                  uSentence ["leave", "home"],
-                                 uSentence ["walk", "to", "square"],
-                                 uSentence ["leave", "to", "square"]],
+                                 uSentence ["walk", "to", "square"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -894,14 +888,13 @@ wizardTowerGroundFloorScene =
                 Interaction
                 {
                     sentences = [uSentence ["walk", "through", "gateway"],
-                                 uSentence ["leave", "through", "gateway"],
                                  uSentence ["walk", "out", "gateway"],
-                                 uSentence ["leave", "out", "gateway"],
                                  uSentence ["walk", "outside"],
                                  uSentence ["walk", "west"],
-                                 uSentence ["leave", "west"],
                                  uSentence ["leave"],
-                                 uSentence ["leave", "tower"]],
+                                 uSentence ["leave", "tower"],
+                                 uSentence ["leave", "tower", "through", "gateway"],
+                                 uSentence ["leave", "tower", "using", "gateway"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -965,11 +958,9 @@ wizardTowerGroundFloorScene =
                 Interaction
                 {
                     sentences = [uSentence ["walk", "into", "elevator"],
+                                 uSentence ["walk", "in", "elevator"],
                                  uSentence ["use", "elevator"],
-                                 uSentence ["enter", "elevator"],
-                                 uSentence ["go", "in", "elevator"],
-                                 uSentence ["go", "into", "elevator"],
-                                 uSentence ["get", "into", "elevator"]],
+                                 uSentence ["enter", "elevator"]],
                     conditionalActions = 
                         [
                             ConditionalAction
@@ -1103,7 +1094,7 @@ elevatorScene =
                },
                Interaction
                {
-                   sentences = [uSentence ["go", "to", "Guest Room"],
+                   sentences = [uSentence ["walk", "to", "Guest Room"],
                                 uSentence ["press", "Guest Room"],
                                 uSentence ["ride", "to", "Guest Room"]],
                    conditionalActions = 
@@ -1122,8 +1113,7 @@ elevatorScene =
                },
                Interaction
                {
-                   sentences = [uSentence ["exit", "elevator"],
-                                uSentence ["walk", "out", "elevator"],
+                   sentences = [uSentence ["walk", "out", "elevator"],
                                 uSentence ["leave", "elevator"]],
                    conditionalActions = 
                        [
@@ -1366,11 +1356,9 @@ wizardTowerBedroomScene =
                 Interaction
                 {
                     sentences = [uSentence ["walk", "into", "elevator"],
+                                 uSentence ["walk", "in", "elevator"],
                                  uSentence ["use", "elevator"],
-                                 uSentence ["enter", "elevator"],
-                                 uSentence ["go", "in", "elevator"],
-                                 uSentence ["go", "into", "elevator"],
-                                 uSentence ["get", "into", "elevator"]],
+                                 uSentence ["enter", "elevator"]],
                     conditionalActions = 
                         [
                             ConditionalAction
@@ -1504,10 +1492,9 @@ wizardTowerMusicRoomScene =
                 Interaction
                 {
                     sentences = [uSentence ["walk", "into", "elevator"],
+                                 uSentence ["walk", "in", "elevator"],
                                  uSentence ["use", "elevator"],
-                                 uSentence ["enter", "elevator"],
-                                 uSentence ["go", "in", "elevator"],
-                                 uSentence ["get", "into", "elevator"]],
+                                 uSentence ["enter", "elevator"]],
                     conditionalActions = 
                         [
                             ConditionalAction
@@ -1543,7 +1530,7 @@ wizardTowerGuestRoomScene =
             [
                 Interaction
                 {
-                    sentences = [uSentence ["go", "to", "bed"],
+                    sentences = [uSentence ["walk", "to", "bed"],
                                  uSentence ["look", "at", "bed"]],
                     conditionalActions = 
                         [
@@ -1648,10 +1635,9 @@ wizardTowerGuestRoomScene =
                 Interaction
                 {
                     sentences = [uSentence ["walk", "into", "elevator"],
+                                 uSentence ["walk", "in", "elevator"],
                                  uSentence ["use", "elevator"],
-                                 uSentence ["enter", "elevator"],
-                                 uSentence ["go", "in", "elevator"],
-                                 uSentence ["get", "into", "elevator"]],
+                                 uSentence ["enter", "elevator"]],
                     conditionalActions = 
                         [
                             ConditionalAction
@@ -1725,7 +1711,9 @@ starFieldScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["walk", "to", "clock constellation"],
+                    sentences = [uSentence ["walk", "into", "clock constellation"],
+                                 uSentence ["walk", "to", "clock constellation"],
+                                 uSentence ["fly", "into", "clock constellation"]
                                  uSentence ["fly", "to", "clock constellation"]],
                     conditionalActions =
                     [
@@ -1740,7 +1728,9 @@ starFieldScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["walk", "to", "hypnotism constellation"],
+                    sentences = [uSentence ["walk", "into", "hypnotism constellation"],
+                                 uSentence ["walk", "to", "hypnotism constellation"],
+                                 uSentence ["fly", "into", "hypnotism constellation"]
                                  uSentence ["fly", "to", "hypnotism constellation"]],
                     conditionalActions =
                     [
@@ -1755,7 +1745,9 @@ starFieldScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["walk", "to", "cupcake constellation"],
+                    sentences = [uSentence ["walk", "into", "cupcake constellation"],
+                                 uSentence ["walk", "to", "cupcake constellation"],
+                                 uSentence ["fly", "into", "cupcake constellation"],
                                  uSentence ["fly", "to", "cupcake constellation"]],
                     conditionalActions =
                     [
@@ -2025,9 +2017,8 @@ hypnotismScene =
                 Interaction
                 {
                     sentences = [uSentence ["walk", "to", "star field"],
-                                 uSentence ["go", "to", "star field"],
                                  uSentence ["walk", "left"],
-                                 uSentence ["go", "left"]],
+                                 uSentence ["leave"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2508,7 +2499,7 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["go", "to", "star field"],
+                    sentences = [uSentence ["walk", "to", "star field"],
                                  uSentence ["fly", "to", "star field"]],
                     conditionalActions =
                     [
