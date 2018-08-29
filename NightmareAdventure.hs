@@ -416,7 +416,7 @@ aldeiaScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You inspect the <Ancient Clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in The Beyond. The clock is not ticking, and the hands have stopped. You notice that something appears to have bored a a perfectly round hole in the marble. Inside, you see that the clock operates with a complicated set of gears. One of the gears appears to be missing.", [])
+                                        (CTrue, "You inspect the <Ancient Clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in The Beyond. The clock is not ticking, and the hands have stopped. You notice that something appears to have bored a perfectly round hole in the marble. Inside, you see that the clock operates with a complicated set of gears. One of the gears appears to be missing.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -453,7 +453,7 @@ aldeiaScene =
                                     ConditionalDescription
                                     [
                                         (CNot (InInventory "jade amulet"), "You reach down and remove Evanna's jade amulet.", []),
-                                        (InInventory "jade amulet", "You have already take Evanna's jade amulet.", [])
+                                        (InInventory "jade amulet", "You have already taken Evanna's jade amulet.", [])
                                     ],
                                 stateChanges = [AddToInventory "jade amulet"]
                             }
