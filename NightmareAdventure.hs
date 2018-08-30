@@ -73,6 +73,7 @@ allVerbs =
         TokenVerb "buy" ["buy", "purchase"],
         TokenVerb "fall asleep" ["fall asleep"],
         TokenVerb "sleep" ["sleep"]
+        TokenVerb "fix" ["fix", "repair"]
     ]
 
 allNouns :: [Token]
@@ -108,6 +109,7 @@ allNouns =
         TokenNoun "gateway" ["gateway", "gate", "cloaked gateway"],
         TokenNoun "elevator" ["elevator"],
         TokenNoun "ground floor" ["ground floor"],
+        TokenNoun "wizard" ["wizard", "Isvald"],
         TokenNoun "Bedroom" ["bedroom", "Bedroom"],
         TokenNoun "Music Room" ["music room", "Music Room"],
         TokenNoun "Guest Room" ["guest room", "Guest Room"],
@@ -1050,7 +1052,7 @@ elevatorScene =
                                        [
                                            (CTrue, "The <elevator> whisks you off, and brings you to the ground floor with a gentle bounce. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
                                        ],
-                                stateChanges = [SetFlag "elevator ground floor"]
+                                stateChanges = [SetFlag "elevator ground floor", RemoveFlag "elevator bedroom", RemoveFlag "elevator music room", RemoveFlag "elevator guest room"]
                             }
                         ]
                },
@@ -1069,7 +1071,7 @@ elevatorScene =
                                       [
                                           (CTrue, "The <elevator> zooms across the tower, and comes to a floating stop at the bedroom. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
                                       ],
-                               stateChanges = [SetFlag "elevator bedroom"]
+                               stateChanges = [SetFlag "elevator bedroom", RemoveFlag "elevator ground floor", RemoveFlag "elevator music room", RemoveFlag "elevator guest room"]
                            }
                        ]
                },
@@ -1088,13 +1090,13 @@ elevatorScene =
                                       [
                                           (CTrue, "The <elevator> glides away, and comes to a rest at the music room. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", []) 
                                       ],
-                               stateChanges = [SetFlag "elevator music room"]
+                               stateChanges = [SetFlag "elevator music room", RemoveFlag "elevator ground floor", RemoveFlag "elevator bedroom", RemoveFlag "elevator guest room"]
                            }
                        ]
                },
                Interaction
                {
-                   sentences = [uSentence ["walk", "to", "Guest Room"],
+                   sentences = [uSentence ["go", "to", "Guest Room"],
                                 uSentence ["press", "Guest Room"],
                                 uSentence ["ride", "to", "Guest Room"]],
                    conditionalActions = 
@@ -1107,7 +1109,7 @@ elevatorScene =
                                       [
                                           (CTrue, "The <elevator> sails across the tower, and docks at the guest room. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
                                       ],
-                               stateChanges = [SetFlag "elevator guest room"]
+                               stateChanges = [SetFlag "elevator guest room", RemoveFlag "elevator ground floor", RemoveFlag "elevator bedroom", RemoveFlag "elevator music room"]
                            }
                       ]
                },
@@ -1125,7 +1127,7 @@ elevatorScene =
                                       [
                                           (CTrue, "You step out to the ground floor, and the elevator lifts off.", [])
                                       ],
-                               stateChanges = [SceneChange "tower ground floor", RemoveFlag "elevator ground floor"]
+                               stateChanges = [SceneChange "tower ground floor", RemoveFlag "elevator ground floor", RemoveFlag "elevator described"]
                            },
                            ConditionalAction
                            {
@@ -1135,7 +1137,7 @@ elevatorScene =
                                       [
                                           (CTrue, "You step out into the bedroom, and the elevator drifts away.", [])
                                       ],
-                               stateChanges = [SceneChange "tower bedroom", RemoveFlag "elevator bedroom"]
+                               stateChanges = [SceneChange "tower bedroom", RemoveFlag "elevator bedroom", RemoveFlag "elevator described"]
                            },
                            ConditionalAction
                            {
@@ -1145,7 +1147,7 @@ elevatorScene =
                                       [
                                           (CTrue, "You step out into the music room, and the elevator cruises away.", [])
                                       ],
-                               stateChanges = [SceneChange "tower music room", RemoveFlag "elevator music room"]
+                               stateChanges = [SceneChange "tower music room", RemoveFlag "elevator music room", RemoveFlag "elevator described"]
                            },
                            ConditionalAction
                            {
@@ -1155,7 +1157,7 @@ elevatorScene =
                                       [
                                           (CTrue, "You step out into the guest room, and the elevator slides away.", [])
                                       ],
-                               stateChanges = [SceneChange "tower guest room", RemoveFlag "elevator guest room"]
+                               stateChanges = [SceneChange "tower guest room", RemoveFlag "elevator guest room", RemoveFlag "elevator described"]
                            }
                        ]
                }
@@ -1249,7 +1251,7 @@ wizardTowerBedroomScene =
                },
                Interaction
                {
-                   sentences = [uSentence ["take", "gear"]],
+                   sentences = [uSentence ["get", "gear"]],
                    conditionalActions = 
                        [
                            ConditionalAction
@@ -2025,7 +2027,7 @@ hypnotismScene =
                         {
                             condition = CTrue,
                             conditionalDescription = ConditionalDescription [(CTrue, "You walk off stage and your vision fades to black.", [])],
-                            stateChanges = [SceneChange "star field",
+                            stateChanges = [SceneChange "starfield",
                                             RemoveFlag "hypnotism described"]
                         }
                     ]
@@ -2507,7 +2509,7 @@ cupcakeScene =
                         {
                             condition = CTrue,
                             conditionalDescription = ConditionalDescription [(CTrue, "You float back to the star field.", [])],
-                            stateChanges = [SceneChange "star field",
+                            stateChanges = [SceneChange "starfield",
                                             RemoveFlag "cupcake described"]
                         }
                     ]
@@ -2795,6 +2797,7 @@ allScenes = (Data.Map.fromList [("cottage", cottageScene),
                                 ("starfield", starFieldScene),
                                 ("hypnotism", hypnotismScene),
                                 ("cupcake", cupcakeScene),
+                                ("clock", clockScene),
                                 ("tower ground floor", wizardTowerGroundFloorScene),
                                 ("tower bedroom", wizardTowerBedroomScene),
                                 ("tower music room", wizardTowerMusicRoomScene),
