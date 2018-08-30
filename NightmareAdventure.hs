@@ -384,7 +384,7 @@ winScene :: Scene
 winScene =
     Scene
     {
-        sceneDescription = ConditionalDescription [(CTrue, "Everything swirls around, and you find yourself back in your cottage with your parents, and Jorryn. Jorryn is stretching out of his sleep. \"I feel so refreshed! Get ready, we have to go tend to the crops!\", he says.", [])],
+        sceneDescription = ConditionalDescription [(CTrue, "Everything swirls around, and you find yourself back in your cottage with your parents, and Jorryn. Jorryn is stretching out of his sleep. \"I feel so refreshed! Get ready, we have to go tend to the crops!\", he says.", [SceneChange "end"])],
         interactions = []
     }
 
@@ -392,7 +392,15 @@ loseScene :: Scene
 loseScene =
     Scene
     {
-        sceneDescription = ConditionalDescription [(CTrue, "Game over", [])],
+        sceneDescription = ConditionalDescription [(CTrue, "Game over.", [SceneChange "end"])],
+        interactions = []
+    }
+
+endScene :: Scene
+endScene =
+    Scene
+    {
+        sceneDescription = ConditionalDescription [(CTrue, "", [])],
         interactions = []
     }
 
@@ -2792,6 +2800,7 @@ allScenes :: (Data.Map.Map String Scene, [String])
 allScenes = (Data.Map.fromList [("cottage", cottageScene),
                                 ("win", winScene),
                                 ("lose", loseScene),
+                                ("end", endScene),
                                 ("aldeia", aldeiaScene),
                                 ("tower", towerExteriorScene),
                                 ("starfield", starFieldScene),
@@ -2803,4 +2812,4 @@ allScenes = (Data.Map.fromList [("cottage", cottageScene),
                                 ("tower music room", wizardTowerMusicRoomScene),
                                 ("tower guest room", wizardTowerGuestRoomScene),
                                 ("elevator", elevatorScene)], --List of scenes
-             ["win", "lose"]) --End scenes
+             ["end"]) --End scenes
