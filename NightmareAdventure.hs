@@ -105,7 +105,7 @@ allNouns =
         TokenNoun "jade indentation" ["jade indentation"],
         TokenNoun "ruby indentation" ["ruby indentation"],
         TokenNoun "ruby amulet" ["ruby amulet"],
-        TokenNoun "gateway" ["gate", "cloaked gateway"],
+        TokenNoun "gateway" ["gateway", "gate", "cloaked gateway"],
         TokenNoun "elevator" ["elevator"],
         TokenNoun "ground floor" ["ground floor"],
         TokenNoun "bedroom" ["bedroom"],
