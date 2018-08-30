@@ -72,7 +72,7 @@ allVerbs =
         TokenVerb "call" ["call", "summon"],
         TokenVerb "buy" ["buy", "purchase"],
         TokenVerb "fall asleep" ["fall asleep"],
-        TokenVerb "sleep" ["sleep"]
+        TokenVerb "sleep" ["sleep"],
         TokenVerb "fix" ["fix", "repair"]
     ]
 
