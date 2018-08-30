@@ -111,7 +111,7 @@ allNouns =
         TokenNoun "bedroom" ["bedroom"],
         TokenNoun "music room" ["music room"],
         TokenNoun "guest room" ["guest room"],
-        TokenNoun "button panel" ["button panel"],
+        TokenNoun "button panel" ["panel", "button panel"],
         TokenNoun "button" ["button"],
         TokenNoun "gear" ["gear"],
         TokenNoun "chest of drawers" ["chest of drawers", "drawers"],
