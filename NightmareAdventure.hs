@@ -96,7 +96,7 @@ allNouns =
         TokenNoun "home" ["home", "my house", "cottage", "mud-brick cottage"], --Cottage nouns
         TokenNoun "Jorryn" ["Jorryn"],
         TokenNoun "parents" ["parents"],
-        TokenNoun "square" ["square", "aldeia square"], --Town square nouns
+        TokenNoun "square" ["square", "village square"], --Village square nouns
         TokenNoun "clock" ["ancient clock", "clock"],
         TokenNoun "Evanna" ["Evanna"],
         TokenNoun "jade amulet" ["jade amulet"],
@@ -197,7 +197,7 @@ startFlags :: Flags
 startFlags = Flags []
 
 introString :: String
-introString = "It's been a long day working at the moisture farms outside of your village, your aldeia. You return home just as the sun is setting. You open the door to your mud-brick cottage to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of The Beyond can be dangerous.\nBut as you lean down to inspect your brother you realize that he is not dead, but asleep.\nYou rush to check your <parents>, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them."
+introString = "It's been a long day working at the moisture farms outside of your <village>. You return home just as the sun is setting. You open the door to your mud-brick cottage to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of The Beyond can be dangerous.\nBut as you lean down to inspect your brother you realize that he is not dead, but asleep.\nYou rush to check your <parents>, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them."
 
 cottageDescriptionString :: String
 cottageDescriptionString = "You're standing in your home. <Jorryn> is lying by the <front door> to the <east>. Your <parents> are on the floor by the stove."
@@ -278,7 +278,7 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CNot (FlagSet "front door closed"), "You peer out of your <front door>. You see the path to the <aldeia square>.", []),
+                                        (CNot (FlagSet "front door closed"), "You peer out of your <front door>. You see the path to the <village square>.", []),
                                         ((FlagSet "front door closed"), "You look at your <front door>. It's closed.", [])
                                     ],
                                 stateChanges = []
@@ -363,10 +363,10 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (FlagSet "square visited", "You walk through the front door of your home out into the aldeia. Everyone you pass is still asleep. Your friend, <Evanna>, is still asleep at the base of the <Ancient Clock>.", []),
-                                            (CNot (FlagSet "square visited"), "You walk through the front door of your home out into your aldeia. As you walk through the aldeia, you come across several people asleep on the ground. You arrive at the aldeia square and you notice that, for the first time in your life, the <Ancient Clock> has stopped. You see your friend, <Evanna>, walking slowly through the square in a dazed stupor. As you approach, she collapses to the ground. The <Ancient Clock> chimes and her body starts to glow a deep green color, the glowing aura shoots quickly into the <Ancient Clock> and it falls silent.", [])
+                                            (FlagSet "square visited", "You walk through the front door of your home out into the <village>. Everyone you pass is still asleep. Your friend, <Evanna>, is still asleep at the base of the <Ancient Clock>.", []),
+                                            (CNot (FlagSet "square visited"), "You walk through the front door of your home out into your <village>. As you walk through the <village>, you come across several people asleep on the ground. You arrive at the <village square> and you notice that, for the first time in your life, the <Ancient Clock> has stopped. You see your friend, <Evanna>, walking slowly through the square in a dazed stupor. As you approach, she collapses to the ground. The <Ancient Clock> chimes and her body starts to glow a deep green color, the glowing aura shoots quickly into the <Ancient Clock> and it falls silent.", [])
                                         ],
-                                stateChanges = [SceneChange "aldeia", SetFlag "square visited", RemoveFlag "cottage described"]
+                                stateChanges = [SceneChange "village", SetFlag "square visited", RemoveFlag "cottage described"]
                             },
                             ConditionalAction
                             {
@@ -407,14 +407,14 @@ endScene =
         interactions = []
     }
 
-aldeiaDescriptionString :: String
-aldeiaDescriptionString = "You are standing in the <aldeia square>. It is a dusty open area surrounded by mud-brick buildings. The <Ancient Clock> stands silent in the center of the square. Your friend, <Evanna>, is lying at the base of the clock. Your <home> is to the <west>. You see the <Aeon Tower> to the <south> at the edge of the Kethar desert."
+villageDescriptionString :: String
+villageDescriptionString = "You are standing in the <village square>. It is a dusty open area surrounded by mud-brick buildings. The <Ancient Clock> stands silent in the center of the square. Your friend, <Evanna>, is lying at the base of the clock. Your <home> is to the <west>. You see the <Aeon Tower> to the <south> at the edge of the Kethar desert."
 
-aldeiaScene :: Scene
-aldeiaScene =
+villageScene :: Scene
+villageScene =
     Scene
     {
-        sceneDescription = ConditionalDescription [(CNot (FlagSet "aldeia described"), aldeiaDescriptionString, [SetFlag "aldeia described"])],
+        sceneDescription = ConditionalDescription [(CNot (FlagSet "village described"), villageDescriptionString, [SetFlag "village described"])],
         interactions =
             [
                 Interaction
@@ -485,7 +485,7 @@ aldeiaScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, aldeiaDescriptionString, [])
+                                        (CTrue, villageDescriptionString, [])
                                     ],
                                 stateChanges = []
                             }
@@ -538,7 +538,7 @@ aldeiaScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (CTrue, "You walk through the deserted streets of your aldeia, passing several sleeping bodies on your way home.", [RemoveFlag "aldeia described"])
+                                            (CTrue, "You walk through the deserted streets of your <village>, passing several sleeping bodies on your way home.", [RemoveFlag "village described"])
                                         ],
                                 stateChanges = [SceneChange "cottage"]
                             }
@@ -557,7 +557,7 @@ aldeiaScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (CTrue, "You walk towards the looming <Aeon Tower>.", [RemoveFlag "aldeia described"])
+                                            (CTrue, "You walk towards the looming <Aeon Tower>.", [RemoveFlag "village described"])
                                         ],
                                 stateChanges = [SceneChange "tower"]
                             }
@@ -567,7 +567,7 @@ aldeiaScene =
     }
 
 towerExteriorDescriptionString :: String
-towerExteriorDescriptionString = "You are standing at the base of the <Aeon Tower>, inhabited by Isvald, the aldeia's resident Aeon Priest. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is Kethar desert, which stretches to the horizon. The <aledeia square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
+towerExteriorDescriptionString = "You are standing at the base of the <Aeon Tower>, inhabited by Isvald, the <village>'s resident Aeon Priest. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is Kethar desert, which stretches to the horizon. The <aledeia square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
 
 gatewayDescriptionString :: String
 gatewayDescriptionString = " A cloaked <gateway> has been opened in the side of the tower."
@@ -612,7 +612,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You see your aldeia. A dirt path leads from the <Aeon Tower> back to the <aldeia square>", [])
+                                        (CTrue, "You see your <village>. A dirt path leads from the <Aeon Tower> back to the <village square>", [])
                                     ],
                                 stateChanges = []
                             }
@@ -631,9 +631,9 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (CTrue, "You walk back to the <aldeia square>.", [RemoveFlag "tower described"])
+                                            (CTrue, "You walk back to the <village square>.", [RemoveFlag "tower described"])
                                         ],
-                                stateChanges = [SceneChange "aldeia"]
+                                stateChanges = [SceneChange "village"]
                             }
                         ]
                 },
@@ -856,7 +856,7 @@ towerExteriorScene =
     }
 
 wizardTowerGroundFloorDescriptionString :: String
-wizardTowerGroundFloorDescriptionString = "You are inside <Aeon Tower>, inhabited by Isvald, the aldeia's resident Aeon Priest. The tall tower’s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your east, is an elevator with a <button> to summon it, which seems to be the only way to get past the foyer."
+wizardTowerGroundFloorDescriptionString = "You are inside <Aeon Tower>, inhabited by Isvald, the <village>'s resident Aeon Priest. The tall tower’s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your east, is an elevator with a <button> to summon it, which seems to be the only way to get past the foyer."
 
 wizardTowerGroundFloorScene :: Scene
 wizardTowerGroundFloorScene =
@@ -1823,7 +1823,7 @@ clockScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription[(CTrue, "The <prison> holds all the people from the village. You spot your <parents>, <Jorryn>, and <Evanna>. Even the <wizard> is here.", [])],
+                                conditionalDescription = ConditionalDescription[(CTrue, "The <prison> holds all the people from the <village>. You spot your <parents>, <Jorryn>, and <Evanna>. Even the <wizard> is here.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2835,7 +2835,7 @@ allScenes = (Data.Map.fromList [("cottage", cottageScene),
                                 ("win", winScene),
                                 ("lose", loseScene),
                                 ("end", endScene),
-                                ("aldeia", aldeiaScene),
+                                ("village", villageScene),
                                 ("tower", towerExteriorScene),
                                 ("starfield", starFieldScene),
                                 ("hypnotism", hypnotismScene),
