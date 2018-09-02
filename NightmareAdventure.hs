@@ -111,9 +111,10 @@ allNouns =
         TokenNoun "elevator" ["elevator"],
         TokenNoun "ground floor" ["ground floor"],
         TokenNoun "wizard" ["wizard", "Isvald"],
-        TokenNoun "Bedroom" ["bedroom", "Bedroom"],
-        TokenNoun "Music Room" ["music room", "Music Room"],
-        TokenNoun "Guest Room" ["guest room", "Guest Room"],
+        TokenNoun "bedroom" ["bedroom"],
+        TokenNoun "ground floor" ["ground floor"],
+        TokenNoun "music room" ["music room"],
+        TokenNoun "buest room" ["guest room"],
         TokenNoun "button panel" ["panel", "button panel"],
         TokenNoun "button" ["button"],
         TokenNoun "gear" ["gear"],
@@ -1015,7 +1016,7 @@ elevatorScene =
                                 conditionalDescription = 
                                     ConditionalDescription 
                                        [
-                                           (CTrue, "You may go to the <Bedroom>, the <Music Room>, or the <Guest Room>", []) 
+                                           (CTrue, "You may go to the <bedroom>, the <music room>, or the <guest room>", []) 
                                        ],
                                 stateChanges = []
                             },
@@ -1025,7 +1026,7 @@ elevatorScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You may go to the <Ground Floor>, the <Music Room>, or the <Guest Room>", [])
+                                           (CTrue, "You may go to the <ground floor>, the <music room>, or the <guest room>", [])
                                        ],
                                 stateChanges = []
                             },
@@ -1035,7 +1036,7 @@ elevatorScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You may go to the <Ground Floor>, the <Bedroom>, or the <Guest Room>", [])
+                                           (CTrue, "You may go to the <ground floor>, the <bedroom>, or the <guest room>", [])
                                        ],
                                 stateChanges = []
                             },
@@ -1045,7 +1046,7 @@ elevatorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You may go to the <Ground Floor>, the <Bedroom>, or the <Music Room>", [])
+                                           (CTrue, "You may go to the <ground floor>, the <bedroom>, or the <music room>", [])
                                        ],
                                 stateChanges = []
                             }
@@ -1053,9 +1054,9 @@ elevatorScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["go", "to", "Ground Floor"],
-                                 uSentence ["press", "Ground Floor"],
-                                 uSentence ["ride", "to", "Ground Floor"]],
+                    sentences = [uSentence ["go", "to", "ground floor"],
+                                 uSentence ["press", "ground floor"],
+                                 uSentence ["ride", "to", "ground floor"]],
                     conditionalActions = 
                         [
                             ConditionalAction
@@ -1072,9 +1073,9 @@ elevatorScene =
                },
                Interaction
                {
-                   sentences = [uSentence ["go", "to", "Bedroom"],
-                                uSentence ["press", "Bedroom"],
-                                uSentence ["ride", "to", "Bedroom"]],
+                   sentences = [uSentence ["go", "to", "bedroom"],
+                                uSentence ["press", "bedroom"],
+                                uSentence ["ride", "to", "bedroom"]],
                    conditionalActions = 
                        [
                            ConditionalAction
@@ -1091,9 +1092,9 @@ elevatorScene =
                },
                Interaction
                {
-                   sentences = [uSentence ["go", "to", "Music Room"],
-                                uSentence ["press", "Music Room"],
-                                uSentence ["ride", "to", "Music Room"]],
+                   sentences = [uSentence ["go", "to", "music room"],
+                                uSentence ["press", "music room"],
+                                uSentence ["ride", "to", "music room"]],
                    conditionalActions = 
                        [
                            ConditionalAction
@@ -1110,9 +1111,9 @@ elevatorScene =
                },
                Interaction
                {
-                   sentences = [uSentence ["go", "to", "Guest Room"],
-                                uSentence ["press", "Guest Room"],
-                                uSentence ["ride", "to", "Guest Room"]],
+                   sentences = [uSentence ["go", "to", "guest room"],
+                                uSentence ["press", "guest room"],
+                                uSentence ["ride", "to", "guest room"]],
                    conditionalActions = 
                        [
                            ConditionalAction
@@ -1817,7 +1818,7 @@ clockScene =
                 Interaction
                 {
                     sentences = [uSentence ["look", "at", "prison"],
-                                 uSentence ["go", "to", "prison"]],
+                                 uSentence ["walk", "to", "prison"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1884,7 +1885,7 @@ clockScene =
                 {
                     sentences = [uSentence ["talk", "to", "parents"],
                                  uSentence ["talk", "with", "parents"],
-                                 uSentence ["go", "to", "parents"]],
+                                 uSentence ["walk", "to", "parents"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1899,7 +1900,7 @@ clockScene =
                 {
                     sentences = [uSentence ["talk", "to", "Jorryn"],
                                  uSentence ["talk", "with", "Jorryn"],
-                                 uSentence ["go", "to", "Jorryn"]],
+                                 uSentence ["walk", "to", "Jorryn"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1914,7 +1915,7 @@ clockScene =
                 {
                     sentences = [uSentence ["talk", "to", "Evanna"],
                                  uSentence ["talk", "with", "Evanna"],
-                                 uSentence ["go", "to", "Evanna"]],
+                                 uSentence ["walk", "to", "Evanna"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1929,7 +1930,7 @@ clockScene =
                 {
                     sentences = [uSentence ["talk", "to", "wizard"],
                                  uSentence ["talk", "with", "wizard"],
-                                 uSentence ["go", "to", "wizard"]],
+                                 uSentence ["walk", "to", "wizard"]],
                     conditionalActions =
                         [
                             ConditionalAction
