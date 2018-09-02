@@ -26,7 +26,7 @@ gameIntro = "Nightmare Adventure by Vibha Laljani, Raji Venkat, and Laurence Emm
 allVerbs :: [Token]
 allVerbs =
     [
-        TokenVerb "get" ["get", "take", "pick up"],
+        TokenVerb "get" ["get", "take", "pick up", "pluck"],
         TokenVerb "put" ["put", "place", "put down"],
         TokenVerb "throw" ["throw", "pitch"],
         TokenVerb "give" ["give"],
@@ -827,6 +827,7 @@ towerExteriorScene =
                                  uSentence ["walk", "into", "tower", "using", "gateway"],
                                  uSentence ["walk", "inside"],
                                  uSentence ["enter"],
+                                 uSentence ["enter", "gateway"],
                                  uSentence ["enter", "tower"],
                                  uSentence ["enter", "through", "gateway"],
                                  uSentence ["enter", "using", "gateway"],
