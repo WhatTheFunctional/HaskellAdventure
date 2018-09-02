@@ -21,20 +21,20 @@ allColumnWidth = 80
 
 printTokens :: String -> [Token] -> IO ()
 printTokens word [] = return () >> putStr "\n" >> hFlush stdout
-printTokens word ((TokenVerb _ _) : tokens) = (putStrLn ("== Verb " ++ word)) >> printTokens word tokens
-printTokens word ((TokenNoun _ _) : tokens) = (putStrLn ("== Noun " ++ word)) >> printTokens word tokens
-printTokens word ((TokenPreposition _ _) : tokens) = (putStrLn ("== Preposition " ++ word)) >> printTokens word tokens
+printTokens word ((TokenVerb _ _) : tokens) = (putStrLn ("== Verb " ++ word)) >> printTokens word tokens >> hFlush stdout
+printTokens word ((TokenNoun _ _) : tokens) = (putStrLn ("== Noun " ++ word)) >> printTokens word tokens >> hFlush stdout
+printTokens word ((TokenPreposition _ _) : tokens) = (putStrLn ("== Preposition " ++ word)) >> printTokens word tokens >> hFlush stdout
 
 --Print tokens for a word
 printWordTokens :: [TokenMatch] -> IO ()
 printWordTokens [] = putStr "\n" >> hFlush stdout
-printWordTokens ((TokenMatch word matchedTokens) : tokens) = printTokens word matchedTokens >> printWordTokens tokens
+printWordTokens ((TokenMatch word matchedTokens) : tokens) = printTokens word matchedTokens >> printWordTokens tokens >> hFlush stdout
 
 --Print sentence
 printSentences :: [Sentence] -> IO ()
-printSentences [] = putStrLn "I'm sorry, I don't understand what you said.\n" >> hFlush stdout
-printSentences (sentence : []) = putStrLn (show sentence)
-printSentences (sentence : sentences) = putStrLn (show sentence) >> printSentences sentences
+printSentences [] = putStr "I'm sorry, I don't understand what you said." >> hFlush stdout
+printSentences (sentence : []) = putStrLn (show sentence) >> hFlush stdout
+printSentences (sentence : sentences) = putStrLn (show sentence) >> printSentences sentences >> hFlush stdout
 
 --Print intro
 printIntro :: IO ()
@@ -74,35 +74,35 @@ printVerbs [] = putStr "\n" >> hFlush stdout
 printVerbs ((TokenVerb name synonyms) : tokens) = reflowPutStr allDelimiters
                                                                allColumnWidth
                                                                ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".\n") >>
-                                             printVerbs tokens
+                                                  printVerbs tokens >> hFlush stdout
 
 printNouns :: [Token] -> IO ()
 printNouns [] = putStr "\n" >> hFlush stdout
 printNouns ((TokenNoun name synonyms) : tokens) = reflowPutStr allDelimiters
                                                                allColumnWidth
                                                                ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".\n") >>
-                                             printNouns tokens
+                                                  printNouns tokens >> hFlush stdout
 
 printPrepositions :: [Token] -> IO ()
 printPrepositions [] = putStr "\n" >> hFlush stdout
 printPrepositions ((TokenPreposition name synonyms) : tokens) = reflowPutStr allDelimiters
                                                                              allColumnWidth
                                                                              ("Synonyms for " ++ name ++ ": " ++ (show synonyms) ++ ".\n") >>
-                                                           printPrepositions tokens
+                                                                printPrepositions tokens >> hFlush stdout
 
 printInventory :: Inventory -> IO ()
 printInventory (Inventory []) = putStr "\n" >> hFlush stdout
 printInventory (Inventory (object : remainingInventory)) = reflowPutStr allDelimiters
                                                                         allColumnWidth
                                                                         (object ++ ".\n") >>
-                                                           printInventory (Inventory remainingInventory)
+                                                           printInventory (Inventory remainingInventory) >> hFlush stdout
 
 printFlags :: Flags -> IO ()
 printFlags (Flags []) = putStr "\n" >> hFlush stdout
 printFlags (Flags (flag : remainingFlags)) = reflowPutStr allDelimiters
                                                           allColumnWidth
                                                           (flag ++ ".\n") >>
-                                             printFlags (Flags remainingFlags)
+                                             printFlags (Flags remainingFlags) >> hFlush stdout
 
 parseInput :: Inventory -> Flags -> String -> IO (Maybe [Sentence])
 parseInput inventory flags line
@@ -114,9 +114,10 @@ parseInput inventory flags line
     | map Data.Char.toLower line == "inventory" = putStrLn "All items in inventory:" >> printInventory inventory >> return (Just [])
     | map Data.Char.toLower line == "flags" = putStrLn "All currently set flags:" >> printFlags flags >> return (Just [])
     | map Data.Char.toLower line == "quit" = putStrLn "Thanks for playing!" >> hFlush stdout >> return Nothing
-    | sentences == [] = reflowPutStr allDelimiters allColumnWidth "I'm sorry, I don't understand what you said." >> putStr "\n" >> return (Just sentences)
+    | sentences == [] = putStr "I'm sorry, I don't understand what you said." >> hFlush stdout >> return (Just sentences)
     | otherwise = --printWordTokens sentenceTokenMatches >>
                   --printSentences sentences >>
+                  hFlush stdout >>
                   return (Just sentences)
         where inputWords = splitString allDelimiters line []
               sentenceTokenMatches = lexInput allTokens inputWords
@@ -126,21 +127,23 @@ doAdventureLoop :: NarrativeGraph -> SceneKey -> Inventory -> Flags -> Maybe [Se
 doAdventureLoop _ _ _ _ Nothing = return Nothing -- End state of the game
 doAdventureLoop narrativeGraph sceneKey inventory flags (Just []) = adventure narrativeGraph (Just (sceneKey, inventory, flags)) --Failed to parse any sentences
 doAdventureLoop narrativeGraph sceneKey inventory flags (Just sentences) = performInteraction allDelimiters allColumnWidth narrativeGraph sceneKey inventory flags sentences >>=
-                                                                             adventure narrativeGraph --Perform the adventure loop
+                                                                           adventure narrativeGraph --Perform the adventure loop
 
 updateAdventure :: NarrativeGraph -> Maybe (SceneKey, Inventory, Flags) -> IO (Maybe (SceneKey, Inventory, Flags))
 updateAdventure _ Nothing = return Nothing
 updateAdventure narrativeGraph (Just (sceneKey, inventory, flags))
-    = putStr "\n" >>
+    = putStr "\n> " >>
+      hFlush stdout >>
       printInvalidInteractions narrativeGraph sceneKey >>
       getLine >>=
       parseInput inventory flags >>=
+      (\state -> putStr "\n" >> hFlush stdout >> return state) >>=
       doAdventureLoop narrativeGraph sceneKey inventory flags
 
 adventure :: NarrativeGraph -> Maybe (SceneKey, Inventory, Flags) -> IO (Maybe (SceneKey, Inventory, Flags))
 adventure _ Nothing = reflowPutStr allDelimiters allColumnWidth "Game over. Thanks for playing!" >> hFlush stdout >> return Nothing
 adventure narrativeGraph (Just (sceneKey, inventory, flags)) = printSceneDescription allDelimiters allColumnWidth narrativeGraph (Just (sceneKey, inventory, flags)) >>=
-                                                                 updateAdventure narrativeGraph
+                                                               updateAdventure narrativeGraph
 
 main = printIntro >>
        reflowPutStr allDelimiters allColumnWidth gameIntro >>

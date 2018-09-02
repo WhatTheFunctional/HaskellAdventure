@@ -83,11 +83,11 @@ evaluateCondition (CAnd condition0 condition1) scene inventory flags = (evaluate
 --Print a conditional description by evaluating which conditions are true, concatenating the description, and printing it with reflowPutStrs
 printConditionalDescription :: [Char] -> Int -> [SceneKey] -> ConditionalDescription -> [String] -> Maybe (SceneKey, Inventory, Flags) -> IO (Maybe (SceneKey, Inventory, Flags))
 printConditionalDescription delimiters columnWidth _ (ConditionalDescription []) linesToPrint Nothing
-    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n\n" >> return Nothing --Game reached an end state
+    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n" >> return Nothing --Game reached an end state
 printConditionalDescription delimiters columnWidth _ (ConditionalDescription []) linesToPrint (Just (sceneKey, inventory, flags))
-    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n\n" >> hFlush stdout >> return (Just (sceneKey, inventory, flags)) --No more descriptions to print
+    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n" >> hFlush stdout >> return (Just (sceneKey, inventory, flags)) --No more descriptions to print
 printConditionalDescription delimiters columnWidth _ (ConditionalDescription ((_, _, _) : remainingDescriptions)) linesToPrint Nothing
-    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n\n" >> return Nothing --Game reached an end state
+    = reflowPutStrs delimiters columnWidth (reverse linesToPrint) >> putStr "\n" >> return Nothing --Game reached an end state
 printConditionalDescription delimiters columnWidth endScenes
                             (ConditionalDescription ((condition, subDescription, stateChanges) : remainingDescriptions)) linesToPrint (Just (sceneKey, inventory, flags))
     | evaluateCondition condition sceneKey inventory flags =
@@ -160,7 +160,7 @@ updateGameState delimiters columnWidth endScenes currentSceneKey inventory flags
 --Perform the interaction and return a tuple of (new scene index, new inventory, new flags)
 performConditionalActions :: [Char] -> Int -> SceneKey -> [SceneKey] -> Inventory -> Flags -> Maybe Interaction -> Maybe Interaction -> IO (Maybe (SceneKey, Inventory, Flags))
 performConditionalActions _ _ currentSceneKey _ inventory flags Nothing Nothing
-    = putStrLn "That does nothing.\n" >>
+    = putStr "That does nothing." >>
       hFlush stdout >>
       return (Just (currentSceneKey, inventory, flags)) --If there are no valid interactions actions but the sentence was valid, just return to the current state
 performConditionalActions delimiters
