@@ -151,6 +151,7 @@ allPrepositions =
         TokenPreposition "in" ["in", "inside", "within"],
         TokenPreposition "into" ["into", "in", "inside"],
         TokenPreposition "out" ["out", "outside"],
+        TokenPreposition "on" ["on"],
         TokenPreposition "upon" ["on", "on top", "upon"],
         TokenPreposition "above" ["above", "over"],
         TokenPreposition "over" ["over"],
@@ -691,12 +692,16 @@ towerExteriorScene =
                     sentences = [uSentence ["insert", "chrome amulet", "into", "pedestal"],
                                  uSentence ["put", "chrome amulet", "into", "pedestal"],
                                  uSentence ["use", "chrome amulet", "on", "pedestal"],
+                                 uSentence ["use", "chrome amulet", "with", "pedestal"],
                                  uSentence ["insert", "chrome amulet", "into", "indentation"],
                                  uSentence ["put", "chrome amulet", "into", "indentation"],
                                  uSentence ["use", "chrome amulet", "on", "indentation"],
+                                 uSentence ["use", "chrome amulet", "with", "indentation"],
+                                 uSentence ["use", "chrome amulet", "with", "indentation"],
                                  uSentence ["insert", "chrome amulet", "into", "chrome indentation"],
                                  uSentence ["put", "chrome amulet", "into", "chrome indentation"],
-                                 uSentence ["use", "chrome amulet", "on", "chrome indentation"]],
+                                 uSentence ["use", "chrome amulet", "on", "chrome indentation"],
+                                 uSentence ["use", "chrome amulet", "with", "chrome indentation"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -737,12 +742,15 @@ towerExteriorScene =
                     sentences = [uSentence ["insert", "jade amulet", "into", "pedestal"],
                                  uSentence ["put", "jade amulet", "into", "pedestal"],
                                  uSentence ["use", "jade amulet", "on", "pedestal"],
+                                 uSentence ["use", "jade amulet", "with", "pedestal"],
                                  uSentence ["insert", "jade amulet", "into", "indentation"],
                                  uSentence ["put", "jade amulet", "into", "indentation"],
                                  uSentence ["use", "jade amulet", "on", "indentation"],
+                                 uSentence ["use", "jade amulet", "with", "indentation"],
                                  uSentence ["insert", "jade amulet", "into", "jade indentation"],
                                  uSentence ["put", "jade amulet", "into", "jade indentation"],
-                                 uSentence ["use", "jade amulet", "on", "jade indentation"]],
+                                 uSentence ["use", "jade amulet", "on", "jade indentation"],
+                                 uSentence ["use", "jade amulet", "with", "jade indentation"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -783,12 +791,15 @@ towerExteriorScene =
                     sentences = [uSentence ["insert", "ruby amulet", "into", "pedestal"],
                                  uSentence ["put", "ruby amulet", "into", "pedestal"],
                                  uSentence ["use", "ruby amulet", "on", "pedestal"],
+                                 uSentence ["use", "ruby amulet", "with", "pedestal"],
                                  uSentence ["insert", "ruby amulet", "into", "indentation"],
                                  uSentence ["put", "ruby amulet", "into", "indentation"],
                                  uSentence ["use", "ruby amulet", "on", "indentation"],
+                                 uSentence ["use", "ruby amulet", "with", "indentation"],
                                  uSentence ["insert", "ruby amulet", "into", "ruby indentation"],
                                  uSentence ["put", "ruby amulet", "into", "ruby indentation"],
-                                 uSentence ["use", "ruby amulet", "on", "ruby indentation"]],
+                                 uSentence ["use", "ruby amulet", "on", "ruby indentation"],
+                                 uSentence ["use", "ruby amulet", "with", "ruby indentation"]],
                     conditionalActions =
                         [
                             ConditionalAction
