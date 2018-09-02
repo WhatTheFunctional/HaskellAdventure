@@ -351,6 +351,7 @@ cottageScene =
                                  uSentence ["walk", "outside"],
                                  uSentence ["walk", "east"],
                                  uSentence ["leave"],
+                                 uSentence ["leave", "front door"],
                                  uSentence ["leave", "home"],
                                  uSentence ["walk", "to", "square"],
                                  uSentence ["approach", "square"]],
