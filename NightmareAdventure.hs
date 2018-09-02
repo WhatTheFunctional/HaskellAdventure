@@ -95,7 +95,7 @@ allNouns =
         TokenNoun "home" ["home", "my house", "cottage", "mud-brick cottage"], --Cottage nouns
         TokenNoun "Jorryn" ["Jorryn"],
         TokenNoun "parents" ["parents"],
-        TokenNoun "square" ["square", "aldeia square"], --Aldeia square nouns
+        TokenNoun "square" ["square", "aldeia square"], --Town square nouns
         TokenNoun "clock" ["ancient clock", "clock"],
         TokenNoun "Evanna" ["Evanna"],
         TokenNoun "jade amulet" ["jade amulet"],
@@ -196,10 +196,10 @@ startFlags :: Flags
 startFlags = Flags []
 
 introString :: String
-introString = "It's been a long day working at the moisture farms outside of your village, your aldeia. You return home just as the sun is setting. You open the door to your mud-brick cottage to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of The Beyond can be dangerous.\nBut as you lean down to inspect your brother you realize that he is not dead, but asleep.\nYou rush to check your parents, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them."
+introString = "It's been a long day working at the moisture farms outside of your village, your aldeia. You return home just as the sun is setting. You open the door to your mud-brick cottage to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of The Beyond can be dangerous.\nBut as you lean down to inspect your brother you realize that he is not dead, but asleep.\nYou rush to check your <parents>, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them."
 
 cottageDescriptionString :: String
-cottageDescriptionString = "You're standing in your home. <Jorryn> is lying by the <front door> to the <east>. Your parents are on the floor by the stove."
+cottageDescriptionString = "You're standing in your home. <Jorryn> is lying by the <front door> to the <east>. Your <parents> are on the floor by the stove."
 
 cottageScene :: Scene
 cottageScene =
@@ -243,7 +243,7 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "Your parents are unhurt but you can't wake them from their slumber.", [])
+                                        (CTrue, "Your <parents> are unhurt but you can't wake them from their slumber.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -444,8 +444,8 @@ aldeiaScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CNot (InInventory "jade amulet"), "Your friend Evanna, lies in a deep slumber at the base of the Ancient clock. You call her name and shake her, but nothing you do can wake her. You notice that her <jade amulet> is gently glowing.", []),
-                                        (InInventory "jade amulet", "Your friend Evanna, lies in a deep slumber at the base of the Ancient clock. You call her name and shake her, but nothing you do can wake her.", [])
+                                        (CNot (InInventory "jade amulet"), "Your friend <Evanna>, lies in a deep slumber at the base of the Ancient clock. You call her name and shake her, but nothing you do can wake her. You notice that her <jade amulet> is gently glowing.", []),
+                                        (InInventory "jade amulet", "Your friend <Evanna>, lies in a deep slumber at the base of the Ancient clock. You call her name and shake her, but nothing you do can wake her.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -462,8 +462,8 @@ aldeiaScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CNot (InInventory "jade amulet"), "You reach down and remove Evanna's jade amulet.", []),
-                                        (InInventory "jade amulet", "You have already taken Evanna's jade amulet.", [])
+                                        (CNot (InInventory "jade amulet"), "You reach down and remove <Evanna>'s <jade amulet>.", []),
+                                        (InInventory "jade amulet", "You have already taken <Evanna>'s <jade amulet>.", [])
                                     ],
                                 stateChanges = [AddToInventory "jade amulet"]
                             }
@@ -563,7 +563,7 @@ aldeiaScene =
     }
 
 towerExteriorDescriptionString :: String
-towerExteriorDescriptionString = "You are standing at the base of the <Aeon Tower>, inhabited by Isvald, the aldeia's resident Aeon Priest. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is Kethar desert, which stretches to the horizon. The <aledeia square> is to the <north>. In front of you is a <pedestal> with some strange indentations."
+towerExteriorDescriptionString = "You are standing at the base of the <Aeon Tower>, inhabited by Isvald, the aldeia's resident Aeon Priest. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is Kethar desert, which stretches to the horizon. The <aledeia square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
 
 gatewayDescriptionString :: String
 gatewayDescriptionString = " A cloaked <gateway> has been opened in the side of the tower."
@@ -643,11 +643,11 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You see a pedestal made out of marble. It rises up to chest height and has three indentations: a chrome indentation, a jade indentation, and a ruby indentation. ", []),
-                                        (FlagSet "chrome amulet installed", "The chrome amulet is inserted into the chrome indentation.", []),
-                                        (FlagSet "jade amulet installed", "The jade amulet is inserted into the jade indentation.", []),
-                                        (FlagSet "ruby amulet installed", "The ruby amulet is inserted into the ruby indentation.", []),
-                                        (CNot (FlagSet "got ruby amulet"), "You notice that there is a <ruby amulet> at the base of the pedestal.", [])
+                                        (CTrue, "You see a <pedestal> made out of marble. It rises up to chest height and has three <indentations>: a <chrome indentation>, a <jade indentation>, and a <ruby indentation>. ", []),
+                                        (FlagSet "chrome amulet installed", "The <chrome amulet> is inserted into the <chrome indentation>.", []),
+                                        (FlagSet "jade amulet installed", "The <jade amulet> is inserted into the <jade indentation>.", []),
+                                        (FlagSet "ruby amulet installed", "The <ruby amulet> is inserted into the <ruby indentation>.", []),
+                                        (CNot (FlagSet "got ruby amulet"), "You notice that there is a <ruby amulet> at the base of the <pedestal>.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -664,7 +664,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You already got the ruby amulet.", [])
+                                        (CTrue, "You already got the <ruby amulet>.", [])
                                     ],
                                 stateChanges = []
                             },
@@ -674,7 +674,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You pick up the ruby amulet.", [])
+                                        (CTrue, "You pick up the <ruby amulet>.", [])
                                     ],
                                 stateChanges = [AddToInventory "ruby amulet", SetFlag "got ruby amulet"]
                             }
@@ -699,7 +699,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You have already inserted the chrome amulet into the chrome indentation.", [])
+                                        (CTrue, "You have already inserted the <chrome amulet> into the <chrome indentation>.", [])
                                     ],
                                 stateChanges = []
                             },
@@ -709,7 +709,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You don't have a chrome amulet.", [])
+                                        (CTrue, "You don't have a <chrome amulet>.", [])
                                     ],
                                 stateChanges = []
                             },
@@ -719,8 +719,8 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You insert the chrome amulet into the chrome indentation on the pedestal.", [SetFlag "chrome amulet installed"]),
-                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the Aeon Tower shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
+                                        (CTrue, "You insert the <chrome amulet> into the <chrome indentation> on the <pedestal>.", [SetFlag "chrome amulet installed"]),
+                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the <Aeon Tower> shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
                                     ],
                                 stateChanges = [RemoveFromInventory "chrome amulet"]
                             }
@@ -745,7 +745,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You have already inserted the jade amulet into the jade indentation.", [])
+                                        (CTrue, "You have already inserted the <jade amulet> into the <jade indentation>.", [])
                                     ],
                                 stateChanges = []
                             },
@@ -755,7 +755,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You don't have a jade amulet.", [])
+                                        (CTrue, "You don't have a <jade amulet>.", [])
                                     ],
                                 stateChanges = []
                             },
@@ -765,8 +765,8 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You insert the jade amulet into the jade indentation on the pedestal.", [SetFlag "jade amulet installed"]),
-                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the Aeon Tower shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
+                                        (CTrue, "You insert the <jade amulet> into the <jade indentation> on the <pedestal>.", [SetFlag "jade amulet installed"]),
+                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the <Aeon Tower> shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
                                     ],
                                 stateChanges = [RemoveFromInventory "jade amulet"]
                             }
@@ -791,7 +791,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You have already inserted the ruby amulet into the ruby indentation.", [])
+                                        (CTrue, "You have already inserted the <ruby amulet> into the <ruby indentation>.", [])
                                     ],
                                 stateChanges = []
                             },
@@ -801,7 +801,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You don't have a ruby amulet.", [])
+                                        (CTrue, "You don't have a <ruby amulet>.", [])
                                     ],
                                 stateChanges = []
                             },
@@ -811,8 +811,8 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You insert the ruby amulet into the ruby indentation on the pedestal.", [SetFlag "ruby amulet installed"]),
-                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the Aeon Tower shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
+                                        (CTrue, "You insert the <ruby amulet> into the <ruby indentation> on the <pedestal>.", [SetFlag "ruby amulet installed"]),
+                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the <Aeon Tower> shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
                                     ],
                                 stateChanges = [RemoveFromInventory "ruby amulet"]
                             }
@@ -2657,7 +2657,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "chrome amulet",
-                                conditionalDescription = ConditionalDescription [(CTrue, "You are wearing the chrome amulet your grandfather gave you as a child. It shimmers as you inspect it.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You are wearing the <chrome amulet> your grandfather gave you as a child. It shimmers as you inspect it.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2670,7 +2670,20 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "jade amulet",
-                                conditionalDescription = ConditionalDescription [(CTrue, "You look at Evanna's jade amulet. It shimmers as you inspect it.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You look at <Evanna>'s <jade amulet>. It shimmers as you inspect it.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "ruby amulet"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "ruby amulet",
+                                conditionalDescription = ConditionalDescription [(CTrue, "You look at the <ruby amulet> you picked up from the base of the <pedestal>. It shimmers as you inspect it.", [])],
                                 stateChanges = []
                             }
                         ]
