@@ -100,7 +100,7 @@ allNouns =
         TokenNoun "clock" ["ancient clock", "clock"],
         TokenNoun "Evanna" ["Evanna"],
         TokenNoun "jade amulet" ["jade amulet"],
-        TokenNoun "tower" ["tower", "aeon tower", "crystal tower"], --Tower nouns
+        TokenNoun "tower" ["tower", "wizard's tower", "crystal tower"], --Tower nouns
         TokenNoun "pedestal" ["pedestal"],
         TokenNoun "indentation" ["indentation"],
         TokenNoun "chrome indentation" ["chrome indentation"],
@@ -408,7 +408,7 @@ endScene =
     }
 
 villageDescriptionString :: String
-villageDescriptionString = "You are standing in the <village square>. It is a dusty open area surrounded by mud-brick buildings. The <Ancient Clock> stands silent in the center of the square. Your friend, <Evanna>, is lying at the base of the clock. Your <home> is to the <west>. You see the <Aeon Tower> to the <south> at the edge of the Kethar desert."
+villageDescriptionString = "You are standing in the <village square>. It is a dusty open area surrounded by mud-brick buildings. The <Ancient Clock> stands silent in the center of the square. Your friend, <Evanna>, is lying at the base of the clock. Your <home> is to the <west>. You see the <wizard's tower> to the <south> at the edge of the Kethar desert."
 
 villageScene :: Scene
 villageScene =
@@ -520,7 +520,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You see the <Aeon Tower>, a single massive crystal growing out of the Kethar desert. It serves as Isvald's home.", [])
+                                        (CTrue, "You see the <wizard's tower>, a single massive crystal growing out of the Kethar desert. It serves as <Isvald>'s home.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -557,7 +557,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (CTrue, "You walk towards the looming <Aeon Tower>.", [RemoveFlag "village described"])
+                                            (CTrue, "You walk towards the looming <wizard's tower>.", [RemoveFlag "village described"])
                                         ],
                                 stateChanges = [SceneChange "tower"]
                             }
@@ -567,7 +567,7 @@ villageScene =
     }
 
 towerExteriorDescriptionString :: String
-towerExteriorDescriptionString = "You are standing at the base of the <Aeon Tower>, inhabited by Isvald, the <village>'s resident Aeon Priest. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is Kethar desert, which stretches to the horizon. The <aledeia square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
+towerExteriorDescriptionString = "You are standing at the base of the <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is Kethar desert, which stretches to the horizon. The <aledeia square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
 
 gatewayDescriptionString :: String
 gatewayDescriptionString = " A cloaked <gateway> has been opened in the side of the tower."
@@ -612,7 +612,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You see your <village>. A dirt path leads from the <Aeon Tower> back to the <village square>", [])
+                                        (CTrue, "You see your <village>. A dirt path leads from the <wizard's tower> back to the <village square>", [])
                                     ],
                                 stateChanges = []
                             }
@@ -725,7 +725,7 @@ towerExteriorScene =
                                     ConditionalDescription
                                     [
                                         (CTrue, "You insert the <chrome amulet> into the <chrome indentation> on the <pedestal>.", [SetFlag "chrome amulet installed"]),
-                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the <Aeon Tower> shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
+                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the <wizard's tower> shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
                                     ],
                                 stateChanges = [RemoveFromInventory "chrome amulet"]
                             }
@@ -771,7 +771,7 @@ towerExteriorScene =
                                     ConditionalDescription
                                     [
                                         (CTrue, "You insert the <jade amulet> into the <jade indentation> on the <pedestal>.", [SetFlag "jade amulet installed"]),
-                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the <Aeon Tower> shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
+                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the <wizard's tower> shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
                                     ],
                                 stateChanges = [RemoveFromInventory "jade amulet"]
                             }
@@ -817,7 +817,7 @@ towerExteriorScene =
                                     ConditionalDescription
                                     [
                                         (CTrue, "You insert the <ruby amulet> into the <ruby indentation> on the <pedestal>.", [SetFlag "ruby amulet installed"]),
-                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the <Aeon Tower> shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
+                                        (CAnd (FlagSet "chrome amulet installed") (CAnd (FlagSet "jade amulet installed") (FlagSet "ruby amulet installed")), "The blue crystal of the <wizard's tower> shifts, revealing a cloaked <gateway>", [SetFlag "gateway opened"])
                                     ],
                                 stateChanges = [RemoveFromInventory "ruby amulet"]
                             }
@@ -856,7 +856,7 @@ towerExteriorScene =
     }
 
 wizardTowerGroundFloorDescriptionString :: String
-wizardTowerGroundFloorDescriptionString = "You are inside <Aeon Tower>, inhabited by Isvald, the <village>'s resident Aeon Priest. The tall tower’s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your east, is an elevator with a <button> to summon it, which seems to be the only way to get past the foyer."
+wizardTowerGroundFloorDescriptionString = "You are inside <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tall tower’s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your east, is an elevator with a <button> to summon it, which seems to be the only way to get past the foyer."
 
 wizardTowerGroundFloorScene :: Scene
 wizardTowerGroundFloorScene =
@@ -919,7 +919,7 @@ wizardTowerGroundFloorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (CTrue, "You exit through the cloaked gateway, and find yourself at the base of <Aeon Tower>.", [RemoveFlag "wizardTowerGroundFloor described"])
+                                            (CTrue, "You exit through the cloaked gateway, and find yourself at the base of <wizard's tower>.", [RemoveFlag "wizardTowerGroundFloor described"])
                                         ],
                                 stateChanges = [SceneChange "tower"]
                             }
@@ -1179,7 +1179,7 @@ elevatorScene =
     }
 
 wizardTowerBedroomDescriptionString :: String
-wizardTowerBedroomDescriptionString = "You are in the ornate bedroom. The <wizard>, Isvald, is sleeping on the <bed>. One corner of the room is inhabited by a <chest of drawers>, with a mirror atop. You hear music floating up to the bedroom, presumably from the music room. It sounds like a lullaby, and is making you sleepy. Behind you is the <elevator>, with a call <button> to summon it."
+wizardTowerBedroomDescriptionString = "You are in the ornate bedroom. The <wizard>, <Isvald>, is sleeping on the <bed>. One corner of the room is inhabited by a <chest of drawers>, with a mirror atop. You hear music floating up to the bedroom, presumably from the music room. It sounds like a lullaby, and is making you sleepy. Behind you is the <elevator>, with a call <button> to summon it."
 
 wizardTowerBedroomScene :: Scene
 wizardTowerBedroomScene =
