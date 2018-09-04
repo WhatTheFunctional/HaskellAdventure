@@ -91,10 +91,10 @@ allNouns =
         TokenNoun "me" ["me"],
         TokenNoun "myself" ["myself"],
         TokenNoun "chrome amulet" ["chrome amulet"],
-        TokenNoun "front door" ["front door"],
+        TokenNoun "front door" ["front door", "door", "doorway", "front doorway"],
         TokenNoun "door" ["door", "doorway"],
-        TokenNoun "home" ["home", "my house", "cottage", "mud-brick cottage"], --Cottage nouns
-        TokenNoun "Jorryn" ["Jorryn"],
+        TokenNoun "home" ["home", "my house", "house", "cottage", "mud-brick cottage"], --Cottage nouns
+        TokenNoun "Jorryn" ["Jorryn", "my brother", "brother"],
         TokenNoun "parents" ["parents"],
         TokenNoun "square" ["square", "village square"], --Village square nouns
         TokenNoun "clock" ["ancient clock", "clock"],
@@ -117,7 +117,6 @@ allNouns =
         TokenNoun "buest room" ["guest room"],
         TokenNoun "button panel" ["panel", "button panel"],
         TokenNoun "button" ["button"],
-        TokenNoun "gear" ["gear"],
         TokenNoun "chest of drawers" ["chest of drawers", "drawers"],
         TokenNoun "bed" ["bed"],
         TokenNoun "gramophone" ["gramophone", "phonograph"],
@@ -199,7 +198,7 @@ startFlags :: Flags
 startFlags = Flags []
 
 introString :: String
-introString = "It's been a long day working at the moisture farms outside of your <village>. You return home just as the sun is setting. You open the door to your mud-brick cottage to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of The Beyond can be dangerous.\nBut as you lean down to inspect your brother you realize that he is not dead, but asleep.\nYou rush to check your <parents>, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them."
+introString = "It's been a long day working at the moisture farms outside of your <village>. You return home just as the sun is setting. You open the door to your mud-brick <cottage> to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of the great desert can be dangerous.\nBut as you lean down to inspect your <brother> you realize that he is not dead, but asleep.\nYou rush to check your <parents>, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them."
 
 cottageDescriptionString :: String
 cottageDescriptionString = "You're standing in your home. <Jorryn> is lying by the <front door> to the <east>. Your <parents> are on the floor by the stove."
@@ -263,7 +262,7 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "Jorryn lies asleep on the floor, you can't seem to wake him.", [])
+                                        (CTrue, "<Jorryn> lies asleep on the floor, you can't seem to wake him.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -318,8 +317,8 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CNot (FlagSet "front door closed"), "You close your front door.", []),
-                                        ((FlagSet "front door closed"), "Your front door is already closed.", [])
+                                        (CNot (FlagSet "front door closed"), "You close your <front door>.", []),
+                                        ((FlagSet "front door closed"), "Your <front door> is already closed.", [])
                                     ],
                                 stateChanges = [SetFlag "front door closed"]
                             }
@@ -337,8 +336,8 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CNot (FlagSet "front door closed"), "Your front door is already open.", []),
-                                        ((FlagSet "front door closed"), "You open your front door.", [])
+                                        (CNot (FlagSet "front door closed"), "Your <front door> is already open.", []),
+                                        ((FlagSet "front door closed"), "You open your <front door>.", [])
                                     ],
                                 stateChanges = [RemoveFlag "front door closed"]
                             }
@@ -365,8 +364,8 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (FlagSet "square visited", "You walk through the front door of your home out into the <village>. Everyone you pass is still asleep. Your friend, <Evanna>, is still asleep at the base of the <Ancient Clock>.", []),
-                                            (CNot (FlagSet "square visited"), "You walk through the front door of your home out into your <village>. As you walk through the <village>, you come across several people asleep on the ground. You arrive at the <village square> and you notice that, for the first time in your life, the <Ancient Clock> has stopped. You see your friend, <Evanna>, walking slowly through the square in a dazed stupor. As you approach, she collapses to the ground. The <Ancient Clock> chimes and her body starts to glow a deep green color, the glowing aura shoots quickly into the <Ancient Clock> and it falls silent.", [])
+                                            (FlagSet "square visited", "You walk through the <front door> of your <home> out into the <village>. Everyone you pass is still asleep. Your friend, <Evanna>, is still asleep at the base of the <ancient clock>.", []),
+                                            (CNot (FlagSet "square visited"), "You walk through the <front door> of your <home> out into your <village>. As you walk through the <village>, you come across several people asleep on the ground. You arrive at the <village square> and you notice that, for the first time in your life, the <ancient clock> has stopped. You see your friend, <Evanna>, walking slowly through the <village square> in a dazed stupor. As you approach, she collapses to the ground. The <ancient clock> chimes and her body starts to glow a deep green color, the glowing aura shoots quickly into the <ancient clock> and it falls silent.", [])
                                         ],
                                 stateChanges = [SceneChange "village", SetFlag "square visited", RemoveFlag "cottage described"]
                             },
@@ -376,7 +375,7 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (CTrue, "Your front door is closed, blocking your way.", [])
+                                            (CTrue, "Your <front door> is closed, blocking your way.", [])
                                         ],
                                 stateChanges = []
                             }
@@ -389,7 +388,7 @@ winScene :: Scene
 winScene =
     Scene
     {
-        sceneDescription = ConditionalDescription [(CTrue, "Everything swirls around, and you find yourself back in your cottage with your parents, and Jorryn. Jorryn is stretching out of his sleep. \"I feel so refreshed! Get ready, we have to go tend to the crops!\", he says.", [SceneChange "end"])],
+        sceneDescription = ConditionalDescription [(CTrue, "Everything swirls around, and you find yourself back in your <cottage> with your <parents>, and <Jorryn>. <Jorryn> is stretching out of his sleep. \"I feel so refreshed! Get ready, we have to go tend to the crops!\", he says.", [SceneChange "end"])],
         interactions = []
     }
 
@@ -410,7 +409,7 @@ endScene =
     }
 
 villageDescriptionString :: String
-villageDescriptionString = "You are standing in the <village square>. It is a dusty open area surrounded by mud-brick buildings. The <Ancient Clock> stands silent in the center of the square. Your friend, <Evanna>, is lying at the base of the clock. Your <home> is to the <west>. You see the <wizard's tower> to the <south> at the edge of the Kethar desert."
+villageDescriptionString = "You are standing in the <village square>. It is a dusty open area surrounded by mud-brick buildings. The <ancient clock> stands silent in the center of the <square>. Your friend, <Evanna>, is lying at the base of the <ancient clock>. Your <home> is to the <west>. You see the <wizard's tower> to the <south> at the edge of the great desert."
 
 villageScene :: Scene
 villageScene =
@@ -431,7 +430,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You inspect the <Ancient Clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in The Beyond. The clock is not ticking, and the hands have stopped. You notice that something appears to have bored a perfectly round hole in the marble. Inside, you see that the clock operates with a complicated set of gears. One of the gears appears to be missing.", [])
+                                        (CTrue, "You inspect the <ancient clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in the great desert. The <ancient clock> is not ticking, and the hands have stopped. You notice that something appears to have bored a perfectly round hole in the marble. Inside, you see that the <ancient clock> operates with a complicated set of gears. The <pendulum> of the <ancient clock> appears to be missing.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -449,8 +448,8 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CNot (InInventory "jade amulet"), "Your friend <Evanna>, lies in a deep slumber at the base of the Ancient clock. You call her name and shake her, but nothing you do can wake her. You notice that her <jade amulet> is gently glowing.", []),
-                                        (InInventory "jade amulet", "Your friend <Evanna>, lies in a deep slumber at the base of the Ancient clock. You call her name and shake her, but nothing you do can wake her.", [])
+                                        (CNot (InInventory "jade amulet"), "Your friend <Evanna>, lies in a deep slumber at the base of the <ancient clock>. You call her name and shake her, but nothing you do can wake her. You notice that her <jade amulet> is gently glowing.", []),
+                                        (InInventory "jade amulet", "Your friend <Evanna>, lies in a deep slumber at the base of the <ancient clock>. You call her name and shake her, but nothing you do can wake her.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -522,7 +521,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You see the <wizard's tower>, a single massive crystal growing out of the Kethar desert. It serves as <Isvald>'s home.", [])
+                                        (CTrue, "You see the <wizard's tower>, a single massive crystal growing out of the great desert. It serves as <Isvald>'s home.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -569,10 +568,10 @@ villageScene =
     }
 
 towerExteriorDescriptionString :: String
-towerExteriorDescriptionString = "You are standing at the base of the <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is Kethar desert, which stretches to the horizon. The <aledeia square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
+towerExteriorDescriptionString = "You are standing at the base of the <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is the great desert, which stretches to the horizon. The <village square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
 
 gatewayDescriptionString :: String
-gatewayDescriptionString = " A cloaked <gateway> has been opened in the side of the tower."
+gatewayDescriptionString = " A cloaked <gateway> has been opened in the side of the <tower>."
 
 towerExteriorScene :: Scene
 towerExteriorScene =
@@ -868,7 +867,7 @@ towerExteriorScene =
     }
 
 wizardTowerGroundFloorDescriptionString :: String
-wizardTowerGroundFloorDescriptionString = "You are inside <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tall tower’s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your east, is an elevator with a <button> to summon it, which seems to be the only way to get past the foyer."
+wizardTowerGroundFloorDescriptionString = "You are inside <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tall <tower>’s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
 
 wizardTowerGroundFloorScene :: Scene
 wizardTowerGroundFloorScene =
@@ -931,7 +930,7 @@ wizardTowerGroundFloorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (CTrue, "You exit through the cloaked gateway, and find yourself at the base of <wizard's tower>.", [RemoveFlag "wizardTowerGroundFloor described"])
+                                            (CTrue, "You exit through the cloaked <gateway>, and find yourself at the base of <wizard's tower>.", [RemoveFlag "wizardTowerGroundFloor described"])
                                         ],
                                 stateChanges = [SceneChange "tower"]
                             }
@@ -977,7 +976,7 @@ wizardTowerGroundFloorScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.", [])
+                                           (CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the <tower>.", [])
                                        ],
                                 stateChanges = []
                             }
@@ -997,7 +996,7 @@ wizardTowerGroundFloorScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You enter the cool glass cube elevator. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
+                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the <tower>.", [RemoveFlag "elevator arrived"]) 
                                        ],
                                 stateChanges = [SceneChange "elevator", SetFlag "elevator ground floor"]
                             }
@@ -1076,7 +1075,7 @@ elevatorScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "The <elevator> whisks you off, and brings you to the ground floor with a gentle bounce. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
+                                           (CTrue, "The <elevator> whisks you off, and brings you to the <ground floor> with a gentle bounce. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
                                        ],
                                 stateChanges = [SetFlag "elevator ground floor", RemoveFlag "elevator bedroom", RemoveFlag "elevator music room", RemoveFlag "elevator guest room"]
                             }
@@ -1095,7 +1094,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription
                                       [
-                                          (CTrue, "The <elevator> zooms across the tower, and comes to a floating stop at the bedroom. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
+                                          (CTrue, "The <elevator> zooms across the <tower>, and comes to a floating stop at the <bedroom>. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
                                       ],
                                stateChanges = [SetFlag "elevator bedroom", RemoveFlag "elevator ground floor", RemoveFlag "elevator music room", RemoveFlag "elevator guest room"]
                            }
@@ -1114,7 +1113,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription
                                       [
-                                          (CTrue, "The <elevator> glides away, and comes to a rest at the music room. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", []) 
+                                          (CTrue, "The <elevator> glides away, and comes to a rest at the <music room>. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", []) 
                                       ],
                                stateChanges = [SetFlag "elevator music room", RemoveFlag "elevator ground floor", RemoveFlag "elevator bedroom", RemoveFlag "elevator guest room"]
                            }
@@ -1133,7 +1132,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription 
                                       [
-                                          (CTrue, "The <elevator> sails across the tower, and docks at the guest room. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
+                                          (CTrue, "The <elevator> sails across the <tower>, and docks at the <guest room>. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
                                       ],
                                stateChanges = [SetFlag "elevator guest room", RemoveFlag "elevator ground floor", RemoveFlag "elevator bedroom", RemoveFlag "elevator music room"]
                            }
@@ -1151,7 +1150,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription 
                                       [
-                                          (CTrue, "You step out to the ground floor, and the elevator lifts off.", [])
+                                          (CTrue, "You step out to the <ground floor>, and the <elevator> lifts off.", [])
                                       ],
                                stateChanges = [SceneChange "tower ground floor", RemoveFlag "elevator ground floor", RemoveFlag "elevator described"]
                            },
@@ -1161,7 +1160,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription
                                       [
-                                          (CTrue, "You step out into the bedroom, and the elevator drifts away.", [])
+                                          (CTrue, "You step out into the <bedroom>, and the <elevator> drifts away.", [])
                                       ],
                                stateChanges = [SceneChange "tower bedroom", RemoveFlag "elevator bedroom", RemoveFlag "elevator described"]
                            },
@@ -1171,7 +1170,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription
                                       [
-                                          (CTrue, "You step out into the music room, and the elevator cruises away.", [])
+                                          (CTrue, "You step out into the <music room>, and the <elevator> cruises away.", [])
                                       ],
                                stateChanges = [SceneChange "tower music room", RemoveFlag "elevator music room", RemoveFlag "elevator described"]
                            },
@@ -1181,7 +1180,7 @@ elevatorScene =
                                conditionalDescription =
                                    ConditionalDescription
                                       [
-                                          (CTrue, "You step out into the guest room, and the elevator slides away.", [])
+                                          (CTrue, "You step out into the <guest room>, and the <elevator> slides away.", [])
                                       ],
                                stateChanges = [SceneChange "tower guest room", RemoveFlag "elevator guest room", RemoveFlag "elevator described"]
                            }
@@ -1191,7 +1190,7 @@ elevatorScene =
     }
 
 wizardTowerBedroomDescriptionString :: String
-wizardTowerBedroomDescriptionString = "You are in the ornate bedroom. The <wizard>, <Isvald>, is sleeping on the <bed>. One corner of the room is inhabited by a <chest of drawers>, with a mirror atop. You hear music floating up to the bedroom, presumably from the music room. It sounds like a lullaby, and is making you sleepy. Behind you is the <elevator>, with a call <button> to summon it."
+wizardTowerBedroomDescriptionString = "You are in the ornate <bedroom>. The <wizard>, <Isvald>, is sleeping on the <bed>. One corner of the room is inhabited by a <chest of drawers>, with a mirror atop. You hear music floating up to the <bedroom>, presumably from the <music room>. It sounds like a lullaby, and is making you sleepy. Behind you is the <elevator>, with a call <button> to summon it."
 
 wizardTowerBedroomScene :: Scene
 wizardTowerBedroomScene =
@@ -1209,7 +1208,7 @@ wizardTowerBedroomScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <wizard> has a big smile on his face because he is dreaming. He is clutching a <gear> to his chest. A luxurious purple velvet blanket envelopes him.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <wizard> has a big smile on his face because he is dreaming. A luxurious purple velvet blanket envelopes him.", [])],
                                 stateChanges = [SetFlag "wizard seen"]
                             }
                         ]
@@ -1272,19 +1271,6 @@ wizardTowerBedroomScene =
                                condition = CTrue,
                                conditionalDescription = ConditionalDescription [(CTrue, "You see clothes that don't seem like the right size. You also find dusty old books written in a language you don't understand. The magical drawers tuck themselves away upon noticing your disinterest.", [])],
                                stateChanges = [SetFlag "at chest of drawers", RemoveFlag "at wizard", RemoveFlag "at elevator"]
-                           }
-                       ]
-               },
-               Interaction
-               {
-                   sentences = [uSentence ["get", "gear"]],
-                   conditionalActions = 
-                       [
-                           ConditionalAction
-                           {
-                               condition = FlagSet "wizard seen",
-                               conditionalDescription = ConditionalDescription [(CTrue, "The <wizard> is holding the <gear> magically. Thus, you are not able to pry it free.", [])],
-                               stateChanges = [SetFlag "at wizard", RemoveFlag "at chest of drawers", RemoveFlag "at elevator"]
                            }
                        ]
                },
@@ -1698,8 +1684,8 @@ wizardTowerGuestRoomScene =
     }
 
 starFieldDescriptionString :: String
-starFieldDescriptionString = "You open your eyes and find yourself floating in a sea of stars. To your left you see a constellation which looks like a [Clock]." ++
-                             "To your right you see a constellation which you know is called [Hypnotism]. Above you is a constellation called [Cup Cake]."
+starFieldDescriptionString = "You open your eyes and find yourself floating in a sea of <stars>. To your left you see a constellation which looks like a <clock>." ++
+                             "To your right you see a constellation which you know is called <hypnotism>. Above you is a constellation called <cupcake>."
 
 starFieldScene :: Scene
 starFieldScene =
@@ -1734,13 +1720,13 @@ starFieldScene =
                             ConditionalAction
                             {
                                 condition = InInventory "star",
-                                conditionalDescription = ConditionalDescription [(CTrue, "You already have a star.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You already have a <star>.", [])],
                                 stateChanges = []
                             },
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "You pluck a star out of the sky and put it in your pocket.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You pluck a <star> out of the sky and put it in your pocket.", [])],
                                 stateChanges = [AddToInventory "star"]
                             }
                         ]
@@ -1803,7 +1789,7 @@ starFieldScene =
     }
 
 clockDescriptionString :: String
-clockDescriptionString = "You are on the outside of a <prison> made of stars. Right across from the twinkling prison bars is a grandfather <clock> that's missing a pendulum."
+clockDescriptionString = "You are on the outside of a <prison> made of stars. Right across from the twinkling prison bars is a grandfather <clock> that's missing a <pendulum>."
 
 clockScene :: Scene
 clockScene = 
@@ -1947,7 +1933,7 @@ clockScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription[(CTrue, "Fix <clock> with pendulum! Everyone wakes up, and you win.", [])],
+                                conditionalDescription = ConditionalDescription[(CTrue, "Fix <clock> with <pendulum>! Everyone wakes up, and you win.", [])],
                                 stateChanges = [] 
                             }
                         ]
@@ -1962,13 +1948,13 @@ clockScene =
                            ConditionalAction
                            {
                                condition = CNot (InInventory "pendulum"),
-                               conditionalDescription = ConditionalDescription[(CTrue, "Alas! You don't have a pendulum! Hurry, and find one!", [])],
+                               conditionalDescription = ConditionalDescription[(CTrue, "Alas! You don't have a <pendulum>! Hurry, and find one!", [])],
                                stateChanges = []
                            },
                            ConditionalAction
                            {
                                condition = InInventory "pendulum",
-                               conditionalDescription = ConditionalDescription[(CTrue, "Alas! The pendulum easily fits in the clock, and resumes its to-and-fro motion!", [])],
+                               conditionalDescription = ConditionalDescription[(CTrue, "Alas! The <pendulum> easily fits in the <clock>, and resumes its to-and-fro motion!", [])],
                                stateChanges = [SceneChange "win"]
                            }
                        ]
@@ -2285,21 +2271,21 @@ hypnotismScene =
                         {
                             condition = InInventory "pendulum",
                             conditionalDescription =
-                                ConditionalDescription [(CTrue, "The rabbit says \"Thanks but I already gave you my pendulum!\"", [])],
+                                ConditionalDescription [(CTrue, "The <rabbit> says \"Thanks but I already gave you my pendulum!\"", [])],
                             stateChanges = [RemoveFromInventory "cupcake"]
                         },
                         ConditionalAction
                         {
                             condition = InInventory "cupcake",
                             conditionalDescription =
-                                ConditionalDescription [(CTrue, "The rabbit says \"I don't like this flavor, no deal!\"", [])],
+                                ConditionalDescription [(CTrue, "The <rabbit> says \"I don't like this flavor, no deal!\"", [])],
                             stateChanges = []
                         },
                         ConditionalAction
                         {
                             condition = CTrue,
                             conditionalDescription =
-                                ConditionalDescription [(CTrue, "You don't have a cupcake.", [])],
+                                ConditionalDescription [(CTrue, "You don't have a <cupcake>.", [])],
                             stateChanges = []
                         }
                     ]
@@ -2308,7 +2294,7 @@ hypnotismScene =
     }
 
 cupcakeDescriptionString :: String
-cupcakeDescriptionString = "You step out onto a green field that stretches to the horizon, above you is a <star field> in the sky. There are cupcake flowers growing all over the field, in every color of the rainbow. Before you, an elderly woman sits at a <table> with a red and white polkadot tablecloth."
+cupcakeDescriptionString = "You step out onto a green field that stretches to the horizon, above you is a <star field> in the sky. There are <cupcake> flowers growing all over the field, in every color of the rainbow. Before you, an elderly woman sits at a <table> with a red and white polkadot tablecloth."
 
 cupcakeScene :: Scene
 cupcakeScene =
@@ -2345,7 +2331,7 @@ cupcakeScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The table has three cakes on it. Each cake is covered in pink frosting and chocolate sprinkles. The <left cake> has a <red card> in front of it, the <middle cake> has a <green card> in front of it, and the <right cake> has a <blue card> in front of it.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The table has three <cakes> on it. Each <cake> is covered in pink frosting and chocolate sprinkles. The <left cake> has a <red card> in front of it, the <middle cake> has a <green card> in front of it, and the <right cake> has a <blue card> in front of it.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2358,7 +2344,7 @@ cupcakeScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "Instead of flowers, there are cupcakes on stems growing out of the ground.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "Instead of flowers, there are <cupcakes> on stems growing out of the ground.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2371,7 +2357,7 @@ cupcakeScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "You pluck a cupcake off its stem.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You pluck a <cupcake> off its stem.", [])],
                                 stateChanges = [AddToInventory "cupcake"]
                             }
                         ]
@@ -2386,7 +2372,7 @@ cupcakeScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The cake is covered in pink frosting and chocolate sprinkles. Nothing distinguishes it from the other cakes.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <cake> is covered in pink frosting and chocolate sprinkles. Nothing distinguishes it from the other cakes.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2399,7 +2385,7 @@ cupcakeScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The red card in front of the left cake reads:\n\"Most people think I'm sweet but really I'm bitter. I take many forms, I flow when it's hot and snap when it's cold. I soften when it's warm but enough heat makes me brittle. Sweet, bitter, or spicy, I'm universally loved!\nPrice: 1 star\"", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <red card> in front of the <left cake> reads:\n\"Most people think I'm sweet but really I'm bitter. I take many forms, I flow when it's hot and snap when it's cold. I soften when it's warm but enough heat makes me brittle. Sweet, bitter, or spicy, I'm universally loved!\nPrice: 1 star\"", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2412,7 +2398,7 @@ cupcakeScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The green card in front of the middle cake reads:\n\"I have a tough life. I'm born in darkness, you'll see my rosette first. It takes two years to show my true form, and when I do show myself I might get chopped to bits, strung up in front of someone, or shoved into a pile of snow.\nPrice: 1 star\"", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <green card> in front of the <middle cake> reads:\n\"I have a tough life. I'm born in darkness, you'll see my rosette first. It takes two years to show my true form, and when I do show myself I might get chopped to bits, strung up in front of someone, or shoved into a pile of snow.\nPrice: 1 star\"", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2425,7 +2411,7 @@ cupcakeScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The blue card in front of the right cake reads:\n\"I'm loved by many for my brilliant hue but parts of me are practical too. I clean stains, help sailors stay healthy at sea, but when I write, my words disappear!\nPrice: 1 star\"", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <blue card> in front of the <right cake> reads:\n\"I'm loved by many for my brilliant hue but parts of me are practical too. I clean stains, help sailors stay healthy at sea, but when I write, my words disappear!\nPrice: 1 star\"", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2456,7 +2442,7 @@ cupcakeScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "You see an elderly lady sitting behind a table with three cakes. Her hair is tied in a bun and she's wearing a blue apron and a hair net.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You see an elderly lady sitting behind a table with three <cakes>. Her hair is tied in a bun and she's wearing a blue apron and a hair net.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2485,7 +2471,7 @@ cupcakeScene =
                             {
                                 condition = InInventory "star",
                                 conditionalDescription =
-                                    ConditionalDescription [(CTrue, "You give the elderly woman a star and in exchange she cuts a slice of the left cake and hands it to you. \"Good choice.\" she says \"That one's my favorite!\".", [])],
+                                    ConditionalDescription [(CTrue, "You give the elderly woman a <star> and in exchange she cuts a slice of the <left cake> and hands it to you. \"Good choice.\" she says \"That one's my favorite!\".", [])],
                                 stateChanges = [RemoveFromInventory "star", AddToInventory "chocolate cake"]
                             },
                             ConditionalAction
@@ -2506,7 +2492,7 @@ cupcakeScene =
                             {
                                 condition = InInventory "star",
                                 conditionalDescription =
-                                    ConditionalDescription [(CTrue, "You give the elderly woman a star and in exchange she cuts a slice of the middle cake and hands it to you. \"That one huh?\" she says \"I'm not a big fan of that one, but I hear it's popular with some folks.\".", [])],
+                                    ConditionalDescription [(CTrue, "You give the elderly woman a <star> and in exchange she cuts a slice of the <middle cake> and hands it to you. \"That one huh?\" she says \"I'm not a big fan of that one, but I hear it's popular with some folks.\".", [])],
                                 stateChanges = [RemoveFromInventory "star", AddToInventory "carrot cake"]
                             },
                             ConditionalAction
@@ -2527,7 +2513,7 @@ cupcakeScene =
                             {
                                 condition = InInventory "star",
                                 conditionalDescription =
-                                    ConditionalDescription [(CTrue, "You give the elderly woman a star and in exchange she cuts a slice of the right cake and hands it to you. The elderly woman says \"What a strange choice, well I'm sure you'll enjoy it anyway.\".", [])],
+                                    ConditionalDescription [(CTrue, "You give the elderly woman a <star> and in exchange she cuts a slice of the <right cake> and hands it to you. The elderly woman says \"What a strange choice, well I'm sure you'll enjoy it anyway.\".", [])],
                                 stateChanges = [RemoveFromInventory "star", AddToInventory "lemon cake"]
                             },
                             ConditionalAction
@@ -2549,7 +2535,7 @@ cupcakeScene =
                         ConditionalAction
                         {
                             condition = CTrue,
-                            conditionalDescription = ConditionalDescription [(CTrue, "You float back to the star field.", [])],
+                            conditionalDescription = ConditionalDescription [(CTrue, "You float back to the <star field>.", [])],
                             stateChanges = [SceneChange "starfield",
                                             RemoveFlag "cupcake described"]
                         }
@@ -2677,7 +2663,20 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "star",
-                                conditionalDescription = ConditionalDescription [(CTrue, "You inspect the star, it twinkles in your hand.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You inspect the <star>, it twinkles in your hand.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "pendulum"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "pendulum",
+                                conditionalDescription = ConditionalDescription [(CTrue, "You inspect the <pendulum> of the <ancient clock>. It seems to be intact.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2729,7 +2728,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "chocolate cake",
-                                conditionalDescription = ConditionalDescription [(CTrue, "It's a slice of chocolate cake.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "It's a slice of <chocolate cake>.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2742,7 +2741,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "carrot cake",
-                                conditionalDescription = ConditionalDescription [(CTrue, "It's a slice of carrot cake.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "It's a slice of <carrot cake>.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2755,7 +2754,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "lemon cake",
-                                conditionalDescription = ConditionalDescription [(CTrue, "It's a slice of lemon cake.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "It's a slice of <lemon cake>.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2768,7 +2767,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "cupcake",
-                                conditionalDescription = ConditionalDescription [(CTrue, "It's a multi-colored cupcake.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "It's a multi-colored <cupcake>.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2781,7 +2780,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "chocolate cake",
-                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the chocolate cake. It's delicious!", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the <chocolate cake>. It's delicious!", [])],
                                 stateChanges = [RemoveFromInventory "chocolate cake"]
                             }
                         ]
@@ -2794,7 +2793,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "carrot cake",
-                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the carrot cake. It's delicious!", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the <carrot cake>. It's delicious!", [])],
                                 stateChanges = [RemoveFromInventory "carrot cake"]
                             }
                         ]
@@ -2807,7 +2806,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "lemon cake",
-                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the lemon cake. It's delicious!", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the <lemon cake>. It's delicious!", [])],
                                 stateChanges = [RemoveFromInventory "lemon cake"]
                             }
                         ]
@@ -2820,7 +2819,7 @@ defaultScene =
                             ConditionalAction
                             {
                                 condition = InInventory "cupcake",
-                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the cupcake. It's delicious!", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You eat the <cupcake>. It's delicious!", [])],
                                 stateChanges = [RemoveFromInventory "cupcake"]
                             }
                         ]
