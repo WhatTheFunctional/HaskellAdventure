@@ -41,7 +41,7 @@ printIntro :: IO ()
 printIntro = reflowPutStrs allDelimiters 
                            allColumnWidth
                            ["Haskell Text Adventure Engine v1.0\n",
-                            "Copyright Laurence Emms 2018\n\n"] >>
+                            "Copyright Laurence Emms 2018\n\n\n"] >>
              hFlush stdout
 
 --Print help text
@@ -57,7 +57,7 @@ printHelp = reflowPutStrs allDelimiters
                            "Inventory - Print all current inventory items.\n",
                            "Flags - Print all current flags. Warning, this contains spoilers!\n",
                            "Quit - Exit the  game.\n",
-                           "--------------------\n\n"] >>
+                           "--------------------"] >>
             hFlush stdout
 
 printGrammar :: IO ()
@@ -149,6 +149,9 @@ main = printIntro >>
        reflowPutStr allDelimiters allColumnWidth gameIntro >>
        putStr "\n" >>
        printHelp >>
+       putStr "\n" >>
+       putStr "\n" >>
+       putStr "\n" >>
        hFlush stdout >>
        adventure (makeNarrativeGraph adventureScenes endScenes defaultScene) (Just (startScene, startInventory, startFlags)) >>
        return ()

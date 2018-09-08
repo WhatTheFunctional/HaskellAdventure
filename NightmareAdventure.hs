@@ -21,7 +21,12 @@ import NaturalLanguageParser
 import NarrativeGraph
 
 gameIntro :: String
-gameIntro = "Nightmare Adventure by Vibha Laljani, Raji Venkat, and Laurence Emms\n\n"
+gameIntro = "Nightmare Adventure\n" ++
+            "-------------------\n" ++
+            "Authors: Vibha Laljani and Laurence Emms\n" ++
+            "Editor: Jared Molton\n" ++
+            "Play Testers: Kelly Townsend Jennings, Sowmya Pary\n" ++
+            "\n"
 
 allVerbs :: [Token]
 allVerbs =
