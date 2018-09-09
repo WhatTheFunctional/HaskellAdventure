@@ -1020,7 +1020,7 @@ wizardTowerGroundFloorScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the <tower>.", [RemoveFlag "elevator arrived"]) 
+                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
                                        ],
                                 stateChanges = [SceneChange "elevator", SetFlag "elevator ground floor"]
                             }
@@ -1030,7 +1030,7 @@ wizardTowerGroundFloorScene =
     }
 
 elevatorDescriptionString :: String
-elevatorDescriptionString = "The elevator has a magic <button panel> so you can pick a destination for your ride."
+elevatorDescriptionString = "The <elevator> has a magic <button panel> so you can pick a destination for your ride."
 elevatorScene :: Scene
 elevatorScene = 
     Scene
@@ -1038,6 +1038,25 @@ elevatorScene =
         sceneDescription = ConditionalDescription [(CNot (FlagSet "elevator described"), elevatorDescriptionString, [SetFlag "elevator described"])],
         interactions = 
             [
+                Interaction
+                {
+                    sentences = [uSentence ["look", "at", "elevator"],
+                                 uSentence ["look around"],
+                                 uSentence ["look around", "elevator"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = 
+                                    ConditionalDescription 
+                                       [
+                                           (CTrue, elevatorDescriptionString, [])
+                                       ],
+                                stateChanges = []
+                            }
+                        ]
+                },
                 Interaction
                 {
                     sentences = [uSentence ["look", "at", "button panel"],
@@ -1099,7 +1118,7 @@ elevatorScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "The <elevator> whisks you off, and brings you to the <ground floor> with a gentle bounce. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
+                                           (CTrue, "The <elevator> whisks you off, and brings you to the ground floor with a gentle bounce. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
                                        ],
                                 stateChanges = [SetFlag "elevator ground floor", RemoveFlag "elevator bedroom", RemoveFlag "elevator music room", RemoveFlag "elevator guest room"]
                             }
@@ -1118,7 +1137,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription
                                       [
-                                          (CTrue, "The <elevator> zooms across the <tower>, and comes to a floating stop at the <bedroom>. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
+                                          (CTrue, "The <elevator> zooms across the tower, and comes to a floating stop at the bedroom. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
                                       ],
                                stateChanges = [SetFlag "elevator bedroom", RemoveFlag "elevator ground floor", RemoveFlag "elevator music room", RemoveFlag "elevator guest room"]
                            }
@@ -1137,7 +1156,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription
                                       [
-                                          (CTrue, "The <elevator> glides away, and comes to a rest at the <music room>. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", []) 
+                                          (CTrue, "The <elevator> glides away, and comes to a rest at the music room. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", []) 
                                       ],
                                stateChanges = [SetFlag "elevator music room", RemoveFlag "elevator ground floor", RemoveFlag "elevator bedroom", RemoveFlag "elevator guest room"]
                            }
@@ -1156,7 +1175,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription 
                                       [
-                                          (CTrue, "The <elevator> sails across the <tower>, and docks at the <guest room>. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
+                                          (CTrue, "The <elevator> sails across the tower, and docks at the guest room. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
                                       ],
                                stateChanges = [SetFlag "elevator guest room", RemoveFlag "elevator ground floor", RemoveFlag "elevator bedroom", RemoveFlag "elevator music room"]
                            }
@@ -1214,7 +1233,7 @@ elevatorScene =
     }
 
 wizardTowerBedroomDescriptionString :: String
-wizardTowerBedroomDescriptionString = "You are in the ornate <bedroom>. The <wizard>, <Isvald>, is sleeping on the <bed>. One corner of the room is inhabited by a <chest of drawers>, with a mirror atop. You hear music floating up to the <bedroom>, presumably from the <music room>. It sounds like a lullaby, and is making you sleepy. Behind you is the <elevator>, with a call <button> to summon it."
+wizardTowerBedroomDescriptionString = "You are in the ornate <bedroom>. The <wizard>, <Isvald>, is sleeping on the <bed>. One corner of the room is inhabited by a <chest of drawers>, with a mirror atop. You hear music floating up to the <bedroom>, presumably from the music room. It sounds like a lullaby, and is making you sleepy. Behind you is the <elevator>, with a call <button> to summon it."
 
 wizardTowerBedroomScene :: Scene
 wizardTowerBedroomScene =
@@ -1222,11 +1241,26 @@ wizardTowerBedroomScene =
     {
         sceneDescription = ConditionalDescription [(CNot (FlagSet "wizardTowerBedroom described"), wizardTowerBedroomDescriptionString, [SetFlag "wizardTowerBedroom described"])],
         interactions =
-            [
+            [   
+                Interaction
+                {
+                    sentences = [uSentence ["look around"],
+                                 uSentence ["look around", "bedroom"],
+                                 uSentence ["look", "at", "bedroom"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, wizardTowerBedroomDescriptionString, [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
                 Interaction
                 {
                     sentences = [uSentence ["look", "at", "wizard"],
-                                 uSentence ["see", "wizard"]],
+                                 uSentence ["inspect", "wizard"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1240,7 +1274,7 @@ wizardTowerBedroomScene =
                Interaction
                {
                    sentences = [uSentence ["look", "at", "bed"],
-                                uSentence ["see", "bed"]],
+                                uSentence ["inspect", "bed"]],
                    conditionalActions = 
                        [
                            ConditionalAction
@@ -1254,7 +1288,7 @@ wizardTowerBedroomScene =
                Interaction
                {
                    sentences = [uSentence ["look", "at", "chest of drawers"],
-                                uSentence ["see", "chest of drawers"]],
+                                uSentence ["inspect", "chest of drawers"]],
                    conditionalActions = 
                        [
                            ConditionalAction
@@ -1268,13 +1302,13 @@ wizardTowerBedroomScene =
                Interaction
                {
                    sentences = [uSentence ["look", "at", "elevator"],
-                                uSentence ["see", "elevator"]],
+                                uSentence ["inspect", "elevator"]],
                    conditionalActions =
                        [
                            ConditionalAction
                            {
                                condition = FlagSet "elevator arrived",
-                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the <tower>.", [])],
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.", [])],
                                stateChanges = []
                            },
                            ConditionalAction
@@ -1409,7 +1443,7 @@ wizardTowerBedroomScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the <tower>.", [RemoveFlag "elevator arrived"]) 
+                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
                                        ],
                                 stateChanges = [SetFlag "at elevator", RemoveFlag "at wizard", RemoveFlag "at chest of drawers", SceneChange "elevator", SetFlag "elevator bedroom"]
                             },
@@ -1425,7 +1459,7 @@ wizardTowerBedroomScene =
     }
 
 wizardTowerMusicRoomDescriptionString :: String
-wizardTowerMusicRoomDescriptionString = "You are in a harmonious room. The walls are white, with black musical notes running across them. Their tune interleaves with framed pictures of the <wizard> playing the piano. At the head of the room, sits a grand paino. Arm chairs with delicate detail on the cushions face the piano. The <gramophone> to the right of the piano, seems to be the source of a lullaby that's making you sleepy."
+wizardTowerMusicRoomDescriptionString = "You are in a harmonious room. The walls are white, with black musical notes running across them. Their tune interleaves with framed pictures of the wizard playing the piano. At the head of the room, sits a grand paino. Arm chairs with delicate detail on the cushions face the piano. The <gramophone> to the right of the piano, seems to be the source of a lullaby that's making you sleepy."
 
 wizardTowerMusicRoomScene :: Scene
 wizardTowerMusicRoomScene = 
@@ -1433,11 +1467,26 @@ wizardTowerMusicRoomScene =
     {
         sceneDescription = ConditionalDescription [(CNot (FlagSet "music room described"), wizardTowerMusicRoomDescriptionString, [SetFlag "music room described"])],
         interactions = 
-            [
+            [   
+                Interaction
+                {
+                    sentences = [uSentence ["look around"],
+                                 uSentence ["look", "at", "music room"],
+                                 uSentence ["look around", "music room"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, wizardTowerMusicRoomDescriptionString, [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
                 Interaction
                 {
                     sentences = [uSentence ["look", "at", "gramophone"],
-                                 uSentence ["see", "gramophone"],
+                                 uSentence ["inspect", "gramophone"],
                                  uSentence ["walk", "to", "gramophone"],
                                  uSentence ["approach", "gramophone"]],
                     conditionalActions =
@@ -1473,7 +1522,7 @@ wizardTowerMusicRoomScene =
                            ConditionalAction
                            {
                                condition = FlagSet "elevator arrived",
-                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the <tower>.", [])],
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.", [])],
                                stateChanges = []
                            },
                            ConditionalAction
@@ -1547,7 +1596,7 @@ wizardTowerMusicRoomScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the <tower>.", [RemoveFlag "elevator arrived"]) 
+                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
                                        ],
                                 stateChanges = [SceneChange "elevator", SetFlag "elevator music room"]
                             },
@@ -1563,7 +1612,7 @@ wizardTowerMusicRoomScene =
     }
  
 wizardTowerGuestRoomDescriptionString :: String
-wizardTowerGuestRoomDescriptionString = "You are in a simple, yet cozy room. It is setup with a four poster <bed>, plain wooden <chest of drawers>, and a full length mirror. The <elevator>'s call <button> is behind you."
+wizardTowerGuestRoomDescriptionString = "You are in a simple, yet cozy room. It is setup with a four poster <bed>, plain wooden chest of drawers, and a full length mirror. The <elevator>'s call <button> is behind you."
 
 wizardTowerGuestRoomScene :: Scene
 wizardTowerGuestRoomScene = 
@@ -1571,7 +1620,22 @@ wizardTowerGuestRoomScene =
     {
         sceneDescription = ConditionalDescription [(CNot (FlagSet "wizard tower guest room described"), wizardTowerGuestRoomDescriptionString, [SetFlag "wizard tower guest room described"])],
         interactions =
-            [
+            [   
+                Interaction
+                {
+                    sentences = [uSentence ["look around"],
+                                 uSentence ["look around", "guest room"],
+                                 uSentence ["look", "at", "guest room"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, wizardTowerGuestRoomDescriptionString, [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
                 Interaction
                 {
                     sentences = [uSentence ["walk", "to", "bed"],
@@ -1618,7 +1682,7 @@ wizardTowerGuestRoomScene =
                            ConditionalAction
                            {
                                condition = FlagSet "elevator arrived",
-                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the <tower>.", [])],
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.", [])],
                                stateChanges = []
                            },
                            ConditionalAction
@@ -1692,7 +1756,7 @@ wizardTowerGuestRoomScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the <tower>.", [RemoveFlag "elevator arrived"]) 
+                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
                                        ],
                                 stateChanges = [SceneChange "elevator", SetFlag "elevator guest room"]
                             },
