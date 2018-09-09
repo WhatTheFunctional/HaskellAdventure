@@ -43,7 +43,8 @@ allVerbs =
         TokenVerb "jump" ["jump"],
         TokenVerb "sit" ["sit"],
         TokenVerb "lie down" ["lie", "lie down"],
-        TokenVerb "go" ["move", "proceed", "leave", "exit"],
+        TokenVerb "go" ["go", "move", "proceed", "leave", "exit"],
+        TokenVerb "ride" ["ride", "fly", "head"],
         TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "perambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go", "leave", "exit"],
         TokenVerb "walk down" ["walk down", "move down", "go down"],
         TokenVerb "walk up" ["walk up", "move up", "go up"],
@@ -120,7 +121,7 @@ allNouns =
         TokenNoun "bedroom" ["bedroom"],
         TokenNoun "ground floor" ["ground floor"],
         TokenNoun "music room" ["music room"],
-        TokenNoun "buest room" ["guest room"],
+        TokenNoun "guest room" ["guest room"],
         TokenNoun "button panel" ["panel", "button panel"],
         TokenNoun "button" ["button"],
         TokenNoun "chest of drawers" ["chest of drawers", "drawers", "dresser"],
@@ -891,7 +892,8 @@ wizardTowerGroundFloorScene =
                 {
                     sentences = [uSentence ["look"],
                                  uSentence ["look around"],
-                                 uSentence ["look", "at", "tower"]],
+                                 uSentence ["look", "at", "tower"],
+                                 uSentence ["look around", "tower"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1039,7 +1041,7 @@ elevatorScene =
                 Interaction
                 {
                     sentences = [uSentence ["look", "at", "button panel"],
-                                 uSentence ["observe", "button panel"]],
+                                 uSentence ["inspect", "button panel"]],
                     conditionalActions = 
                         [
                             ConditionalAction
