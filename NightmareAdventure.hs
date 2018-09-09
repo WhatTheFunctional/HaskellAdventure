@@ -25,7 +25,7 @@ gameIntro = "Nightmare Adventure\n" ++
             "-------------------\n" ++
             "Authors: Vibha Laljani and Laurence Emms\n" ++
             "Editor: Jared Molton\n" ++
-            "Play Testers: Kelly Townsend Jennings, Sowmya Pary\n" ++
+            "Play Testers: Kelly Townsend Jennings, Sowmya Pary, Aditi Roy, Tim Detwiler\n" ++
             "\n"
 
 allVerbs :: [Token]
@@ -37,7 +37,7 @@ allVerbs =
         TokenVerb "give" ["give"],
         TokenVerb "select" ["select", "pick"],
         TokenVerb "look" ["look", "see", "view", "scan", "spy", "observe"],
-        TokenVerb "inspect" ["inspect", "check out", "observe", "scan"],
+        TokenVerb "inspect" ["inspect", "check out", "observe", "scan", "see"],
         TokenVerb "look around" ["look around"],
         TokenVerb "use" ["use"],
         TokenVerb "jump" ["jump"],
@@ -101,12 +101,13 @@ allNouns =
         TokenNoun "home" ["home", "my house", "house", "cottage", "mud-brick cottage"], --Cottage nouns
         TokenNoun "Jorryn" ["Jorryn", "my brother", "brother"],
         TokenNoun "parents" ["parents"],
-        TokenNoun "square" ["square", "village square"], --Village square nouns
+        TokenNoun "square" ["square", "village square", "village"], --Village square nouns
         TokenNoun "clock" ["ancient clock", "clock"],
         TokenNoun "Evanna" ["Evanna"],
         TokenNoun "jade amulet" ["jade amulet"],
         TokenNoun "tower" ["tower", "wizard's tower", "crystal tower"], --Tower nouns
         TokenNoun "pedestal" ["pedestal"],
+        TokenNoun "indentations" ["indentations"],
         TokenNoun "indentation" ["indentation"],
         TokenNoun "chrome indentation" ["chrome indentation"],
         TokenNoun "jade indentation" ["jade indentation"],
@@ -203,7 +204,7 @@ startFlags :: Flags
 startFlags = Flags []
 
 introString :: String
-introString = "It's been a long day working at the moisture farms outside of your <village>. You return home just as the sun is setting. You open the door to your mud-brick <cottage> to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of the great desert can be dangerous.\nBut as you lean down to inspect your <brother> you realize that he is not dead, but asleep.\nYou rush to check your <parents>, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them."
+introString = "It's been a long day working at the moisture farms outside of your <village square>. You return home just as the sun is setting. You open the door to your mud-brick <cottage> to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of the great desert can be dangerous.\nBut as you lean down to inspect your <brother> you realize that he is not dead, but asleep.\nYou rush to check your <parents>, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them."
 
 cottageDescriptionString :: String
 cottageDescriptionString = "You're standing in your home. <Jorryn> is lying by the <front door> to the <east>. Your <parents> are on the floor by the stove."
@@ -224,7 +225,8 @@ cottageScene =
                 {
                     sentences = [uSentence ["look"],
                                  uSentence ["look around"],
-                                 uSentence ["look", "at", "home"]],
+                                 uSentence ["look", "at", "home"],
+                                 uSentence ["look around", "home"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -369,8 +371,8 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (FlagSet "square visited", "You walk through the <front door> of your <home> out into the <village>. Everyone you pass is still asleep. Your friend, <Evanna>, is still asleep at the base of the <ancient clock>.", []),
-                                            (CNot (FlagSet "square visited"), "You walk through the <front door> of your <home> out into your <village>. As you walk through the <village>, you come across several people asleep on the ground. You arrive at the <village square> and you notice that, for the first time in your life, the <ancient clock> has stopped. You see your friend, <Evanna>, walking slowly through the <village square> in a dazed stupor. As you approach, she collapses to the ground. The <ancient clock> chimes and her body starts to glow a deep green color, the glowing aura shoots quickly into the <ancient clock> and it falls silent.", [])
+                                            (FlagSet "square visited", "You walk through the front door of your <home> out into the <village>. Everyone you pass is still asleep. Your friend, <Evanna>, is still asleep at the base of the <ancient clock>.", []),
+                                            (CNot (FlagSet "square visited"), "You walk through the front door of your <home> out into your <village>. As you walk through the <village>, you come across several people asleep on the ground. You arrive at the <village square> and you notice that, for the first time in your life, the <ancient clock> has stopped. You see your friend, <Evanna>, walking slowly through the <village square> in a dazed stupor. As you approach, she collapses to the ground. The <ancient clock> chimes and her body starts to glow a deep green color, the glowing aura shoots quickly into the <ancient clock> and it falls silent.", [])
                                         ],
                                 stateChanges = [SceneChange "village", SetFlag "square visited", RemoveFlag "cottage described"]
                             },
@@ -435,7 +437,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You inspect the <ancient clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in the great desert. The <ancient clock> is not ticking, and the hands have stopped. You notice that something appears to have bored a perfectly round hole in the marble. Inside, you see that the <ancient clock> operates with a complicated set of gears. The <pendulum> of the <ancient clock> appears to be missing.", [])
+                                        (CTrue, "You inspect the <ancient clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in the great desert. The <ancient clock> is not ticking, and the hands have stopped. You notice that something appears to have bored a perfectly round hole in the marble. Inside, you see that the <ancient clock> operates with a complicated set of gears. The pendulum of the <ancient clock> appears to be missing.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -482,7 +484,8 @@ villageScene =
                 {
                     sentences = [uSentence ["look"],
                                  uSentence ["look around"],
-                                 uSentence ["look", "at", "square"]],
+                                 uSentence ["look", "at", "square"],
+                                 uSentence ["look around", "square"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -526,7 +529,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You see the <wizard's tower>, a single massive crystal growing out of the great desert. It serves as <Isvald>'s home.", [])
+                                        (CTrue, "You see the <wizard's tower>, a single massive crystal growing out of the great desert. It serves as Isvald's home.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -573,7 +576,7 @@ villageScene =
     }
 
 towerExteriorDescriptionString :: String
-towerExteriorDescriptionString = "You are standing at the base of the <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is the great desert, which stretches to the horizon. The <village square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
+towerExteriorDescriptionString = "You are standing at the base of the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is the great desert, which stretches to the horizon. The <village square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
 
 gatewayDescriptionString :: String
 gatewayDescriptionString = " A cloaked <gateway> has been opened in the side of the <tower>."
@@ -645,7 +648,10 @@ towerExteriorScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "pedestal"]],
+                    sentences = [uSentence ["look", "at", "pedestal"],
+                                 uSentence ["look", "at", "indentations"],
+                                 uSentence ["inspect", "pedestal"],
+                                 uSentence ["inspect", "indentations"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -872,7 +878,7 @@ towerExteriorScene =
     }
 
 wizardTowerGroundFloorDescriptionString :: String
-wizardTowerGroundFloorDescriptionString = "You are inside <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tall <tower>’s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
+wizardTowerGroundFloorDescriptionString = "You are inside <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tall <tower>’s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
 
 wizardTowerGroundFloorScene :: Scene
 wizardTowerGroundFloorScene =
@@ -972,7 +978,8 @@ wizardTowerGroundFloorScene =
                 Interaction
                 {
                     sentences = [uSentence ["look", "at", "elevator"],
-                                 uSentence ["look", "in", "elevator"]],
+                                 uSentence ["look", "in", "elevator"],
+                                 uSentence ["look", "east"]],
                     conditionalActions = 
                         [
                             ConditionalAction
@@ -982,6 +989,16 @@ wizardTowerGroundFloorScene =
                                     ConditionalDescription
                                        [
                                            (CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the <tower>.", [])
+                                       ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "You see a call <button> to summon the elevator.", [])
                                        ],
                                 stateChanges = []
                             }
