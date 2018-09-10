@@ -879,7 +879,7 @@ towerExteriorScene =
     }
 
 wizardTowerGroundFloorDescriptionString :: String
-wizardTowerGroundFloorDescriptionString = "You are inside <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tall <tower>’s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
+wizardTowerGroundFloorDescriptionString = "You are inside <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
 
 wizardTowerGroundFloorScene :: Scene
 wizardTowerGroundFloorScene =
