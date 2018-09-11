@@ -30,16 +30,16 @@ tokenize "" _  = Nothing --Empty string can't match tokens
 tokenize word token@(TokenVerb _ synonyms)
     | lowerCaseWord `elem` synonyms = Just (TokenMatch word [token])
     | otherwise = Nothing
-        where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
+        where lowerCaseWord = map Data.Char.toLower word
 tokenize word token@(TokenNoun _ synonyms)
     | word `elem` synonyms = Just (TokenMatch word [token])
     | lowerCaseWord `elem` synonyms = Just (TokenMatch word [token])
     | otherwise = Nothing
-        where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
+        where lowerCaseWord = map Data.Char.toLower word
 tokenize word token@(TokenPreposition _ synonyms)
     | lowerCaseWord `elem` synonyms = Just (TokenMatch word [token])
     | otherwise = Nothing
-        where lowerCaseWord = (Data.Char.toLower (head word)) : (tail word)
+        where lowerCaseWord = map Data.Char.toLower word
 
 lexTokens :: [Token] -> [String] -> [(Maybe TokenMatch, [String])] -> [TokenMatch]
 lexTokens potentialTokens words [] = lexInput potentialTokens words
@@ -48,8 +48,24 @@ lexTokens potentialTokens words ((Just token, tokenWords) : tokens) = token : le
 
 lexInput :: [Token] -> [String] -> [TokenMatch]
 lexInput potentialTokens [] = []
+--Prioritize look-ahead by putting the look-ahead option first
+lexInput potentialTokens (word1 : word2 : word3 : word4 : word5 : words) =
+    lexTokens potentialTokens (word5 : words) [(foldl (\acc token -> (tokenize (word1 ++ ' ' : word2 ++ (' ' : word3 ++ (' ' : word4 ++ (' ' : word5)))) token) `join` acc) Nothing potentialTokens, words),
+                                               (foldl (\acc token -> (tokenize (word1 ++ ' ' : word2 ++ (' ' : word3 ++ (' ' : word4))) token) `join` acc) Nothing potentialTokens, words),
+                                               (foldl (\acc token -> (tokenize (word1 ++ ' ' : word2 ++ (' ' : word3)) token) `join` acc) Nothing potentialTokens, words),
+                                               (foldl (\acc token -> (tokenize (word1 ++ ' ' : word2) token) `join` acc) Nothing potentialTokens, words),
+                                               (foldl (\acc token -> (tokenize word1 token) `join` acc) Nothing potentialTokens, word2 : words)]
+lexInput potentialTokens (word1 : word2 : word3 : word4 : words) =
+    lexTokens potentialTokens (word4 : words) [(foldl (\acc token -> (tokenize (word1 ++ ' ' : word2 ++ (' ' : word3 ++ (' ' : word4))) token) `join` acc) Nothing potentialTokens, words),
+                                               (foldl (\acc token -> (tokenize (word1 ++ ' ' : word2 ++ (' ' : word3)) token) `join` acc) Nothing potentialTokens, words),
+                                               (foldl (\acc token -> (tokenize (word1 ++ ' ' : word2) token) `join` acc) Nothing potentialTokens, words),
+                                               (foldl (\acc token -> (tokenize word1 token) `join` acc) Nothing potentialTokens, word2 : words)]
+lexInput potentialTokens (word1 : word2 : word3 : words) =
+    lexTokens potentialTokens (word3 : words) [(foldl (\acc token -> (tokenize (word1 ++ ' ' : word2 ++ (' ' : word3)) token) `join` acc) Nothing potentialTokens, words),
+                                               (foldl (\acc token -> (tokenize (word1 ++ ' ' : word2) token) `join` acc) Nothing potentialTokens, words),
+                                               (foldl (\acc token -> (tokenize word1 token) `join` acc) Nothing potentialTokens, word2 : words)]
 lexInput potentialTokens (word1 : word2 : words) =
-    lexTokens potentialTokens (word2 : words) [(foldl (\acc token -> (tokenize (word1 ++ ' ' : word2) token) `join` acc) Nothing potentialTokens, words), --Prioritize look-ahead by putting the look-ahead option first
-                               (foldl (\acc token -> (tokenize word1 token) `join` acc) Nothing potentialTokens, word2 : words)]
+    lexTokens potentialTokens (word2 : words) [(foldl (\acc token -> (tokenize (word1 ++ ' ' : word2) token) `join` acc) Nothing potentialTokens, words),
+                                               (foldl (\acc token -> (tokenize word1 token) `join` acc) Nothing potentialTokens, word2 : words)]
 lexInput potentialTokens (word : words) =
     lexTokens potentialTokens words [(foldl (\acc token -> (tokenize word token) `join` acc) Nothing potentialTokens, words)]

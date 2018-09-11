@@ -99,12 +99,12 @@ allNouns =
         TokenNoun "chrome amulet" ["chrome amulet"],
         TokenNoun "front door" ["front door", "door", "doorway", "front doorway"],
         TokenNoun "door" ["door", "doorway"],
-        TokenNoun "home" ["home", "my house", "house", "cottage", "mud-brick cottage"], --Cottage nouns
-        TokenNoun "Jorryn" ["Jorryn", "my brother", "brother"],
+        TokenNoun "home" ["home", "my house", "house", "cottage", "mud-brick cottage", "mud brick cottage"], --Cottage nouns
+        TokenNoun "Jorryn" ["jorryn", "my brother", "brother"],
         TokenNoun "parents" ["parents"],
         TokenNoun "square" ["square", "village square", "village"], --Village square nouns
         TokenNoun "clock" ["ancient clock", "clock"],
-        TokenNoun "Evanna" ["Evanna"],
+        TokenNoun "Evanna" ["evanna"],
         TokenNoun "jade amulet" ["jade amulet"],
         TokenNoun "tower" ["tower", "wizard's tower", "crystal tower"], --Tower nouns
         TokenNoun "pedestal" ["pedestal"],
@@ -117,7 +117,7 @@ allNouns =
         TokenNoun "gateway" ["gateway", "gate", "cloaked gateway"],
         TokenNoun "elevator" ["elevator"],
         TokenNoun "ground floor" ["ground floor"],
-        TokenNoun "wizard" ["wizard", "Isvald"],
+        TokenNoun "wizard" ["wizard", "isvald"],
         TokenNoun "bedroom" ["bedroom"],
         TokenNoun "ground floor" ["ground floor"],
         TokenNoun "music room" ["music room"],
