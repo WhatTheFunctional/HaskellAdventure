@@ -502,7 +502,7 @@ villageScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["inspect", "Evanna"]],
+                    sentences = [uSentence ["get", "jade amulet"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -511,10 +511,10 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CNot (InInventory "jade amulet"), "Your friend <Evanna>, lies in a deep slumber at the base of the <ancient clock>. You call her name and shake her, but nothing you do can wake her. You notice that her <jade amulet> is gently glowing.", []),
-                                        (InInventory "jade amulet", "Your friend <Evanna>, lies in a deep slumber at the base of the <ancient clock>. You call her name and shake her, but nothing you do can wake her.", [])
+                                        (CNot (InInventory "jade amulet"), "You reach down and remove <Evanna>'s <jade amulet>.", []),
+                                        (InInventory "jade amulet", "You have already taken <Evanna>'s <jade amulet>.", [])
                                     ],
-                                stateChanges = []
+                                stateChanges = [AddToInventory "jade amulet"]
                             }
                         ]
                 },
@@ -532,7 +532,7 @@ villageScene =
                                         (CNot (InInventory "jade amulet"), "<Evanna> is wearing her <jade amulet>. It is glowing gently.", []),
                                         (InInventory "jade amulet", "You have taken <Evanna>'s <jade amulet>. It is glowing gently.", [])
                                     ],
-                                stateChanges = [AddToInventory "jade amulet"]
+                                stateChanges = []
                             }
                         ]
                 },
