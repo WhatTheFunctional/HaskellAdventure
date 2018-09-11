@@ -36,8 +36,8 @@ allVerbs =
         TokenVerb "throw" ["throw", "pitch"],
         TokenVerb "give" ["give"],
         TokenVerb "select" ["select", "pick"],
-        TokenVerb "look" ["look", "see", "view", "scan", "spy", "observe"],
-        TokenVerb "inspect" ["inspect", "check out", "observe", "scan", "see"],
+        TokenVerb "look" ["look", "view", "scan", "see"],
+        TokenVerb "inspect" ["see", "view", "scan", "spy", "observe", "inspect", "check out", "look at"],
         TokenVerb "look around" ["look around"],
         TokenVerb "use" ["use"],
         TokenVerb "jump" ["jump"],
@@ -226,7 +226,7 @@ cottageScene =
                 {
                     sentences = [uSentence ["look"],
                                  uSentence ["look around"],
-                                 uSentence ["look", "at", "home"],
+                                 uSentence ["inspect", "home"],
                                  uSentence ["look around", "home"]],
                     conditionalActions =
                         [
@@ -244,7 +244,7 @@ cottageScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "parents"]],
+                    sentences = [uSentence ["inspect", "parents"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -261,7 +261,7 @@ cottageScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "Jorryn"]],
+                    sentences = [uSentence ["inspect", "Jorryn"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -296,8 +296,8 @@ cottageScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "door"],
-                                 uSentence ["look", "at", "front door"]],
+                    sentences = [uSentence ["inspect", "door"],
+                                 uSentence ["inspect", "front door"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -428,8 +428,7 @@ villageScene =
             [
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "clock"],
-                                 uSentence ["inspect", "clock"]],
+                    sentences = [uSentence ["inspect", "clock"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -446,8 +445,7 @@ villageScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "Evanna"],
-                                 uSentence ["inspect", "Evanna"]],
+                    sentences = [uSentence ["inspect", "Evanna"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -465,7 +463,7 @@ villageScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["get", "jade amulet"]],
+                    sentences = [uSentence ["inspect", "Evanna"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -474,8 +472,26 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CNot (InInventory "jade amulet"), "You reach down and remove <Evanna>'s <jade amulet>.", []),
-                                        (InInventory "jade amulet", "You have already taken <Evanna>'s <jade amulet>.", [])
+                                        (CNot (InInventory "jade amulet"), "Your friend <Evanna>, lies in a deep slumber at the base of the <ancient clock>. You call her name and shake her, but nothing you do can wake her. You notice that her <jade amulet> is gently glowing.", []),
+                                        (InInventory "jade amulet", "Your friend <Evanna>, lies in a deep slumber at the base of the <ancient clock>. You call her name and shake her, but nothing you do can wake her.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "jade amulet"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CNot (InInventory "jade amulet"), "<Evanna> is wearing her <jade amulet>.", []),
+                                        (InInventory "jade amulet", "You have taken <Evanna>'s <jade amulet>.", [])
                                     ],
                                 stateChanges = [AddToInventory "jade amulet"]
                             }
@@ -485,7 +501,7 @@ villageScene =
                 {
                     sentences = [uSentence ["look"],
                                  uSentence ["look around"],
-                                 uSentence ["look", "at", "square"],
+                                 uSentence ["inspect", "square"],
                                  uSentence ["look around", "square"]],
                     conditionalActions =
                         [
@@ -521,7 +537,7 @@ villageScene =
                 Interaction
                 {
                     sentences = [uSentence ["look", "south"],
-                                 uSentence ["look", "at", "tower"]],
+                                 uSentence ["inspect", "tower"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -595,7 +611,7 @@ towerExteriorScene =
                 {
                     sentences = [uSentence ["look"],
                                  uSentence ["look around"],
-                                 uSentence ["look", "at", "tower"]],
+                                 uSentence ["inspect", "tower"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -649,9 +665,7 @@ towerExteriorScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "pedestal"],
-                                 uSentence ["look", "at", "indentations"],
-                                 uSentence ["inspect", "pedestal"],
+                    sentences = [uSentence ["inspect", "pedestal"],
                                  uSentence ["inspect", "indentations"]],
                     conditionalActions =
                         [
@@ -892,7 +906,7 @@ wizardTowerGroundFloorScene =
                 {
                     sentences = [uSentence ["look"],
                                  uSentence ["look around"],
-                                 uSentence ["look", "at", "tower"],
+                                 uSentence ["inspect", "tower"],
                                  uSentence ["look around", "tower"]],
                     conditionalActions =
                         [
@@ -979,7 +993,7 @@ wizardTowerGroundFloorScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "elevator"],
+                    sentences = [uSentence ["inspect", "elevator"],
                                  uSentence ["look", "in", "elevator"],
                                  uSentence ["look", "east"]],
                     conditionalActions = 
@@ -1040,7 +1054,7 @@ elevatorScene =
             [
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "elevator"],
+                    sentences = [uSentence ["inspect", "elevator"],
                                  uSentence ["look around"],
                                  uSentence ["look around", "elevator"]],
                     conditionalActions = 
@@ -1059,8 +1073,7 @@ elevatorScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "button panel"],
-                                 uSentence ["inspect", "button panel"]],
+                    sentences = [uSentence ["inspect", "button panel"]],
                     conditionalActions = 
                         [
                             ConditionalAction
@@ -1246,7 +1259,7 @@ wizardTowerBedroomScene =
                 {
                     sentences = [uSentence ["look around"],
                                  uSentence ["look around", "bedroom"],
-                                 uSentence ["look", "at", "bedroom"]],
+                                 uSentence ["inspect", "bedroom"]],
                     conditionalActions = 
                         [
                             ConditionalAction
@@ -1259,8 +1272,7 @@ wizardTowerBedroomScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "wizard"],
-                                 uSentence ["inspect", "wizard"]],
+                    sentences = [uSentence ["inspect", "wizard"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1273,8 +1285,7 @@ wizardTowerBedroomScene =
                },
                Interaction
                {
-                   sentences = [uSentence ["look", "at", "bed"],
-                                uSentence ["inspect", "bed"]],
+                   sentences = [uSentence ["inspect", "bed"]],
                    conditionalActions = 
                        [
                            ConditionalAction
@@ -1287,8 +1298,7 @@ wizardTowerBedroomScene =
                },
                Interaction
                {
-                   sentences = [uSentence ["look", "at", "chest of drawers"],
-                                uSentence ["inspect", "chest of drawers"]],
+                   sentences = [uSentence ["inspect", "chest of drawers"]],
                    conditionalActions = 
                        [
                            ConditionalAction
@@ -1301,8 +1311,7 @@ wizardTowerBedroomScene =
                },
                Interaction
                {
-                   sentences = [uSentence ["look", "at", "elevator"],
-                                uSentence ["inspect", "elevator"]],
+                   sentences = [uSentence ["inspect", "elevator"]],
                    conditionalActions =
                        [
                            ConditionalAction
@@ -1471,7 +1480,7 @@ wizardTowerMusicRoomScene =
                 Interaction
                 {
                     sentences = [uSentence ["look around"],
-                                 uSentence ["look", "at", "music room"],
+                                 uSentence ["inspect", "music room"],
                                  uSentence ["look around", "music room"]],
                     conditionalActions = 
                         [
@@ -1485,8 +1494,7 @@ wizardTowerMusicRoomScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "gramophone"],
-                                 uSentence ["inspect", "gramophone"],
+                    sentences = [uSentence ["inspect", "gramophone"],
                                  uSentence ["walk", "to", "gramophone"],
                                  uSentence ["approach", "gramophone"]],
                     conditionalActions =
@@ -1515,8 +1523,7 @@ wizardTowerMusicRoomScene =
                 },
                 Interaction
                 {
-                   sentences = [uSentence ["look", "at", "elevator"],
-                                uSentence ["see", "elevator"]],
+                   sentences = [uSentence ["inspect", "elevator"]],
                    conditionalActions =
                        [
                            ConditionalAction
@@ -1625,7 +1632,7 @@ wizardTowerGuestRoomScene =
                 {
                     sentences = [uSentence ["look around"],
                                  uSentence ["look around", "guest room"],
-                                 uSentence ["look", "at", "guest room"]],
+                                 uSentence ["inspect", "guest room"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1640,7 +1647,7 @@ wizardTowerGuestRoomScene =
                 {
                     sentences = [uSentence ["walk", "to", "bed"],
                                  uSentence ["approach", "bed"],
-                                 uSentence ["look", "at", "bed"]],
+                                 uSentence ["inspect", "bed"]],
                     conditionalActions = 
                         [
                             ConditionalAction
@@ -1675,8 +1682,7 @@ wizardTowerGuestRoomScene =
                 },
                 Interaction
                 {
-                   sentences = [uSentence ["look", "at", "elevator"],
-                                uSentence ["see", "elevator"]],
+                   sentences = [uSentence ["inspect", "elevator"]],
                    conditionalActions =
                        [
                            ConditionalAction
@@ -1902,7 +1908,7 @@ clockScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "prison"],
+                    sentences = [uSentence ["inspect", "prison"],
                                  uSentence ["walk", "to", "prison"]],
                     conditionalActions =
                         [
@@ -1916,7 +1922,7 @@ clockScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "Jorryn"]],
+                    sentences = [uSentence ["inspect", "Jorryn"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1929,7 +1935,7 @@ clockScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "parents"]],
+                    sentences = [uSentence ["inspect", "parents"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1942,7 +1948,7 @@ clockScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "Evanna"]],
+                    sentences = [uSentence ["inspect", "Evanna"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1955,7 +1961,7 @@ clockScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "wizard"]],
+                    sentences = [uSentence ["inspect", "wizard"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2411,7 +2417,7 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "table"],
+                    sentences = [uSentence ["inspect", "table"],
                                  uSentence ["walk", "to", "table"],
                                  uSentence ["approach", "table"]],
                     conditionalActions =
@@ -2426,7 +2432,7 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "cupcake"]],
+                    sentences = [uSentence ["inspect", "cupcake"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2452,9 +2458,9 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "left cake"],
-                                 uSentence ["look", "at", "middle cake"],
-                                 uSentence ["look", "at", "right cake"]],
+                    sentences = [uSentence ["inspect", "left cake"],
+                                 uSentence ["inspect", "middle cake"],
+                                 uSentence ["inspect", "right cake"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2467,7 +2473,7 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "red card"]],
+                    sentences = [uSentence ["inspect", "red card"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2480,7 +2486,7 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "green card"]],
+                    sentences = [uSentence ["inspect", "green card"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2493,7 +2499,7 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "blue card"]],
+                    sentences = [uSentence ["inspect", "blue card"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2524,7 +2530,7 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "elderly woman"]],
+                    sentences = [uSentence ["inspect", "elderly woman"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2745,7 +2751,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "star"]],
+                    sentences = [uSentence ["inspect", "star"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2758,7 +2764,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "pendulum"]],
+                    sentences = [uSentence ["inspect", "pendulum"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2771,7 +2777,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "chrome amulet"]],
+                    sentences = [uSentence ["inspect", "chrome amulet"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2784,7 +2790,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "jade amulet"]],
+                    sentences = [uSentence ["inspect", "jade amulet"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2797,7 +2803,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "ruby amulet"]],
+                    sentences = [uSentence ["inspect", "ruby amulet"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2810,7 +2816,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "chocolate cake"]],
+                    sentences = [uSentence ["inspect", "chocolate cake"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2823,7 +2829,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "carrot cake"]],
+                    sentences = [uSentence ["inspect", "carrot cake"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2836,7 +2842,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "lemon cake"]],
+                    sentences = [uSentence ["inspect", "lemon cake"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2849,7 +2855,7 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "cupcake"]],
+                    sentences = [uSentence ["inspect", "cupcake"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2914,8 +2920,8 @@ defaultScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "at", "me"],
-                                 uSentence ["look", "at", "myself"]],
+                    sentences = [uSentence ["inspect", "me"],
+                                 uSentence ["inspect", "myself"]],
                     conditionalActions =
                         [
                             ConditionalAction
