@@ -2162,7 +2162,7 @@ hypnotismScene =
                             {
                                 condition = CTrue,
                                 conditionalDescription =
-                                    ConditionalDescription [(CTrue, "The <rabbit> asks, \"Are you volunteering for my trick?, just lie down on the couch.\"", [])],
+                                    ConditionalDescription [(CTrue, "The <rabbit> asks, \"Are you volunteering for my trick?, just lie down on the <couch>.\"", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2323,7 +2323,7 @@ hypnotismScene =
                         {
                             condition = CTrue,
                             conditionalDescription =
-                                ConditionalDescription [(CTrue, "The <rabbit> tells you \"If you want to watch the show, you've got to buy a ticket like everyone else. You can join the audience if you volunteer for my trick though! Just lie down on the couch.\"", [])],
+                                ConditionalDescription [(CTrue, "The <rabbit> tells you \"If you want to watch the show, you've got to buy a ticket like everyone else. You can join the audience if you volunteer for my trick though! Just lie down on the <couch>.\"", [])],
                             stateChanges = []
                         }
                     ]
