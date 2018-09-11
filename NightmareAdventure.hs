@@ -31,6 +31,7 @@ gameIntro = "Nightmare Adventure\n" ++
 allVerbs :: [Token]
 allVerbs =
     [
+        TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "perambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go", "leave", "exit"],
         TokenVerb "get" ["get", "take", "pick up", "pluck"],
         TokenVerb "put" ["put", "place", "put down"],
         TokenVerb "throw" ["throw", "pitch"],
@@ -45,7 +46,6 @@ allVerbs =
         TokenVerb "lie down" ["lie", "lie down"],
         TokenVerb "go" ["go", "move", "proceed", "leave", "exit"],
         TokenVerb "ride" ["ride", "fly", "head"],
-        TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "perambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go", "leave", "exit"],
         TokenVerb "walk down" ["walk down", "move down", "go down"],
         TokenVerb "walk up" ["walk up", "move up", "go up"],
         TokenVerb "approach" ["approach"],
