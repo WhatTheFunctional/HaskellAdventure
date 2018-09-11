@@ -145,7 +145,7 @@ parseInput inventory flags line
                   --printSentences sentences >>
                   hFlush stdout >>
                   return (Just sentences)
-        where inputWords = Data.List.Split.split (Data.List.Split.keepDelimsR $ Data.List.Split.oneOf allDelimiters) line
+        where inputWords = Data.List.Split.splitOneOf allDelimiters line
               sentenceTokenMatches = lexInput allTokens inputWords
               sentences = parseSentence sentenceTokenMatches
 
