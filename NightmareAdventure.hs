@@ -37,7 +37,7 @@ allVerbs =
         TokenVerb "give" ["give"],
         TokenVerb "select" ["select", "pick"],
         TokenVerb "look" ["look", "view", "scan", "see"],
-        TokenVerb "inspect" ["see", "view", "scan", "spy", "observe", "inspect", "check out", "look at"],
+        TokenVerb "inspect" ["see", "view", "scan", "spy", "observe", "inspect", "check out", "look at", "look"],
         TokenVerb "look around" ["look around"],
         TokenVerb "use" ["use"],
         TokenVerb "jump" ["jump"],
@@ -1922,7 +1922,7 @@ starFieldScene =
     }
 
 clockDescriptionString :: String
-clockDescriptionString = "You are on the outside of a <prison> made of stars. Right across from the twinkling prison bars is a grandfather <clock> that's missing a <pendulum>."
+clockDescriptionString = "You are on the outside of a <prison> made of stars. Right across from the twinkling prison bars is a grandfather <clock> that's missing a <pendulum>. The <star field> is to your <right>."
 
 clockScene :: Scene
 clockScene = 
@@ -2075,16 +2075,16 @@ clockScene =
                 {
                     sentences = [uSentence ["walk", "to", "star field"],
                                  uSentence ["approach", "star field"],
-                                 uSentence ["walk", "left"],
+                                 uSentence ["walk", "right"],
                                  uSentence ["leave"]],
                     conditionalActions =
                     [
                         ConditionalAction
                         {
                             condition = CTrue,
-                            conditionalDescription = ConditionalDescription [(CTrue, "You walk off stage and your vision fades to black.", [])],
+                            conditionalDescription = ConditionalDescription [(CTrue, "You loved ones blur as you walk away into the <star field>.", [])],
                             stateChanges = [SceneChange "starfield",
-                                            RemoveFlag "hypnotism described"]
+                                            RemoveFlag "clock described"]
                         }
                     ]
                 },
