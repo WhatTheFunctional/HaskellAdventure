@@ -50,6 +50,8 @@ allVerbs =
         TokenVerb "walk up" ["walk up", "move up", "go up"],
         TokenVerb "approach" ["approach"],
         TokenVerb "fly" ["fly", "float", "drift", "glide", "move", "go"],
+        TokenVerb "wake" ["wake"],
+        TokenVerb "shake" ["shake"],
         TokenVerb "run" ["run", "race", "jog", "sprint", "dash"],
         TokenVerb "run down" ["run down", "jog down", "sprint down", "dash down"],
         TokenVerb "run up" ["run up", "jog up", "sprint up", "dash up"],
@@ -100,7 +102,7 @@ allNouns =
         TokenNoun "front door" ["front door", "door", "doorway", "front doorway"],
         TokenNoun "door" ["door", "doorway"],
         TokenNoun "home" ["home", "my house", "house", "cottage", "mud-brick cottage"], --Cottage nouns
-        TokenNoun "Jorryn" ["Jorryn", "my brother", "brother"],
+        TokenNoun "Jorryn" ["Jorryn", "my brother", "brother", "jorryn"],
         TokenNoun "parents" ["parents"],
         TokenNoun "square" ["square", "village square", "village"], --Village square nouns
         TokenNoun "clock" ["ancient clock", "clock"],
@@ -148,7 +150,8 @@ allNouns =
         TokenNoun "blue card" ["blue card"],
         TokenNoun "table" ["table"],
         TokenNoun "cupcake" ["cupcake"],
-        TokenNoun "elderly woman" ["elderly woman", "old woman", "elderly lady", "old lady"]
+        TokenNoun "elderly woman" ["elderly woman", "old woman", "elderly lady", "old lady"],
+        TokenNoun "prison" ["prison", "jail", "cell"]
     ]
 
 allPrepositions :: [Token]
@@ -182,7 +185,7 @@ allPrepositions =
         TokenPreposition "through" ["through"],
         TokenPreposition "using" ["using"],
         TokenPreposition "by" ["by"],
-        TokenPreposition "to" ["to", "toward"],
+        TokenPreposition "to" ["to", "toward", "towards"],
         TokenPreposition "until" ["until"],
         TokenPreposition "with" ["with"],
         TokenPreposition "together with" ["together with"]
@@ -244,7 +247,8 @@ cottageScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["inspect", "parents"]],
+                    sentences = [uSentence ["inspect", "parents"],
+                                 uSentence ["wake", "parents"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -261,7 +265,25 @@ cottageScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["inspect", "Jorryn"]],
+                    sentences = [uSentence ["shake", "parents"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "Your shake your <parents> like salt and pepper shakers. Yet, they're still in deep slumber.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "Jorryn"],
+                                 uSentence ["wake", "Jorryn"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -271,6 +293,23 @@ cottageScene =
                                     ConditionalDescription
                                     [
                                         (CTrue, "<Jorryn> lies asleep on the floor, you can't seem to wake him.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["shake", "Jorryn"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "Your shake shake shake <Jorryn>, but he doesn't make a single move.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -490,8 +529,8 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CNot (InInventory "jade amulet"), "<Evanna> is wearing her <jade amulet>.", []),
-                                        (InInventory "jade amulet", "You have taken <Evanna>'s <jade amulet>.", [])
+                                        (CNot (InInventory "jade amulet"), "<Evanna> is wearing her <jade amulet>. It is glowing gently.", []),
+                                        (InInventory "jade amulet", "You have taken <Evanna>'s <jade amulet>. It is glowing gently.", [])
                                     ],
                                 stateChanges = [AddToInventory "jade amulet"]
                             }
@@ -2031,6 +2070,23 @@ clockScene =
                                 stateChanges = [] 
                             }
                         ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["walk", "to", "star field"],
+                                 uSentence ["approach", "star field"],
+                                 uSentence ["walk", "left"],
+                                 uSentence ["leave"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription = ConditionalDescription [(CTrue, "You walk off stage and your vision fades to black.", [])],
+                            stateChanges = [SceneChange "starfield",
+                                            RemoveFlag "hypnotism described"]
+                        }
+                    ]
                 },
                 Interaction
                 {
