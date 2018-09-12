@@ -44,6 +44,7 @@ allVerbs =
         TokenVerb "jump" ["jump"],
         TokenVerb "sit" ["sit"],
         TokenVerb "lie down" ["lie", "lie down"],
+        TokenVerb "lie" ["lie", "lay"],
         TokenVerb "go" ["go", "move", "proceed", "leave", "exit"],
         TokenVerb "ride" ["ride", "fly", "head"],
         TokenVerb "walk down" ["walk down", "move down", "go down"],
@@ -81,7 +82,7 @@ allVerbs =
         TokenVerb "call" ["call", "summon"],
         TokenVerb "buy" ["buy", "purchase"],
         TokenVerb "fall asleep" ["fall asleep"],
-        TokenVerb "sleep" ["sleep"],
+        TokenVerb "sleep" ["sleep", "slumber"],
         TokenVerb "fix" ["fix", "repair"]
     ]
 
@@ -128,6 +129,7 @@ allNouns =
         TokenNoun "button" ["button"],
         TokenNoun "chest of drawers" ["chest of drawers", "drawers", "dresser"],
         TokenNoun "bed" ["bed"],
+        TokenNoun "sleep" ["sleep", "slumber"],
         TokenNoun "gramophone" ["gramophone", "phonograph"],
         TokenNoun "needle" ["needle", "stylus"],
         TokenNoun "star" ["star", "stars"], -- Star field nouns
@@ -1518,6 +1520,7 @@ wizardTowerBedroomScene =
                 Interaction
                 {
                     sentences = [uSentence ["look around"],
+                                 uSentence ["look"],
                                  uSentence ["look around", "bedroom"],
                                  uSentence ["inspect", "bedroom"]],
                     conditionalActions = 
@@ -1939,7 +1942,12 @@ wizardTowerGuestRoomScene =
                     sentences = [uSentence ["fall asleep"],
                                  uSentence ["sleep", "upon", "bed"],
                                  uSentence ["lie down", "upon", "bed"],
-                                 uSentence ["go", "to", "sleep"]],
+                                 uSentence ["go", "to", "sleep"],
+                                 uSentence ["sleep", "in", "bed"],
+                                 uSentence ["go", "to", "bed"],
+                                 uSentence ["lie", "in", "bed"],
+                                 uSentence ["sleep", "on", "bed"],
+                                 uSentence ["lie", "on", "bed"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1950,7 +1958,7 @@ wizardTowerGuestRoomScene =
                             },
                             ConditionalAction
                             {
-                                condition = CNot (FlagSet "heard wizard"),
+                                condition = CTrue,
                                 conditionalDescription = ConditionalDescription [(CTrue, "Anh anh aanh! Sleep now, and your town is lost forever! See if you can find and eliminate whatever is inducing this sleepy state", [])],
                                 stateChanges = []
                             }
