@@ -1006,6 +1006,16 @@ towerExteriorScene =
                                         (CTrue, "You walk through the cloaked <gateway>.", [])
                                     ],
                                 stateChanges = [SceneChange "tower ground floor"]
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "You don't see a way to enter the <tower>.", [])
+                                    ],
+                                stateChanges = []
                             }
                         ]
                 }
