@@ -753,6 +753,87 @@ towerExteriorScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["inspect", "chrome indentation"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "chrome amulet installed",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "The <chrome indentation> bears the <chrome amulet>.", [])
+                                    ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "The empty <chrome indentation> bears the shape of the <chrome amulet>.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "jade indentation"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "jade amulet installed",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "The <jade indentation> bears the <jade amulet>.", [])
+                                    ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "The empty <jade indentation> bears the shape of the <jade amulet>.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "ruby indentation"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "ruby amulet installed",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "The <ruby indentation> bears the <ruby amulet>.", [])
+                                    ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CTrue, "The empty <ruby indentation> bears the shape of the <ruby amulet>.", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["insert", "chrome amulet", "into", "pedestal"],
                                  uSentence ["put", "chrome amulet", "into", "pedestal"],
                                  uSentence ["use", "chrome amulet", "on", "pedestal"],
