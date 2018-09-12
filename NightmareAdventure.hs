@@ -982,6 +982,24 @@ towerExteriorScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["inspect", "gateway"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "gateway opened",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (FlagSet "gateway opened", gatewayDescriptionString, [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+
+                Interaction
+                {
                     sentences = [uSentence ["walk", "through", "gateway"],
                                  uSentence ["walk", "into", "gateway"],
                                  uSentence ["walk", "into", "tower"],
