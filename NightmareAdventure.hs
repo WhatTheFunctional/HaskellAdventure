@@ -1545,6 +1545,20 @@ wizardTowerBedroomScene =
                },
                Interaction
                {
+                    sentences = [uSentence ["talk", "to", "wizard"],
+                                 uSentence ["talk", "with", "wizard"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The sleeping <wizard> is in such a deep slumber that he doesn't even stir at your voice.", [])],
+                                stateChanges = []
+                            }
+                        ]
+               },
+               Interaction
+               {
                    sentences = [uSentence ["inspect", "bed"]],
                    conditionalActions = 
                        [
