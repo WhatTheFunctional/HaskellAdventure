@@ -2341,8 +2341,10 @@ clockScene =
                 Interaction
                 {
                    sentences = [uSentence ["fix", "clock", "with", "pendulum"],
-                               uSentence ["fix", "clock"],
-                               uSentence ["put", "pendulum", "in", "clock"]],
+                                uSentence ["fix", "clock"],
+                                uSentence ["put", "pendulum", "in", "clock"],
+                                uSentence ["use", "pendulum", "with", "clock"],
+                                uSentence ["use", "pendulum", "on", "clock"],
                    conditionalActions =
                        [
                            ConditionalAction
