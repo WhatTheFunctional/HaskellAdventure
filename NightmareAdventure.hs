@@ -52,7 +52,7 @@ allVerbs =
         TokenVerb "approach" ["approach"],
         TokenVerb "fly" ["fly", "float", "drift", "glide", "move", "go"],
         TokenVerb "wake" ["wake"],
-        TokenVerb "shake" ["shake"],
+        TokenVerb "shake" ["shake", "jostle"],
         TokenVerb "run" ["run", "race", "jog", "sprint", "dash"],
         TokenVerb "run down" ["run down", "jog down", "sprint down", "dash down"],
         TokenVerb "run up" ["run up", "jog up", "sprint up", "dash up"],
@@ -76,7 +76,7 @@ allVerbs =
         TokenVerb "do nothing" ["do nothing"],
         TokenVerb "press" ["press", "hit", "push", "depress", "poke"],
         TokenVerb "lift" ["lift", "remove"],
-        TokenVerb "touch" ["touch", "stroke", "grab", "feel", "handle", "pat", "brush", "tap"],
+        TokenVerb "touch" ["touch", "stroke", "grab", "feel", "handle", "pat", "brush", "tap", "poke"],
         TokenVerb "ask" ["ask", "question", "query", "inquire", "quiz", "interrogate"],
         TokenVerb "talk" ["talk", "chat", "converse", "communicate", "speak", "parley"],
         TokenVerb "call" ["call", "summon"],
@@ -229,6 +229,19 @@ cottageScene =
             [
                 Interaction
                 {
+                    sentences = [uSentence ["fall asleep"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "This seems like an uncomfortable place to sleep.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["look"],
                                  uSentence ["look around"],
                                  uSentence ["inspect", "home"],
@@ -250,7 +263,8 @@ cottageScene =
                 Interaction
                 {
                     sentences = [uSentence ["inspect", "parents"],
-                                 uSentence ["wake", "parents"]],
+                                 uSentence ["wake", "parents"],
+                                 uSentence ["walk", "to", "parents"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -285,7 +299,8 @@ cottageScene =
                 Interaction
                 {
                     sentences = [uSentence ["inspect", "Jorryn"],
-                                 uSentence ["wake", "Jorryn"]],
+                                 uSentence ["wake", "Jorryn"],
+                                 uSentence ["walk", "to", "Jorryn"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -319,7 +334,8 @@ cottageScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "east"]],
+                    sentences = [uSentence ["look", "east"],
+                                 uSentence ["inspect", "square"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -469,7 +485,21 @@ villageScene =
             [
                 Interaction
                 {
-                    sentences = [uSentence ["inspect", "clock"]],
+                    sentences = [uSentence ["fall asleep"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "This seems like an uncomfortable place to sleep.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "clock"],
+                                 uSentence ["walk", "to", "clock"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -486,7 +516,8 @@ villageScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["inspect", "Evanna"]],
+                    sentences = [uSentence ["inspect", "Evanna"],
+                                 uSentence ["shake", "Evanna"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -648,6 +679,19 @@ towerExteriorScene =
                                     (CAnd (CNot (FlagSet "tower described")) (FlagSet "gateway opened"), towerExteriorDescriptionString ++ gatewayDescriptionString, [SetFlag "tower described"])],
         interactions =
             [
+                Interaction
+                {
+                    sentences = [uSentence ["fall asleep"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "This seems like an uncomfortable place to sleep.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
                 Interaction
                 {
                     sentences = [uSentence ["look"],
@@ -1054,6 +1098,19 @@ wizardTowerGroundFloorScene =
             [
                 Interaction
                 {
+                    sentences = [uSentence ["fall asleep"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "This seems like an uncomfortable place to sleep.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["look"],
                                  uSentence ["look around"],
                                  uSentence ["inspect", "tower"],
@@ -1202,6 +1259,19 @@ elevatorScene =
         sceneDescription = ConditionalDescription [(CNot (FlagSet "elevator described"), elevatorDescriptionString, [SetFlag "elevator described"])],
         interactions = 
             [
+                Interaction
+                {
+                    sentences = [uSentence ["fall asleep"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "This seems like an uncomfortable place to sleep.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
                 Interaction
                 {
                     sentences = [uSentence ["inspect", "elevator"],
@@ -1524,6 +1594,19 @@ wizardTowerBedroomScene =
             [   
                 Interaction
                 {
+                    sentences = [uSentence ["fall asleep"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The bed is occupied by <Isvald>. The floor here seems like an uncomfortable place to sleep.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["look around"],
                                  uSentence ["look"],
                                  uSentence ["look around", "bedroom"],
@@ -1759,6 +1842,19 @@ wizardTowerMusicRoomScene =
         sceneDescription = ConditionalDescription [(CNot (FlagSet "music room described"), wizardTowerMusicRoomDescriptionString, [SetFlag "music room described"])],
         interactions = 
             [   
+                Interaction
+                {
+                    sentences = [uSentence ["fall asleep"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "This seems like an uncomfortable place to sleep.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
                 Interaction
                 {
                     sentences = [uSentence ["look"],
@@ -2079,6 +2175,19 @@ starFieldScene =
             [
                 Interaction
                 {
+                    sentences = [uSentence ["fall asleep"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You aren't feeling tired.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["look"],
                                  uSentence ["look around"]],
                     conditionalActions =
@@ -2181,6 +2290,19 @@ clockScene =
         sceneDescription = ConditionalDescription [(CNot (FlagSet "clock described"), clockDescriptionString, [SetFlag "clock described"])],
         interactions = 
             [
+                Interaction
+                {
+                    sentences = [uSentence ["fall asleep"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You aren't feeling tired.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
                 Interaction
                 {
                     sentences = [uSentence ["look"],
@@ -2378,6 +2500,19 @@ hypnotismScene =
                                                    ((CAnd (CNot (FlagSet "hypnotism described")) (InInventory "pendulum")), hypnotismDescriptionString, [SetFlag "hypnotism described"])],
         interactions =
             [
+                Interaction
+                {
+                    sentences = [uSentence ["fall asleep"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You aren't feeling tired.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
                 Interaction
                 {
                     sentences = [uSentence ["look"],
@@ -2705,6 +2840,19 @@ cupcakeScene =
         sceneDescription = ConditionalDescription [(CNot (FlagSet "cupcake described"), cupcakeDescriptionString, [SetFlag "cupcake described"])],
         interactions =
             [
+                Interaction
+                {
+                    sentences = [uSentence ["fall asleep"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You aren't feeling tired.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
                 Interaction
                 {
                     sentences = [uSentence ["look"],
