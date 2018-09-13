@@ -31,21 +31,21 @@ gameIntro = "Nightmare Adventure\n" ++
 allVerbs :: [Token]
 allVerbs =
     [
-        TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "perambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go", "leave", "exit"],
+        TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "perambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go"],
         TokenVerb "get" ["get", "take", "pick up", "pluck"],
         TokenVerb "put" ["put", "place", "put down"],
         TokenVerb "throw" ["throw", "pitch"],
         TokenVerb "give" ["give"],
         TokenVerb "select" ["select", "pick"],
         TokenVerb "look" ["look", "view", "scan", "see"],
-        TokenVerb "inspect" ["see", "view", "scan", "spy", "observe", "inspect", "check out", "look at", "look"],
+        TokenVerb "inspect" ["see", "view", "scan", "spy", "observe", "inspect", "check out", "look at", "look", "examine"],
         TokenVerb "look around" ["look around"],
         TokenVerb "use" ["use"],
         TokenVerb "jump" ["jump"],
         TokenVerb "sit" ["sit"],
         TokenVerb "lie down" ["lie", "lie down"],
         TokenVerb "lie" ["lie", "lay"],
-        TokenVerb "go" ["go", "move", "proceed", "leave", "exit"],
+        TokenVerb "go" ["go", "move", "proceed"],
         TokenVerb "ride" ["ride", "fly", "head"],
         TokenVerb "walk down" ["walk down", "move down", "go down"],
         TokenVerb "walk up" ["walk up", "move up", "go up"],
@@ -1347,7 +1347,8 @@ elevatorScene =
                Interaction
                {
                    sentences = [uSentence ["walk", "out", "elevator"],
-                                uSentence ["leave", "elevator"]],
+                                uSentence ["leave", "elevator"],
+                                uSentence ["leave"]],
                    conditionalActions = 
                        [
                            ConditionalAction
@@ -1394,7 +1395,8 @@ elevatorScene =
                },
                Interaction
                {
-                    sentences = [uSentence ["enter", "guest room"]],
+                    sentences = [uSentence ["enter", "guest room"],
+                                 uSentence ["walk", "to", "guest room"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1422,7 +1424,8 @@ elevatorScene =
                },
                Interaction
                {
-                    sentences = [uSentence ["enter", "music room"]],
+                    sentences = [uSentence ["enter", "music room"],
+                                 uSentence ["walk", "to", "music room"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1450,7 +1453,8 @@ elevatorScene =
                },
                Interaction
                {
-                    sentences = [uSentence ["enter", "bedroom"]],
+                    sentences = [uSentence ["enter", "bedroom"],
+                                 uSentence ["walk", "to", "bedroom"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1478,7 +1482,8 @@ elevatorScene =
                },
                Interaction
                {
-                    sentences = [uSentence ["enter", "ground floor"]],
+                    sentences = [uSentence ["enter", "ground floor"],
+                                 uSentence ["walk", "to", "ground floor"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2422,7 +2427,7 @@ hypnotismScene =
                             {
                                 condition = CNot (InInventory "pendulum"),
                                 conditionalDescription =
-                                    ConditionalDescription [(CTrue, "You lie down on the <couch>. The <rabbit> walks up to you and swings its <pendulum> in front of you. You feel your eyes growing heavy. You fall into a deep slumber, never to awake again.", [SceneChange "lose"])],
+                                    ConditionalDescription [(CTrue, "You lie down on the <couch>. The <rabbit> walks up to you and swings its <pendulum> in front of you. You feel your eyes growing heavy. You fall into a deep slumber, and wake up in the <wizard's tower>.", [SceneChange "tower guest room"])],
                                 stateChanges = []
                             },
                             ConditionalAction
