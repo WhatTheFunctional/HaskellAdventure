@@ -2344,7 +2344,7 @@ clockScene =
                                 uSentence ["fix", "clock"],
                                 uSentence ["put", "pendulum", "in", "clock"],
                                 uSentence ["use", "pendulum", "with", "clock"],
-                                uSentence ["use", "pendulum", "on", "clock"],
+                                uSentence ["use", "pendulum", "on", "clock"]],
                    conditionalActions =
                        [
                            ConditionalAction
