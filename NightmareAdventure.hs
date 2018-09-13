@@ -2178,7 +2178,7 @@ wizardTowerGuestRoomScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The four poster <bed> and a soft blanket look inviting", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The four poster <bed> and a soft blanket looks inviting", [])],
                                 stateChanges = []
                             }
                         ]
