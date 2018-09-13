@@ -32,7 +32,7 @@ allVerbs :: [Token]
 allVerbs =
     [
         TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "ambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go"],
-        TokenVerb "get" ["get", "take", "pick up", "pluck", "snatch", "acquire"],
+        TokenVerb "get" ["get", "take", "pick up", "pluck", "snatch", "acquire", "grab"],
         TokenVerb "put" ["put", "place", "put down"],
         TokenVerb "throw" ["throw", "pitch"],
         TokenVerb "give" ["give"],
@@ -47,23 +47,17 @@ allVerbs =
         TokenVerb "lie" ["lie", "lay"],
         TokenVerb "go" ["go", "move", "proceed"],
         TokenVerb "ride" ["ride", "fly", "head"],
-        TokenVerb "walk down" ["walk down", "move down", "go down"],
-        TokenVerb "walk up" ["walk up", "move up", "go up"],
         TokenVerb "approach" ["approach"],
         TokenVerb "fly" ["fly", "float", "drift", "glide", "move", "go"],
         TokenVerb "wake" ["wake"],
         TokenVerb "flip" ["flip", "back flip", "backflip"],
         TokenVerb "shake" ["shake", "jostle"],
         TokenVerb "run" ["run", "race", "jog", "sprint", "dash"],
-        TokenVerb "run down" ["run down", "jog down", "sprint down", "dash down"],
-        TokenVerb "run up" ["run up", "jog up", "sprint up", "dash up"],
         TokenVerb "sing" ["sing"],
         TokenVerb "dance" ["dance"],
         TokenVerb "smile" ["smile", "grin"],
         TokenVerb "frown" ["frown"],
         TokenVerb "climb" ["climb", "scale"],
-        TokenVerb "climb down" ["climb down", "scale down"],
-        TokenVerb "climb up" ["climb up", "scale up"],
         TokenVerb "unlock" ["unlock"],
         TokenVerb "lock" ["lock"],
         TokenVerb "open" ["open"],
@@ -135,14 +129,15 @@ allNouns =
         TokenNoun "sleep" ["sleep", "slumber"],
         TokenNoun "gramophone" ["gramophone", "phonograph"],
         TokenNoun "needle" ["needle", "stylus"],
-        TokenNoun "star" ["star", "stars"], -- Star field nouns
+        TokenNoun "star" ["star"], -- Star field nouns
+        TokenNoun "stars" ["sea of stars", "stars", "star field", "starfield"],
         TokenNoun "clock constellation" ["clock", "clock constellation"],
         TokenNoun "hypnotism constellation" ["hypnotism", "hypnotism constellation"],
         TokenNoun "hypnosis" ["hypnosis", "hypnotism"],
         TokenNoun "cupcake constellation" ["cupcake", "cup cake", "cupcake constellation", "cup cake constellation"],
         TokenNoun "rabbit" ["rabbit", "white rabbit"],
         TokenNoun "couch" ["couch", "red couch"],
-        TokenNoun "star field" ["star field"],
+        TokenNoun "star field" ["star field", "starfield"],
         TokenNoun "pendulum" ["pendulum"],
         TokenNoun "carrot cake" ["carrot cake"],
         TokenNoun "chocolate cake" ["chocolate cake"],
@@ -2372,11 +2367,52 @@ starFieldScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["touch", "star"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You reach out and touch a <star>, it feels warm.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "star"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You see a star twinkling next to you, it looks so tiny from here.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "stars"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You see <stars> twinkling all around you.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["walk", "into", "clock constellation"],
                                  uSentence ["walk", "to", "clock constellation"],
                                  uSentence ["approach", "clock constellation"],
                                  uSentence ["fly", "into", "clock constellation"],
-                                 uSentence ["fly", "to", "clock constellation"]],
+                                 uSentence ["fly", "to", "clock constellation"],
+                                 uSentence ["walk", "left"],
+                                 uSentence ["fly", "left"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2394,7 +2430,9 @@ starFieldScene =
                                  uSentence ["walk", "to", "hypnotism constellation"],
                                  uSentence ["approach", "hypnotism constellation"],
                                  uSentence ["fly", "into", "hypnotism constellation"],
-                                 uSentence ["fly", "to", "hypnotism constellation"]],
+                                 uSentence ["fly", "to", "hypnotism constellation"],
+                                 uSentence ["walk", "right"],
+                                 uSentence ["fly", "right"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2412,7 +2450,9 @@ starFieldScene =
                                  uSentence ["walk", "to", "cupcake constellation"],
                                  uSentence ["approach", "cupcake constellation"],
                                  uSentence ["fly", "into", "cupcake constellation"],
-                                 uSentence ["fly", "to", "cupcake constellation"]],
+                                 uSentence ["fly", "to", "cupcake constellation"],
+                                 uSentence ["walk", "up"],
+                                 uSentence ["fly", "up"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2791,7 +2831,8 @@ hypnotismScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["ask", "rabbit", "about", "pendulum"]],
+                    sentences = [uSentence ["ask", "rabbit", "about", "pendulum"],
+                                 uSentence ["talk", "to", "rabbit", "about", "pendulum"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2812,7 +2853,8 @@ hypnotismScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["ask", "rabbit", "about", "clock"]],
+                    sentences = [uSentence ["ask", "rabbit", "about", "clock"],
+                                 uSentence ["talk", "to", "rabbit", "about", "clock"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2826,7 +2868,8 @@ hypnotismScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["ask", "rabbit", "about", "carrot cake"]],
+                    sentences = [uSentence ["ask", "rabbit", "about", "carrot cake"],
+                                 uSentence ["talk", "to", "rabbit", "about", "carrot cake"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2842,7 +2885,10 @@ hypnotismScene =
                 {
                     sentences = [uSentence ["ask", "rabbit", "about", "chocolate cake"],
                                  uSentence ["ask", "rabbit", "about", "lemon cake"],
-                                 uSentence ["ask", "rabbit", "about", "cupcake"]],
+                                 uSentence ["ask", "rabbit", "about", "cupcake"],
+                                 uSentence ["talk", "to", "rabbit", "about", "chocolate cake"],
+                                 uSentence ["talk", "to", "rabbit", "about", "lemon cake"],
+                                 uSentence ["talk", "to", "rabbit", "about", "cupcake"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2857,7 +2903,9 @@ hypnotismScene =
                 Interaction
                 {
                     sentences = [uSentence ["ask", "rabbit", "about", "hypnotism constellation"],
-                                 uSentence ["ask", "rabbit", "about", "hypnosis"]],
+                                 uSentence ["ask", "rabbit", "about", "hypnosis"],
+                                 uSentence ["talk", "to", "rabbit", "about", "hypnotism constellation"],
+                                 uSentence ["talk", "to", "rabbit", "about", "hypnosis"]],
                     conditionalActions =
                     [
                         ConditionalAction
