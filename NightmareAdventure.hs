@@ -31,8 +31,8 @@ gameIntro = "Nightmare Adventure\n" ++
 allVerbs :: [Token]
 allVerbs =
     [
-        TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "perambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go"],
-        TokenVerb "get" ["get", "take", "pick up", "pluck"],
+        TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "ambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go"],
+        TokenVerb "get" ["get", "take", "pick up", "pluck", "snatch", "acquire"],
         TokenVerb "put" ["put", "place", "put down"],
         TokenVerb "throw" ["throw", "pitch"],
         TokenVerb "give" ["give"],
@@ -41,7 +41,7 @@ allVerbs =
         TokenVerb "inspect" ["see", "view", "scan", "spy", "observe", "inspect", "check out", "look at", "look", "examine"],
         TokenVerb "look around" ["look around"],
         TokenVerb "use" ["use"],
-        TokenVerb "jump" ["jump"],
+        TokenVerb "jump" ["jump", "hop"],
         TokenVerb "sit" ["sit"],
         TokenVerb "lie down" ["lie", "lie down"],
         TokenVerb "lie" ["lie", "lay"],
@@ -52,10 +52,12 @@ allVerbs =
         TokenVerb "approach" ["approach"],
         TokenVerb "fly" ["fly", "float", "drift", "glide", "move", "go"],
         TokenVerb "wake" ["wake"],
+        TokenVerb "flip" ["flip", "back flip", "backflip"],
         TokenVerb "shake" ["shake", "jostle"],
         TokenVerb "run" ["run", "race", "jog", "sprint", "dash"],
         TokenVerb "run down" ["run down", "jog down", "sprint down", "dash down"],
         TokenVerb "run up" ["run up", "jog up", "sprint up", "dash up"],
+        TokenVerb "sing" ["sing"],
         TokenVerb "dance" ["dance"],
         TokenVerb "smile" ["smile", "grin"],
         TokenVerb "frown" ["frown"],
@@ -69,6 +71,7 @@ allVerbs =
         TokenVerb "enter" ["enter", "get into"],
         TokenVerb "insert" ["insert"],
         TokenVerb "remove" ["remove"],
+        TokenVerb "hop off" ["hop off", "hop out", "jump off", "jump out"],
         TokenVerb "leave" ["leave", "exit", "get out"],
         TokenVerb "eat" ["eat", "consume"],
         TokenVerb "drink" ["drink", "consume"],
@@ -96,7 +99,7 @@ allNouns =
         TokenNoun "up" ["up"],
         TokenNoun "down" ["down"],
         TokenNoun "inside" ["inside"],
-        TokenNoun "outside" ["outside"],
+        TokenNoun "outside" ["outside", "out"],
         TokenNoun "me" ["me"],
         TokenNoun "myself" ["myself"],
         TokenNoun "chrome amulet" ["chrome amulet"],
@@ -117,7 +120,7 @@ allNouns =
         TokenNoun "jade indentation" ["jade indentation"],
         TokenNoun "ruby indentation" ["ruby indentation"],
         TokenNoun "ruby amulet" ["ruby amulet"],
-        TokenNoun "gateway" ["gateway", "gate", "cloaked gateway"],
+        TokenNoun "gateway" ["gateway", "gate", "cloaked gateway", "cloaked door"],
         TokenNoun "elevator" ["elevator"],
         TokenNoun "ground floor" ["ground floor"],
         TokenNoun "wizard" ["wizard", "isvald"],
@@ -417,6 +420,7 @@ cottageScene =
                                  uSentence ["walk", "outside"],
                                  uSentence ["walk", "east"],
                                  uSentence ["leave"],
+                                 uSentence ["leave"],
                                  uSentence ["leave", "front door"],
                                  uSentence ["leave", "home"],
                                  uSentence ["walk", "to", "square"],
@@ -499,7 +503,8 @@ villageScene =
                 Interaction
                 {
                     sentences = [uSentence ["inspect", "clock"],
-                                 uSentence ["walk", "to", "clock"]],
+                                 uSentence ["walk", "to", "clock"],
+                                 uSentence ["approach", "clock"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -508,7 +513,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You inspect the <ancient clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in the great desert. The <ancient clock> is not ticking, and the hands have stopped. You notice that something appears to have bored a perfectly round hole in the marble. Inside, you see that the <ancient clock> operates with a complicated set of gears. The pendulum of the <ancient clock> appears to be missing.", [])
+                                        (CTrue, "You inspect the <ancient clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in the great desert. The <ancient clock> is not ticking, and the hands have stopped. You notice that something appears to have bored a perfectly round hole in the marble. Inside, you see that the <ancient clock> operates with a complicated set of gears. The <pendulum> of the <ancient clock> appears to be missing.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -517,7 +522,9 @@ villageScene =
                 Interaction
                 {
                     sentences = [uSentence ["inspect", "Evanna"],
-                                 uSentence ["shake", "Evanna"]],
+                                 uSentence ["shake", "Evanna"],
+                                 uSentence ["walk", "to", "Evanna"],
+                                 uSentence ["approach", "Evanna"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -591,7 +598,8 @@ villageScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["look", "west"]],
+                    sentences = [uSentence ["look", "west"],
+                                 uSentence ["inspect", "home"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -627,7 +635,8 @@ villageScene =
                 Interaction
                 {
                     sentences = [uSentence ["walk", "west"],
-                                 uSentence ["walk", "home"]],
+                                 uSentence ["walk", "home"],
+                                 uSentence ["approach", "home"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -751,7 +760,9 @@ towerExteriorScene =
                 Interaction
                 {
                     sentences = [uSentence ["inspect", "pedestal"],
-                                 uSentence ["inspect", "indentations"]],
+                                 uSentence ["inspect", "indentations"],
+                                 uSentence ["walk", "to", "pedestal"],
+                                 uSentence ["approach", "pedestal"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -761,6 +772,7 @@ towerExteriorScene =
                                     ConditionalDescription
                                     [
                                         (CTrue, "You see a <pedestal> made out of marble. It rises up to chest height and has three <indentations>: a <chrome indentation>, a <jade indentation>, and a <ruby indentation>. ", []),
+                                        (CNot (FlagSet "chrome amulet installed"), "The <chrome indentation> matches the color of the <chrome amulet> your grandfather gave you in your <inventory>.", []),
                                         (FlagSet "chrome amulet installed", "The <chrome amulet> is inserted into the <chrome indentation>.", []),
                                         (FlagSet "jade amulet installed", "The <jade amulet> is inserted into the <jade indentation>.", []),
                                         (FlagSet "ruby amulet installed", "The <ruby amulet> is inserted into the <ruby indentation>.", []),
@@ -818,7 +830,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "The empty <chrome indentation> bears the shape of the <chrome amulet>.", [])
+                                        (CTrue, "The empty <chrome indentation> bears the shape of the <chrome amulet>. It matches the color of the <chrome amulet> your grandfather gave you.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -880,7 +892,8 @@ towerExteriorScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["insert", "chrome amulet", "into", "pedestal"],
+                    sentences = [uSentence ["insert", "chrome amulet"],
+                                 uSentence ["insert", "chrome amulet", "into", "pedestal"],
                                  uSentence ["put", "chrome amulet", "into", "pedestal"],
                                  uSentence ["use", "chrome amulet", "on", "pedestal"],
                                  uSentence ["use", "chrome amulet", "with", "pedestal"],
@@ -930,7 +943,8 @@ towerExteriorScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["insert", "jade amulet", "into", "pedestal"],
+                    sentences = [uSentence ["insert", "jade amulet"],
+                                 uSentence ["insert", "jade amulet", "into", "pedestal"],
                                  uSentence ["put", "jade amulet", "into", "pedestal"],
                                  uSentence ["use", "jade amulet", "on", "pedestal"],
                                  uSentence ["use", "jade amulet", "with", "pedestal"],
@@ -979,7 +993,8 @@ towerExteriorScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["insert", "ruby amulet", "into", "pedestal"],
+                    sentences = [uSentence ["insert", "ruby amulet"],
+                                 uSentence ["insert", "ruby amulet", "into", "pedestal"],
                                  uSentence ["put", "ruby amulet", "into", "pedestal"],
                                  uSentence ["use", "ruby amulet", "on", "pedestal"],
                                  uSentence ["use", "ruby amulet", "with", "pedestal"],
@@ -1055,6 +1070,7 @@ towerExteriorScene =
                                  uSentence ["enter"],
                                  uSentence ["enter", "gateway"],
                                  uSentence ["enter", "tower"],
+                                 uSentence ["approach", "tower"],
                                  uSentence ["enter", "through", "gateway"],
                                  uSentence ["enter", "using", "gateway"],
                                  uSentence ["enter", "tower", "through", "gateway"],
@@ -1087,7 +1103,7 @@ towerExteriorScene =
     }
 
 wizardTowerGroundFloorDescriptionString :: String
-wizardTowerGroundFloorDescriptionString = "You are inside <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
+wizardTowerGroundFloorDescriptionString = "You are inside the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
 
 wizardTowerGroundFloorScene :: Scene
 wizardTowerGroundFloorScene =
@@ -1173,7 +1189,8 @@ wizardTowerGroundFloorScene =
                 Interaction
                 {
                     sentences = [uSentence ["press", "button"],
-                                 uSentence ["use", "button"]],
+                                 uSentence ["use", "button"],
+                                 uSentence ["call", "elevator"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1231,6 +1248,8 @@ wizardTowerGroundFloorScene =
                 {
                     sentences = [uSentence ["walk", "into", "elevator"],
                                  uSentence ["walk", "in", "elevator"],
+                                 uSentence ["jump", "into", "elevator"],
+                                 uSentence ["jump", "in", "elevator"],
                                  uSentence ["use", "elevator"],
                                  uSentence ["enter", "elevator"]],
                     conditionalActions = 
@@ -1342,6 +1361,7 @@ elevatorScene =
                 {
                     sentences = [uSentence ["go", "to", "ground floor"],
                                  uSentence ["press", "ground floor"],
+                                 uSentence ["select", "ground floor"],
                                  uSentence ["ride", "to", "ground floor"]],
                     conditionalActions = 
                         [
@@ -1361,6 +1381,7 @@ elevatorScene =
                {
                    sentences = [uSentence ["go", "to", "bedroom"],
                                 uSentence ["press", "bedroom"],
+                                uSentence ["select", "bedroom"],
                                 uSentence ["ride", "to", "bedroom"]],
                    conditionalActions = 
                        [
@@ -1380,6 +1401,7 @@ elevatorScene =
                {
                    sentences = [uSentence ["go", "to", "music room"],
                                 uSentence ["press", "music room"],
+                                uSentence ["select", "music room"],
                                 uSentence ["ride", "to", "music room"]],
                    conditionalActions = 
                        [
@@ -1399,6 +1421,7 @@ elevatorScene =
                {
                    sentences = [uSentence ["go", "to", "guest room"],
                                 uSentence ["press", "guest room"],
+                                uSentence ["select", "guest room"],
                                 uSentence ["ride", "to", "guest room"]],
                    conditionalActions = 
                        [
@@ -1418,7 +1441,9 @@ elevatorScene =
                {
                    sentences = [uSentence ["walk", "out", "elevator"],
                                 uSentence ["leave", "elevator"],
-                                uSentence ["leave"]],
+                                uSentence ["leave"],
+                                uSentence ["hop off"],
+                                uSentence ["walk", "outside"]],
                    conditionalActions = 
                        [
                            ConditionalAction
@@ -1465,8 +1490,121 @@ elevatorScene =
                },
                Interaction
                {
+                    sentences = [uSentence ["inspect", "guest room"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "elevator guest room",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                      [
+                                          (CTrue, "You see a simple, yet cozy room. It is setup with a four poster <bed>, plain wooden chest of drawers, and a full length mirror..", [])
+                                      ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                      [
+                                          (CTrue, "Pick <guest room> from the <button panel> to fly to the <guest room>.", [])
+                                      ],
+                                stateChanges = []
+                            }
+                      
+                        ]
+               },
+               Interaction
+               {
+                    sentences = [uSentence ["inspect", "music room"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "elevator music room",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                      [
+                                          (CTrue, "You see a harmonious room. The walls are white, with black musical notes running across them.", [])
+                                      ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                      [
+                                          (CTrue, "Pick <music room> from the <button panel> to fly to the <music room>.", [])
+                                      ],
+                                stateChanges = []
+                            }
+
+                        ]
+               },
+               Interaction
+               {
+                    sentences = [uSentence ["inspect", "bedroom"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "elevator bedroom",
+                                conditionalDescription =
+                                    ConditionalDescription
+                                      [
+                                          (CTrue, "You see an ornate <bedroom>. The <wizard>, <Isvald>, is sleeping on the <bed>.", [])
+                                      ],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                      [
+                                          (CTrue, "Pick <bedroom> from the <button panel> to fly to the <bedroom>.", [])
+                                      ],
+                                stateChanges = []
+                            }
+
+                        ]
+               },
+               Interaction
+               {
+                    sentences = [uSentence ["inspect", "ground floor"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "elevator ground floor",
+                                conditionalDescription = 
+                                   ConditionalDescription 
+                                      [
+                                          (CTrue, "You see the <wizard's tower> foyer. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in.", [])
+                                      ],
+                                stateChanges = [] 
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                      [
+                                          (CTrue, "Pick <ground floor> from the <button panel> to fly to the <ground floor>.", [])
+                                      ],
+                                stateChanges = []
+                            }
+
+                        ]
+               },
+               Interaction
+               {
                     sentences = [uSentence ["enter", "guest room"],
-                                 uSentence ["walk", "to", "guest room"]],
+                                 uSentence ["walk", "to", "guest room"],
+                                 uSentence ["approach", "guest room"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1495,7 +1633,8 @@ elevatorScene =
                Interaction
                {
                     sentences = [uSentence ["enter", "music room"],
-                                 uSentence ["walk", "to", "music room"]],
+                                 uSentence ["walk", "to", "music room"],
+                                 uSentence ["approach", "music room"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1524,7 +1663,8 @@ elevatorScene =
                Interaction
                {
                     sentences = [uSentence ["enter", "bedroom"],
-                                 uSentence ["walk", "to", "bedroom"]],
+                                 uSentence ["walk", "to", "bedroom"],
+                                 uSentence ["approach", "bedroom"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1553,7 +1693,8 @@ elevatorScene =
                Interaction
                {
                     sentences = [uSentence ["enter", "ground floor"],
-                                 uSentence ["walk", "to", "ground floor"]],
+                                 uSentence ["walk", "to", "ground floor"],
+                                 uSentence ["approach", "ground floor"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -1807,6 +1948,8 @@ wizardTowerBedroomScene =
                 {
                     sentences = [uSentence ["walk", "into", "elevator"],
                                  uSentence ["walk", "in", "elevator"],
+                                 uSentence ["jump", "into", "elevator"],
+                                 uSentence ["jump", "in", "elevator"],
                                  uSentence ["use", "elevator"],
                                  uSentence ["enter", "elevator"]],
                     conditionalActions = 
@@ -1833,7 +1976,7 @@ wizardTowerBedroomScene =
     }
 
 wizardTowerMusicRoomDescriptionString :: String
-wizardTowerMusicRoomDescriptionString = "You are in a harmonious room. The walls are white, with black musical notes running across them. Their tune interleaves with framed pictures of the wizard playing the piano. At the head of the room, sits a grand paino. Arm chairs with delicate detail on the cushions face the piano. The <gramophone> to the right of the piano, seems to be the source of a lullaby that's making you sleepy."
+wizardTowerMusicRoomDescriptionString = "You are in a harmonious room. The walls are white, with black musical notes running across them. Their tune interleaves with framed pictures of the wizard playing the piano. At the head of the room, sits a grand piano. Arm chairs with delicate details on the cushions face the piano. The <gramophone> to the right of the piano, seems to be the source of a lullaby that's making you sleepy."
 
 wizardTowerMusicRoomScene :: Scene
 wizardTowerMusicRoomScene = 
@@ -1972,6 +2115,8 @@ wizardTowerMusicRoomScene =
                 {
                     sentences = [uSentence ["walk", "into", "elevator"],
                                  uSentence ["walk", "in", "elevator"],
+                                 uSentence ["jump", "into", "elevator"],
+                                 uSentence ["jump", "in", "elevator"],
                                  uSentence ["use", "elevator"],
                                  uSentence ["enter", "elevator"]],
                     conditionalActions = 
@@ -2137,6 +2282,8 @@ wizardTowerGuestRoomScene =
                 {
                     sentences = [uSentence ["walk", "into", "elevator"],
                                  uSentence ["walk", "in", "elevator"],
+                                 uSentence ["jump", "into", "elevator"],
+                                 uSentence ["jump", "in", "elevator"],
                                  uSentence ["use", "elevator"],
                                  uSentence ["enter", "elevator"]],
                     conditionalActions = 
@@ -2320,7 +2467,8 @@ clockScene =
                 Interaction
                 {
                     sentences = [uSentence ["inspect", "prison"],
-                                 uSentence ["walk", "to", "prison"]],
+                                 uSentence ["walk", "to", "prison"],
+                                 uSentence ["approach", "prison"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2387,7 +2535,8 @@ clockScene =
                 {
                     sentences = [uSentence ["talk", "to", "parents"],
                                  uSentence ["talk", "with", "parents"],
-                                 uSentence ["walk", "to", "parents"]],
+                                 uSentence ["walk", "to", "parents"],
+                                 uSentence ["approach", "parents"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2402,7 +2551,8 @@ clockScene =
                 {
                     sentences = [uSentence ["talk", "to", "Jorryn"],
                                  uSentence ["talk", "with", "Jorryn"],
-                                 uSentence ["walk", "to", "Jorryn"]],
+                                 uSentence ["walk", "to", "Jorryn"],
+                                 uSentence ["approach", "Jorryn"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2417,7 +2567,8 @@ clockScene =
                 {
                     sentences = [uSentence ["talk", "to", "Evanna"],
                                  uSentence ["talk", "with", "Evanna"],
-                                 uSentence ["walk", "to", "Evanna"]],
+                                 uSentence ["walk", "to", "Evanna"],
+                                 uSentence ["approach", "Evanna"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2432,7 +2583,8 @@ clockScene =
                 {
                     sentences = [uSentence ["talk", "to", "wizard"],
                                  uSentence ["talk", "with", "wizard"],
-                                 uSentence ["walk", "to", "wizard"]],
+                                 uSentence ["walk", "to", "wizard"],
+                                 uSentence ["approach", "wizard"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2446,8 +2598,10 @@ clockScene =
                 Interaction
                 {
                     sentences = [uSentence ["walk", "to", "star field"],
+                                 uSentence ["fly", "to", "star field"],
                                  uSentence ["approach", "star field"],
                                  uSentence ["walk", "right"],
+                                 uSentence ["fly", "right"],
                                  uSentence ["leave"]],
                     conditionalActions =
                     [
@@ -3136,6 +3290,32 @@ defaultScene =
                             {
                                 condition = CTrue, --Always do this
                                 conditionalDescription = ConditionalDescription [(CTrue, "You jog in place.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["flip"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue, --Always do this
+                                conditionalDescription = ConditionalDescription [(CTrue, "You do a backflip.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["sing"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue, --Always do this
+                                conditionalDescription = ConditionalDescription [(CTrue, "You sing a happy song.", [])],
                                 stateChanges = []
                             }
                         ]
