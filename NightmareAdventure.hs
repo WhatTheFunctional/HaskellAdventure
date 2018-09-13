@@ -2354,7 +2354,7 @@ clockScene =
                            ConditionalAction
                            {
                                condition = InInventory "pendulum",
-                               conditionalDescription = ConditionalDescription[(CTrue, "Alas! The <pendulum> easily fits in the <clock>, and resumes its to-and-fro motion!", [])],
+                               conditionalDescription = ConditionalDescription[(CTrue, "The <pendulum> easily fits in the <clock>, and resumes its to-and-fro motion!", [])],
                                stateChanges = [SceneChange "win"]
                            }
                        ]
