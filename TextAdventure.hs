@@ -52,12 +52,12 @@ printHelp
     = reflowPutStrs allDelimiters
                     allColumnWidth
                     ["The following commands are available:\n",
+                     "Inventory - Print all current inventory items.\n",
                      "Help - Print help text.\n",
                      "Grammar - Print available grammar.\n",
-                     "Nouns - Print all available nouns. Warning, this contains spoilers!\n",
                      "Verbs - Print all available verbs.\n",
                      "Prepositions - Print all available prepositions.\n",
-                     "Inventory - Print all current inventory items.\n",
+                     "Nouns - Print all available nouns. Warning, this contains spoilers!\n",
                      "Flags - Print all current flags. Warning, this contains spoilers!\n",
                      "Quit - Exit the  game.\n",
                      "--------------------"] >>
