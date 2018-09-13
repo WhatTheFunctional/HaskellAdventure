@@ -152,6 +152,7 @@ allNouns =
         TokenNoun "blue card" ["blue card"],
         TokenNoun "table" ["table"],
         TokenNoun "cupcake" ["cupcake", "flower"],
+        TokenNoun "audience" ["audience", "ghostly audience"],
         TokenNoun "elderly woman" ["elderly woman", "old woman", "elderly lady", "old lady"],
         TokenNoun "prison" ["prison", "jail", "cell"]
     ]
@@ -2684,7 +2685,7 @@ clockScene =
     }
 
 hypnotismDescriptionString :: String
-hypnotismDescriptionString = "You step up onto the stage, the lights overhead are blindingly bright. Before you is a ghostly audience, to your right on the stage is a <white rabbit> wearing a tuxedo and a top hat. Next to the <white rabbit> there's a giant red <couch>. You can see the <star field> off stage to your <left>. "
+hypnotismDescriptionString = "You step up onto the stage, the lights overhead are blindingly bright. Before you is a ghostly <audience>, to your right on the stage is a <white rabbit> wearing a tuxedo and a top hat. Next to the <white rabbit> there's a giant red <couch>. You can see the <star field> off stage to your <left>. "
 
 hypnotismDescriptionStringBefore :: String
 hypnotismDescriptionStringBefore = hypnotismDescriptionString ++ "The <white rabbit> has a <pendulum> in its paw."
@@ -2747,6 +2748,20 @@ hypnotismScene =
                                 condition = CTrue,
                                 conditionalDescription =
                                     ConditionalDescription [(CTrue, "The <rabbit> asks, \"Are you volunteering for my trick?, just lie down on the <couch>.\"", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "audience"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription [(CTrue, "Thousands of hollow eyes stare at you. The ghostly <audience> hovers in the darkness before you, held at bay by the bright lights of the stage.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2923,7 +2938,7 @@ hypnotismScene =
                         {
                             condition = CTrue,
                             conditionalDescription =
-                                ConditionalDescription [(CTrue, "The <rabbit> tells you \"If you want to watch the show, you've got to buy a ticket like everyone else. You can join the audience if you volunteer for my trick though! Just lie down on the <couch>.\"", [])],
+                                ConditionalDescription [(CTrue, "The <rabbit> tells you \"If you want to watch the show, you've got to buy a ticket like everyone else. You can join the <audience> if you volunteer for my trick though! Just lie down on the <couch>.\"", [])],
                             stateChanges = []
                         }
                     ]
