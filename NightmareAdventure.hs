@@ -32,7 +32,7 @@ allVerbs :: [Token]
 allVerbs =
     [
         TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "ambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go"],
-        TokenVerb "get" ["get", "take", "pick up", "pluck", "snatch", "acquire", "grab"],
+        TokenVerb "get" ["get", "take", "pick up", "pluck", "snatch", "acquire", "grab", "pick"],
         TokenVerb "put" ["put", "place", "put down"],
         TokenVerb "throw" ["throw", "pitch"],
         TokenVerb "give" ["give"],
@@ -78,6 +78,7 @@ allVerbs =
         TokenVerb "talk" ["talk", "chat", "converse", "communicate", "speak", "parley"],
         TokenVerb "call" ["call", "summon"],
         TokenVerb "buy" ["buy", "purchase"],
+        TokenVerb "pay" ["pay"],
         TokenVerb "fall asleep" ["fall asleep"],
         TokenVerb "sleep" ["sleep", "slumber"],
         TokenVerb "fix" ["fix", "repair"]
@@ -139,6 +140,7 @@ allNouns =
         TokenNoun "couch" ["couch", "red couch"],
         TokenNoun "star field" ["star field", "starfield"],
         TokenNoun "pendulum" ["pendulum"],
+        TokenNoun "cakes" ["cakes"],
         TokenNoun "carrot cake" ["carrot cake"],
         TokenNoun "chocolate cake" ["chocolate cake"],
         TokenNoun "lemon cake" ["lemon cake"],
@@ -149,7 +151,7 @@ allNouns =
         TokenNoun "green card" ["green card"],
         TokenNoun "blue card" ["blue card"],
         TokenNoun "table" ["table"],
-        TokenNoun "cupcake" ["cupcake"],
+        TokenNoun "cupcake" ["cupcake", "flower"],
         TokenNoun "elderly woman" ["elderly woman", "old woman", "elderly lady", "old lady"],
         TokenNoun "prison" ["prison", "jail", "cell"]
     ]
@@ -167,6 +169,7 @@ allPrepositions =
         TokenPreposition "below" ["below", "under", "underneath", "beneath"],
         TokenPreposition "across" ["across"],
         TokenPreposition "before" ["before"],
+        TokenPreposition "for" ["for"],
         TokenPreposition "after" ["after"],
         TokenPreposition "against" ["against"],
         TokenPreposition "around" ["around"],
@@ -2832,7 +2835,8 @@ hypnotismScene =
                 Interaction
                 {
                     sentences = [uSentence ["ask", "rabbit", "about", "pendulum"],
-                                 uSentence ["talk", "to", "rabbit", "about", "pendulum"]],
+                                 uSentence ["talk", "to", "rabbit", "about", "pendulum"],
+                                 uSentence ["talk", "with", "rabbit", "about", "pendulum"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2854,7 +2858,8 @@ hypnotismScene =
                 Interaction
                 {
                     sentences = [uSentence ["ask", "rabbit", "about", "clock"],
-                                 uSentence ["talk", "to", "rabbit", "about", "clock"]],
+                                 uSentence ["talk", "to", "rabbit", "about", "clock"],
+                                 uSentence ["talk", "with", "rabbit", "about", "clock"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2869,7 +2874,8 @@ hypnotismScene =
                 Interaction
                 {
                     sentences = [uSentence ["ask", "rabbit", "about", "carrot cake"],
-                                 uSentence ["talk", "to", "rabbit", "about", "carrot cake"]],
+                                 uSentence ["talk", "to", "rabbit", "about", "carrot cake"],
+                                 uSentence ["talk", "with", "rabbit", "about", "carrot cake"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2888,7 +2894,10 @@ hypnotismScene =
                                  uSentence ["ask", "rabbit", "about", "cupcake"],
                                  uSentence ["talk", "to", "rabbit", "about", "chocolate cake"],
                                  uSentence ["talk", "to", "rabbit", "about", "lemon cake"],
-                                 uSentence ["talk", "to", "rabbit", "about", "cupcake"]],
+                                 uSentence ["talk", "to", "rabbit", "about", "cupcake"],
+                                 uSentence ["talk", "with", "rabbit", "about", "chocolate cake"],
+                                 uSentence ["talk", "with", "rabbit", "about", "lemon cake"],
+                                 uSentence ["talk", "with", "rabbit", "about", "cupcake"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -2905,7 +2914,9 @@ hypnotismScene =
                     sentences = [uSentence ["ask", "rabbit", "about", "hypnotism constellation"],
                                  uSentence ["ask", "rabbit", "about", "hypnosis"],
                                  uSentence ["talk", "to", "rabbit", "about", "hypnotism constellation"],
-                                 uSentence ["talk", "to", "rabbit", "about", "hypnosis"]],
+                                 uSentence ["talk", "to", "rabbit", "about", "hypnosis"],
+                                 uSentence ["talk", "with", "rabbit", "about", "hypnotism constellation"],
+                                 uSentence ["talk", "with", "rabbit", "about", "hypnosis"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -3033,7 +3044,7 @@ hypnotismScene =
     }
 
 cupcakeDescriptionString :: String
-cupcakeDescriptionString = "You step out onto a green field that stretches to the horizon, above you is a <star field> in the sky. There are <cupcake> flowers growing all over the field, in every color of the rainbow. Before you, an <elderly woman> sits at a <table> with a red and white polkadot tablecloth."
+cupcakeDescriptionString = "You step out onto a green field that stretches to the horizon, above you is a <star field> in the sky. There are <cupcake> flowers growing all over the field, in every color of the rainbow. Before you, an <elderly woman> sits at a <table> with a red and white polka-dot tablecloth. There are three <cakes> on the <table>."
 
 cupcakeScene :: Scene
 cupcakeScene =
@@ -3077,7 +3088,10 @@ cupcakeScene =
                 {
                     sentences = [uSentence ["inspect", "table"],
                                  uSentence ["walk", "to", "table"],
-                                 uSentence ["approach", "table"]],
+                                 uSentence ["approach", "table"],
+                                 uSentence ["inspect", "cakes"],
+                                 uSentence ["walk", "to", "cakes"],
+                                 uSentence ["approach", "cakes"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -3201,6 +3215,43 @@ cupcakeScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["talk", "with", "elderly woman"],
+                                 uSentence ["talk", "to", "elderly woman"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <elderly woman> gestures at the <table> and says \"I have three cakes for sale, I baked them all myself this morning.\"", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["give", "star", "to", "elderly woman"],
+                                 uSentence ["pay", "elderly woman", "with", "star"],
+                                 uSentence ["pay", "elderly woman", "for", "cake"],
+                                 uSentence ["pay", "elderly woman"],
+                                 uSentence ["pay", "for", "cake"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "star",
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <elderly woman> gestures at the <table> and says \"Which cake do you want to buy?\"", [])],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You don't have a <star> to pay the <elderly woman>.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["get", "left cake"],
                                  uSentence ["get", "middle cake"],
                                  uSentence ["get", "right cake"]],
@@ -3281,7 +3332,9 @@ cupcakeScene =
                 {
                     sentences = [uSentence ["walk", "to", "star field"],
                                  uSentence ["approach", "star field"],
-                                 uSentence ["fly", "to", "star field"]],
+                                 uSentence ["fly", "to", "star field"],
+                                 uSentence ["fly", "up"],
+                                 uSentence ["leave"]],
                     conditionalActions =
                     [
                         ConditionalAction
