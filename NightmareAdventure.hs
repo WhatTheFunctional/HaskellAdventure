@@ -625,7 +625,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You see the <wizard's tower>, a single massive crystal growing out of the great desert. It serves as Isvald's home.", [])
+                                        (CTrue, "You see the <wizard's tower>, a single massive crystal growing out of the great desert. It serves as <Isvald>'s home.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -673,7 +673,7 @@ villageScene =
     }
 
 towerExteriorDescriptionString :: String
-towerExteriorDescriptionString = "You are standing at the base of the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is the great desert, which stretches to the horizon. The <village square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
+towerExteriorDescriptionString = "You are standing at the base of the <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is the great desert, which stretches to the horizon. The <village square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
 
 gatewayDescriptionString :: String
 gatewayDescriptionString = " A cloaked <gateway> has been opened in the side of the <tower>."
@@ -1102,7 +1102,7 @@ towerExteriorScene =
     }
 
 wizardTowerGroundFloorDescriptionString :: String
-wizardTowerGroundFloorDescriptionString = "You are inside the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
+wizardTowerGroundFloorDescriptionString = "You are inside the <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
 
 wizardTowerGroundFloorScene :: Scene
 wizardTowerGroundFloorScene =
@@ -1723,7 +1723,7 @@ elevatorScene =
     }
 
 wizardTowerBedroomDescriptionString :: String
-wizardTowerBedroomDescriptionString = "You are in the ornate <bedroom>. The <wizard>, <Isvald>, is sleeping on the <bed>. One corner of the room is inhabited by a <chest of drawers>, with a mirror atop. You hear music floating up to the <bedroom>, presumably from the music room. It sounds like a lullaby, and is making you sleepy. Behind you is the <elevator>, with a call <button> to summon it."
+wizardTowerBedroomDescriptionString = "You are in the ornate <bedroom>. The <wizard>, <Isvald>, is sleeping on the <bed>. He is clutching something in his arms. One corner of the room is inhabited by a <chest of drawers>, with a mirror atop. You hear music floating up to the <bedroom>, presumably from the music room. It sounds like a lullaby, and is making you sleepy. Behind you is the <elevator>, with a call <button> to summon it."
 
 wizardTowerBedroomScene :: Scene
 wizardTowerBedroomScene =
@@ -1769,10 +1769,23 @@ wizardTowerBedroomScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <wizard> has a big smile on his face because he is dreaming. A luxurious purple velvet blanket envelopes him.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <wizard> has a big smile on his face because he is dreaming. He is clutching a <pendulum> to his chest.  A luxurious purple velvet blanket envelopes him.", [])],
                                 stateChanges = [SetFlag "wizard seen"]
                             }
                         ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["get", "pendulum"]],
+                   conditionalActions =
+                       [
+                           ConditionalAction
+                           {
+                               condition = FlagSet "wizard seen",
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <wizard> is holding the <pendulum> magically. Thus, you are not able to pry it free.", [])],
+                               stateChanges = [SetFlag "at wizard", RemoveFlag "at chest of drawers", RemoveFlag "at elevator"]
+                           }
+                       ]
                },
                Interaction
                {
@@ -2037,7 +2050,7 @@ wizardTowerMusicRoomScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The music does not turn off. Yet, it dims gently, and you hear the wizard's voice say, \"I am trapped in dream land by accident. I need a pendulum in the dream world to break the spell.\" The music is distinct again.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The music does not turn off. Yet, it dims gently, and you hear the wizard's voice say, \"I am trapped in dream land by accident. I need a pendulum in the dream world to break the spell. You must join me here in order to save the village.\" The music is distinct again.", [])],
                                 stateChanges = [SetFlag "heard wizard"]
                             }
                         ]
