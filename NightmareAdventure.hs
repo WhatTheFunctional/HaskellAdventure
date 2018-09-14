@@ -2776,7 +2776,7 @@ hypnotismScene =
                             {
                                 condition = CNot (InInventory "pendulum"),
                                 conditionalDescription =
-                                    ConditionalDescription [(CTrue, "You lie down on the <couch>. The <rabbit> walks up to you and swings its <pendulum> in front of you. You feel your eyes growing heavy. You fall into a deep slumber, and wake up in the <wizard's tower>.", [SceneChange "tower guest room"])],
+                                    ConditionalDescription [(CTrue, "You lie down on the <couch>. The <rabbit> walks up to you and swings its <pendulum> in front of you. You feel your eyes growing heavy. You fall into a deep slumber, never to awake again.", [SceneChange "lose"])],
                                 stateChanges = []
                             },
                             ConditionalAction
@@ -2928,10 +2928,13 @@ hypnotismScene =
                 {
                     sentences = [uSentence ["ask", "rabbit", "about", "hypnotism constellation"],
                                  uSentence ["ask", "rabbit", "about", "hypnosis"],
+                                 uSentence ["ask", "rabbit", "about", "couch"],
                                  uSentence ["talk", "to", "rabbit", "about", "hypnotism constellation"],
                                  uSentence ["talk", "to", "rabbit", "about", "hypnosis"],
+                                 uSentence ["talk", "to", "rabbit", "about", "couch"],
                                  uSentence ["talk", "with", "rabbit", "about", "hypnotism constellation"],
-                                 uSentence ["talk", "with", "rabbit", "about", "hypnosis"]],
+                                 uSentence ["talk", "with", "rabbit", "about", "hypnosis"],
+                                 uSentence ["talk", "with", "rabbit", "about", "couch"]],
                     conditionalActions =
                     [
                         ConditionalAction
