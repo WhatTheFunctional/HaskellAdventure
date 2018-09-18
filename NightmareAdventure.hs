@@ -63,7 +63,7 @@ allVerbs =
         TokenVerb "open" ["open"],
         TokenVerb "close" ["close", "shut"],
         TokenVerb "enter" ["enter", "get into"],
-        TokenVerb "insert" ["insert"],
+        TokenVerb "insert" ["insert", "plug"],
         TokenVerb "remove" ["remove"],
         TokenVerb "hop off" ["hop off", "hop out", "jump off", "jump out"],
         TokenVerb "leave" ["leave", "exit", "get out"],
@@ -72,7 +72,9 @@ allVerbs =
         TokenVerb "do something" ["do something"],
         TokenVerb "do nothing" ["do nothing"],
         TokenVerb "press" ["press", "hit", "push", "depress", "poke"],
-        TokenVerb "lift" ["lift", "remove"],
+        TokenVerb "break" ["break", "crack", "throw", "deface", "harm"],
+        TokenVerb "stop" ["stop", "pause"],
+        TokenVerb "lift" ["lift", "remove", "pick"],
         TokenVerb "touch" ["touch", "stroke", "grab", "feel", "handle", "pat", "brush", "tap", "poke"],
         TokenVerb "ask" ["ask", "question", "query", "inquire", "quiz", "interrogate"],
         TokenVerb "talk" ["talk", "chat", "converse", "communicate", "speak", "parley"],
@@ -433,7 +435,7 @@ cottageScene =
                                     ConditionalDescription
                                         [
                                             (FlagSet "square visited", "You walk through the front door of your <home> out into the <village>. Everyone you pass is still asleep. Your friend, <Evanna>, is still asleep at the base of the <ancient clock>.", []),
-                                            (CNot (FlagSet "square visited"), "You walk through the front door of your <home> out into your <village>. As you walk through the <village>, you come across several people asleep on the ground. You arrive at the <village square> and you notice that, for the first time in your life, the <ancient clock> has stopped. You see your friend, <Evanna>, walking slowly through the <village square> in a dazed stupor. As you approach, she collapses to the ground. The <ancient clock> chimes and her body starts to glow a deep green color, the glowing aura shoots quickly into the <ancient clock> and it falls silent.", [])
+                                            (CNot (FlagSet "square visited"), "You walk through the front door of your <home> out into your <village>. As you walk through the <village>, you come across several people asleep on the ground. You arrive at the <village square> and you notice that, for the first time in your life, the <ancient clock> has stopped. You see your friend, <Evanna>, walking slowly through the <village square> in a dazed stupor. As you approach, she collapses to the ground. The <ancient clock> chimes and her body starts to glow a deep golden color, the glowing aura shoots quickly into the <ancient clock> and it falls silent.", [])
                                         ],
                                 stateChanges = [SceneChange "village", SetFlag "square visited", RemoveFlag "cottage described"]
                             },
@@ -512,7 +514,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You inspect the <ancient clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in the great desert. The <ancient clock> is not ticking, and the hands have stopped. You notice that something appears to have bored a perfectly round hole in the marble. Inside, you see that the <ancient clock> operates with a complicated set of gears. The <pendulum> of the <ancient clock> appears to be missing.", [])
+                                        (CTrue, "You inspect the <ancient clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in the great desert. The <ancient clock> is not ticking, and the hands have stopped. You notice that something appears to have bored a perfectly round hole in the marble. Inside, you see that the <ancient clock> operates with a complicated set of gears. The pendulum of the <ancient clock> appears to be missing.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -625,7 +627,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You see the <wizard's tower>, a single massive crystal growing out of the great desert. It serves as <Isvald>'s home.", [])
+                                        (CTrue, "You see the <wizard's tower>, a single massive crystal growing out of the great desert. It serves as Isvald's home.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -673,7 +675,7 @@ villageScene =
     }
 
 towerExteriorDescriptionString :: String
-towerExteriorDescriptionString = "You are standing at the base of the <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is the great desert, which stretches to the horizon. The <village square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
+towerExteriorDescriptionString = "You are standing at the base of the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is the great desert, which stretches to the horizon. The <village square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
 
 gatewayDescriptionString :: String
 gatewayDescriptionString = " A cloaked <gateway> has been opened in the side of the <tower>."
@@ -1102,7 +1104,7 @@ towerExteriorScene =
     }
 
 wizardTowerGroundFloorDescriptionString :: String
-wizardTowerGroundFloorDescriptionString = "You are inside the <wizard's tower>, inhabited by <Isvald>, the <village>'s resident <wizard>. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
+wizardTowerGroundFloorDescriptionString = "You are inside the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
 
 wizardTowerGroundFloorScene :: Scene
 wizardTowerGroundFloorScene =
@@ -1262,6 +1264,31 @@ wizardTowerGroundFloorScene =
                                            (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
                                        ],
                                 stateChanges = [SceneChange "elevator", SetFlag "elevator ground floor", RemoveFlag "wizardTowerGroundFloor described"]
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["pick", "music room"],
+                                 uSentence ["press", "music room"],
+                                 uSentence ["go", "to", "music room"],
+                                 uSentence ["pick", "guest room"],
+                                 uSentence ["press", "guest room"],
+                                 uSentence ["go", "to", "guest room"],
+                                 uSentence ["pick", "bedroom"],
+                                 uSentence ["press", "bedroom"],
+                                 uSentence ["go", "to", "bedroom"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "elevator arrived",
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "Yes! But first, let's enter the <elevator>!", [])
+                                       ],
+                                stateChanges = []
                             }
                         ]
                 }
@@ -1983,7 +2010,32 @@ wizardTowerBedroomScene =
                                 stateChanges = [SetFlag "at elevator", RemoveFlag "at wizard", RemoveFlag "at chest of drawers"]
                             }
                         ]
-                }
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["pick", "music room"],
+                                 uSentence ["press", "music room"],
+                                 uSentence ["go", "to", "music room"],
+                                 uSentence ["pick", "guest room"],
+                                 uSentence ["press", "guest room"],
+                                 uSentence ["go", "to", "guest room"],
+                                 uSentence ["pick", "ground floor"],
+                                 uSentence ["press", "ground floor"],
+                                 uSentence ["go", "to", "ground floor"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "elevator arrived",
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "Yes! But first, let's enter the <elevator>!", [])
+                                       ],
+                                stateChanges = []
+                            }
+                        ]   
+                }      
             ]
     }
 
@@ -2043,6 +2095,32 @@ wizardTowerMusicRoomScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["break", "gramophone"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "A magic spell senses danger to the <gramophone> and activates a shield around it. The <gramophone> is still intact.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["stop", "gramophone"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The only way to try to stop the <gramophone> is by lifting the <needle>.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["lift", "needle"],
                                  uSentence ["touch", "needle"]],
                     conditionalActions = 
@@ -2050,7 +2128,7 @@ wizardTowerMusicRoomScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The music does not turn off. Yet, it dims gently, and you hear the wizard's voice say, \"I am trapped in dream land by accident. I need a pendulum in the dream world to break the spell. You must join me here in order to save the village.\" The music is distinct again.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The music does not turn off. Yet, it dims gently, and you hear the wizard's voice say, \"I am trapped in dream land by accident. I need a pendulum in the dream world to break the spell. You must fall asleep in the real world to join me here in order to save the village.\" The music is distinct again.", [])],
                                 stateChanges = [SetFlag "heard wizard"]
                             }
                         ]
@@ -2150,7 +2228,32 @@ wizardTowerMusicRoomScene =
                                 stateChanges = []
                             }
                         ]
-                }
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["pick", "ground floor"],
+                                 uSentence ["press", "ground floor"],
+                                 uSentence ["go", "to", "ground floor"],
+                                 uSentence ["pick", "guest room"],
+                                 uSentence ["press", "guest room"],
+                                 uSentence ["go", "to", "guest room"],
+                                 uSentence ["pick", "bedroom"],
+                                 uSentence ["press", "bedroom"],
+                                 uSentence ["go", "to", "bedroom"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "elevator arrived",
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "Yes! But first, let's enter the <elevator>!", [])
+                                       ],
+                                stateChanges = []
+                            }
+                        ]   
+                }      
             ]
     }
  
@@ -2317,7 +2420,32 @@ wizardTowerGuestRoomScene =
                                 stateChanges = []
                             }
                         ]
-               }
+               },
+               Interaction
+                {
+                    sentences = [uSentence ["pick", "music room"],
+                                 uSentence ["press", "music room"],
+                                 uSentence ["go", "to", "music room"],
+                                 uSentence ["pick", "ground floor"],
+                                 uSentence ["press", "ground floor"],
+                                 uSentence ["go", "to", "ground floor"],
+                                 uSentence ["pick", "bedroom"],
+                                 uSentence ["press", "bedroom"],
+                                 uSentence ["go", "to", "bedroom"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = FlagSet "elevator arrived",
+                                conditionalDescription = 
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "Yes! But first, let's enter the <elevator>!", [])
+                                       ],
+                                stateChanges = []
+                            }
+                        ]   
+                }      
             ]
     }
 
