@@ -128,6 +128,9 @@ allNouns =
         TokenNoun "button panel" ["panel", "button panel"],
         TokenNoun "button" ["button"],
         TokenNoun "chest of drawers" ["chest of drawers", "drawers", "dresser"],
+        TokenNoun "first drawer" ["first drawer"],
+        TokenNoun "second drawer" ["second drawer"],
+        TokenNoun "third drawer" ["third drawer"],
         TokenNoun "bed" ["bed"],
         TokenNoun "sleep" ["sleep", "slumber"],
         TokenNoun "gramophone" ["gramophone", "phonograph"],
@@ -1888,6 +1891,45 @@ wizardTowerBedroomScene =
                },
                Interaction
                {
+                   sentences = [uSentence ["open", "first drawer"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = CTrue,
+                               conditionalDescription = ConditionalDescription [(CTrue, "You see clothes that don't seem like your size. The <drawer> tucks itself away upon noticing your disinterest.", [])],
+                               stateChanges = [SetFlag "at chest of drawers", RemoveFlag "at wizard", RemoveFlag "at elevator"]
+                           }
+                       ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["open", "second drawer"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = CTrue,
+                               conditionalDescription = ConditionalDescription [(CTrue, "You see shoes that don't seem like your style. The <drawer> shies away upon noticing your inattention.", [])],
+                               stateChanges = [SetFlag "at chest of drawers", RemoveFlag "at wizard", RemoveFlag "at elevator"]
+                           }
+                       ]
+               },
+               Interaction
+               {
+                   sentences = [uSentence ["open", "third drawer"]],
+                   conditionalActions = 
+                       [
+                           ConditionalAction
+                           {
+                               condition = CTrue,
+                               conditionalDescription = ConditionalDescription [(CTrue, "You see books written in a language that you don't understand. The <drawer> puts itself away upon noticing your indifference.", [])],
+                               stateChanges = [SetFlag "at chest of drawers", RemoveFlag "at wizard", RemoveFlag "at elevator"]
+                           }
+                       ]
+               },
+               Interaction
+               {
                    sentences = [uSentence ["walk", "to", "wizard"],
                                 uSentence ["walk", "to", "bed"],
                                 uSentence ["approach", "wizard"],
@@ -2135,6 +2177,19 @@ wizardTowerMusicRoomScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["touch", "gramophone"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "You gently lay your fingers on the <gramophone>. Yet, it feels so delicate. You lift your fingers to avoid harming the dainty piece.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                    sentences = [uSentence ["inspect", "elevator"]],
                    conditionalActions =
                        [
@@ -2285,8 +2340,7 @@ wizardTowerGuestRoomScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["walk", "to", "bed"],
-                                 uSentence ["approach", "bed"],
+                    sentences = [uSentence ["approach", "bed"],
                                  uSentence ["inspect", "bed"]],
                     conditionalActions = 
                         [
@@ -2308,7 +2362,8 @@ wizardTowerGuestRoomScene =
                                  uSentence ["go", "to", "bed"],
                                  uSentence ["lie", "in", "bed"],
                                  uSentence ["sleep", "on", "bed"],
-                                 uSentence ["lie", "on", "bed"]],
+                                 uSentence ["lie", "on", "bed"],
+                                 uSentence ["enter", "bed"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -2659,7 +2714,7 @@ clockScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription[(CTrue, "The <prison> holds all the people from the <village>. You spot your <parents>, <Jorryn>, and <Evanna>. Even the <wizard> is here.", [])],
+                                conditionalDescription = ConditionalDescription[(CTrue, "The <prison> holds all the people from the village. You spot your <parents>, <Jorryn>, and <Evanna>. Even the <wizard> is here.", [])],
                                 stateChanges = []
                             }
                         ]
