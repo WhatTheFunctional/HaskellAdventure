@@ -83,7 +83,8 @@ allVerbs =
         TokenVerb "pay" ["pay"],
         TokenVerb "fall asleep" ["fall asleep"],
         TokenVerb "sleep" ["sleep", "slumber"],
-        TokenVerb "fix" ["fix", "repair"]
+        TokenVerb "fix" ["fix", "repair"],
+        TokenVerb "shout" ["shout", "yell", "scream", "roar", "howl", "bellow", "shriek"]
     ]
 
 allNouns :: [Token]
@@ -1107,7 +1108,7 @@ towerExteriorScene =
     }
 
 wizardTowerGroundFloorDescriptionString :: String
-wizardTowerGroundFloorDescriptionString = "You are inside the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer."
+wizardTowerGroundFloorDescriptionString = "You are inside the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer to the other rooms in the <tower>."
 
 wizardTowerGroundFloorScene :: Scene
 wizardTowerGroundFloorScene =
@@ -1764,13 +1765,22 @@ wizardTowerBedroomScene =
             [   
                 Interaction
                 {
-                    sentences = [uSentence ["fall asleep"]],
+                    sentences = [uSentence ["fall asleep"],
+                                 uSentence ["sleep", "upon", "bed"],
+                                 uSentence ["lie down", "upon", "bed"],
+                                 uSentence ["go", "to", "sleep"],
+                                 uSentence ["sleep", "in", "bed"],
+                                 uSentence ["go", "to", "bed"],
+                                 uSentence ["lie", "in", "bed"],
+                                 uSentence ["sleep", "on", "bed"],
+                                 uSentence ["lie", "on", "bed"],
+                                 uSentence ["enter", "bed"]],
                     conditionalActions =
                         [
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The bed is occupied by <Isvald>. The floor here seems like an uncomfortable place to sleep.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <bed> is occupied by <Isvald>. The floor here seems like an uncomfortable place to sleep.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -1806,6 +1816,20 @@ wizardTowerBedroomScene =
                },
                Interaction
                {
+                   sentences = [uSentence ["touch", "wizard"],
+                                uSentence ["shake", "wizard"]],
+                   conditionalActions =
+                       [
+                           ConditionalAction
+                           {
+                               condition = CTrue,
+                               conditionalDescription = ConditionalDescription [(CTrue, "As you get closer to touch the <wizard>, his body starts glowing and emanating radiation. You pull your hand away from the heat, and the glow dims.", [])],
+                               stateChanges = [SetFlag "at wizard", RemoveFlag "at chest of drawers", RemoveFlag "at elevator"] 
+                           }
+                       ]
+               },
+               Interaction
+               {
                    sentences = [uSentence ["get", "pendulum"]],
                    conditionalActions =
                        [
@@ -1820,7 +1844,8 @@ wizardTowerBedroomScene =
                Interaction
                {
                     sentences = [uSentence ["talk", "to", "wizard"],
-                                 uSentence ["talk", "with", "wizard"]],
+                                 uSentence ["talk", "with", "wizard"],
+                                 uSentence ["shout", "at", "wizard"]],
                     conditionalActions =
                         [
                             ConditionalAction
