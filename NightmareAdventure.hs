@@ -2693,13 +2693,18 @@ starFieldScene =
     }
 
 clockDescriptionString :: String
-clockDescriptionString = "You are on the outside of a <prison> made of stars. Right across from the twinkling prison bars is a grandfather <clock> that's missing a <pendulum>. The <star field> is to your <right>."
+clockDescriptionString = "You are on the outside of a <prison> made of stars. Right across from the twinkling <prison> bars is a grandfather <clock> that's missing a pendulum. The <star field> is to your <right>."
+clockDescriptionWithPendulumString = "You are on the outside of a <prison> made of stars. Right across from the twinkling <prison> bars is a grandfather <clock> that's missing a <pendulum>. The <star field> is to your <right>."
 
 clockScene :: Scene
 clockScene = 
     Scene
     {
-        sceneDescription = ConditionalDescription [(CNot (FlagSet "clock described"), clockDescriptionString, [SetFlag "clock described"])],
+        sceneDescription = ConditionalDescription 
+                           [
+                               ((CAnd (CNot (FlagSet "clock described")) (CNot (InInventory "pendulum"))), clockDescriptionString, [SetFlag "clock described"]),
+                               ((CAnd (CNot (FlagSet "clock described")) (InInventory "pendulum")), clockDescriptionWithPendulumString, [SetFlag "clock described"])
+                           ],
         interactions = 
             [
                 Interaction
@@ -2725,6 +2730,25 @@ clockScene =
                             {
                                 condition = CTrue,
                                 conditionalDescription = ConditionalDescription[(CTrue, clockDescriptionString, [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "clock"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = InInventory "pendulum",
+                                conditionalDescription = ConditionalDescription[(CTrue, "The mighty grandfather <clock> feels incomplete without its <pendulum>.", [])],
+                                stateChanges = []
+                            },
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription[(CTrue, "The mighty grandfather <clock> feels incomplete without its pendulum.", [])],
                                 stateChanges = []
                             }
                         ]
