@@ -37,6 +37,7 @@ allVerbs =
         TokenVerb "throw" ["throw", "pitch"],
         TokenVerb "give" ["give"],
         TokenVerb "select" ["select", "pick"],
+        TokenVerb "read" ["read"],
         TokenVerb "look" ["look", "view", "scan", "see"],
         TokenVerb "inspect" ["see", "view", "scan", "spy", "observe", "inspect", "check out", "look at", "look", "examine"],
         TokenVerb "look around" ["look around"],
@@ -2592,6 +2593,19 @@ starFieldScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["get", "stars"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "Greedy! Greedy! You can only take one <star> at a time.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["touch", "star"]],
                     conditionalActions =
                         [
@@ -2970,6 +2984,24 @@ hypnotismScene =
                                     [
                                         (CNot (InInventory "pendulum"), hypnotismDescriptionStringBefore, []),
                                         (InInventory "pendulum", hypnotismDescriptionString, [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "rabbit"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CNot (InInventory "pendulum"), "The <white rabbit> has a <pendulum> in its paw.", []),
+                                        (InInventory "pendulum", "The <white rabbit> is standing next to the red couch.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -3408,7 +3440,8 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["inspect", "red card"]],
+                    sentences = [uSentence ["inspect", "red card"],
+                                 uSentence ["read", "red card"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -3421,7 +3454,8 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["inspect", "green card"]],
+                    sentences = [uSentence ["inspect", "green card"],
+                                 uSentence ["read", "green card"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -3434,7 +3468,8 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["inspect", "blue card"]],
+                    sentences = [uSentence ["inspect", "blue card"],
+                                 uSentence ["read", "blue card"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -3516,7 +3551,10 @@ cupcakeScene =
                 Interaction
                 {
                     sentences = [uSentence ["get", "left cake"],
+                                 uSentence ["eat", "left cake"],
                                  uSentence ["get", "middle cake"],
+                                 uSentence ["eat", "middle cake"],
+                                 uSentence ["eat", "right cake"],
                                  uSentence ["get", "right cake"]],
                     conditionalActions =
                         [
