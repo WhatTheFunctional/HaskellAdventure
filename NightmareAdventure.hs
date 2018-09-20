@@ -299,7 +299,7 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "Your shake your <parents> like salt and pepper shakers. Yet, they're still in deep slumber.", [])
+                                        (CTrue, "You shake your <parents> like salt and pepper shakers. Yet, they're still in deep slumber.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -335,7 +335,7 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "Your shake shake shake <Jorryn>, but he doesn't make a single move.", [])
+                                        (CTrue, "You shake shake shake <Jorryn>, but he doesn't make a single move.", [])
                                     ],
                                 stateChanges = []
                             }
