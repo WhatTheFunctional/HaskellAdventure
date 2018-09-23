@@ -58,7 +58,7 @@ allVerbs =
         TokenVerb "dance" ["dance"],
         TokenVerb "smile" ["smile", "grin"],
         TokenVerb "frown" ["frown"],
-        TokenVerb "climb" ["climb", "scale"],
+        TokenVerb "climb" ["climb", "scale", "get"],
         TokenVerb "unlock" ["unlock"],
         TokenVerb "lock" ["lock"],
         TokenVerb "open" ["open"],
@@ -123,12 +123,12 @@ allNouns =
         TokenNoun "elevator" ["elevator"],
         TokenNoun "ground floor" ["ground floor"],
         TokenNoun "wizard" ["wizard", "isvald"],
-        TokenNoun "bedroom" ["bedroom"],
+        TokenNoun "bedroom" ["bedroom", "bed room"],
         TokenNoun "ground floor" ["ground floor"],
         TokenNoun "music room" ["music room"],
         TokenNoun "guest room" ["guest room"],
         TokenNoun "button panel" ["panel", "button panel"],
-        TokenNoun "button" ["button"],
+        TokenNoun "button" ["button", "elevator button"],
         TokenNoun "chest of drawers" ["chest of drawers", "drawers", "dresser"],
         TokenNoun "first drawer" ["first drawer"],
         TokenNoun "second drawer" ["second drawer"],
@@ -1775,13 +1775,15 @@ wizardTowerBedroomScene =
                                  uSentence ["lie", "in", "bed"],
                                  uSentence ["sleep", "on", "bed"],
                                  uSentence ["lie", "on", "bed"],
-                                 uSentence ["enter", "bed"]],
+                                 uSentence ["enter", "bed"],
+                                 uSentence ["sit", "on", "bed"],
+                                 uSentence ["climb", "in", "bed"]],
                     conditionalActions =
                         [
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The <bed> is occupied by <Isvald>. The floor here seems like an uncomfortable place to sleep.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <bed> is occupied by <Isvald>. The floor here seems like an uncomfortable place to sit or sleep.", [])],
                                 stateChanges = []
                             }
                         ]
@@ -2389,7 +2391,8 @@ wizardTowerGuestRoomScene =
                                  uSentence ["lie", "in", "bed"],
                                  uSentence ["sleep", "on", "bed"],
                                  uSentence ["lie", "on", "bed"],
-                                 uSentence ["enter", "bed"]],
+                                 uSentence ["enter", "bed"],
+                                 uSentence ["climb", "in", "bed"]],
                     conditionalActions =
                         [
                             ConditionalAction
