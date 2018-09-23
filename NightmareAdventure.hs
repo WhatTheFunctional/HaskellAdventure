@@ -121,6 +121,7 @@ allNouns =
         TokenNoun "ruby amulet" ["ruby amulet"],
         TokenNoun "gateway" ["gateway", "gate", "cloaked gateway", "cloaked door"],
         TokenNoun "elevator" ["elevator"],
+        TokenNoun "elevator arms" ["elevator arms", "arms"],
         TokenNoun "ground floor" ["ground floor"],
         TokenNoun "wizard" ["wizard", "isvald"],
         TokenNoun "bedroom" ["bedroom", "bed room"],
@@ -1255,6 +1256,23 @@ wizardTowerGroundFloorScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["inspect", "elevator arms"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "The <elevator>'s glass arms have an elaborate pattern etched across them.", [])
+                                       ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["walk", "into", "elevator"],
                                  uSentence ["walk", "in", "elevator"],
                                  uSentence ["jump", "into", "elevator"],
@@ -1908,6 +1926,23 @@ wizardTowerBedroomScene =
                        ]
                },
                Interaction
+                {
+                    sentences = [uSentence ["inspect", "elevator arms"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "The <elevator>'s glass arms have an elaborate pattern etched across them.", [])
+                                       ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+               Interaction
                {
                    sentences = [uSentence ["open", "chest of drawers"]],
                    conditionalActions = 
@@ -2240,6 +2275,23 @@ wizardTowerMusicRoomScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["inspect", "elevator arms"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "The <elevator>'s glass arms have an elaborate pattern etched across them.", [])
+                                       ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                    sentences = [uSentence ["walk", "to", "elevator"],
                                 uSentence ["approach", "elevator"]],
                    conditionalActions = 
@@ -2430,6 +2482,23 @@ wizardTowerGuestRoomScene =
                                stateChanges = []
                            }
                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "elevator arms"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                       [
+                                           (CTrue, "The <elevator>'s glass arms have an elaborate pattern etched across them.", [])
+                                       ],
+                                stateChanges = []
+                            }
+                        ]
                 },
                 Interaction
                 {
