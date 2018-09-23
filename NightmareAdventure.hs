@@ -199,7 +199,8 @@ allPrepositions =
         TokenPreposition "to" ["to", "toward", "towards"],
         TokenPreposition "until" ["until"],
         TokenPreposition "with" ["with"],
-        TokenPreposition "together with" ["together with"]
+        TokenPreposition "together with" ["together with"],
+        TokenPreposition "in through" ["in through"]
     ]
 
 --Helper function to make unambiguous sentences
@@ -1071,6 +1072,7 @@ towerExteriorScene =
                                  uSentence ["walk", "into", "gateway"],
                                  uSentence ["walk", "into", "tower"],
                                  uSentence ["walk", "into", "tower", "through", "gateway"],
+                                 uSentence ["walk", "in through", "gateway"],
                                  uSentence ["walk", "into", "tower", "using", "gateway"],
                                  uSentence ["walk", "inside"],
                                  uSentence ["enter"],
@@ -1177,7 +1179,8 @@ wizardTowerGroundFloorScene =
                                  uSentence ["leave"],
                                  uSentence ["leave", "tower"],
                                  uSentence ["leave", "tower", "through", "gateway"],
-                                 uSentence ["leave", "tower", "using", "gateway"]],
+                                 uSentence ["leave", "tower", "using", "gateway"],
+                                 uSentence ["leave", "through", "gateway"]],
                     conditionalActions =
                         [
                             ConditionalAction
