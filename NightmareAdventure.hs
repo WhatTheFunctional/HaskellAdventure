@@ -2459,10 +2459,29 @@ wizardTowerGuestRoomScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "Anh anh aanh! Sleep now, and your town is lost forever! See if you can find and eliminate whatever is inducing this sleepy state", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "Anh anh aanh! Sleep now, and your town is lost forever! See if you can find and eliminate whatever is inducing this sleepy state.", [])],
                                 stateChanges = []
                             }
                         ]
+                },
+                Interaction
+                {
+                   sentences = [uSentence ["sit", "on", "bed"]],
+                   conditionalActions =
+                       [
+                           ConditionalAction
+                           {
+                               condition = FlagSet "heard wizard",
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <bed> is so cozy that the second you sit on it, you lie down. You fall into a serene slumber as soon as your head hits the pillow. You feel a gentle breeze, and are transported into Dreamland.", [])],
+                               stateChanges = []
+                           },
+                           ConditionalAction
+                           {
+                               condition = CTrue,
+                               conditionalDescription = ConditionalDescription [(CTrue, "Anh anh aanh! If you sit on this cozy <bed> now, it's not long before you fall asleep! Sleep now, and your town is lost forever! See if you can find and eliminate whatever is inducing this sleepy state.", [])],
+                               stateChanges = []
+                           }
+                       ]
                 },
                 Interaction
                 {
