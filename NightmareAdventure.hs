@@ -3833,6 +3833,19 @@ cupcakeScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["inspect", "star field"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription = ConditionalDescription [(CTrue, "You see a <star field> above you.", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["walk", "to", "star field"],
                                  uSentence ["approach", "star field"],
                                  uSentence ["fly", "to", "star field"],
