@@ -2748,6 +2748,45 @@ starFieldScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["inspect", "clock constellation"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription = ConditionalDescription [(CTrue, "You see a constellation shaped like a <clock> to your left.", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "hypnotism constellation"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription = ConditionalDescription [(CTrue, "You see a constellation shaped like a <hypnotism> to your right.", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "cupcake constellation"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription = ConditionalDescription [(CTrue, "You see a constellation shaped like a <cupcake> above you.", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["walk", "into", "clock constellation"],
                                  uSentence ["walk", "to", "clock constellation"],
                                  uSentence ["approach", "clock constellation"],
