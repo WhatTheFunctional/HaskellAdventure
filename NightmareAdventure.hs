@@ -2635,7 +2635,7 @@ wizardTowerGuestRoomScene =
 
 starFieldDescriptionString :: String
 starFieldDescriptionString = "You open your eyes and find yourself floating in a sea of <stars>. To your left you see a constellation which looks like a <clock>." ++
-                             "To your right you see a constellation which you know is called <hypnotism>. Above you is a constellation called <cupcake>."
+                             "To your right you see a constellation which you know is called <hypnotism>. Above you is a constellation called <cupcake>. It seems like you could <float> right over to them."
 
 starFieldScene :: Scene
 starFieldScene =
