@@ -3199,7 +3199,8 @@ hypnotismScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["give", "pendulum", "to", "rabbit"]],
+                    sentences = [uSentence ["give", "pendulum", "to", "rabbit"],
+                                 uSentence ["give", "rabbit", "pendulum"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -3319,7 +3320,8 @@ hypnotismScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["give", "carrot cake", "to", "rabbit"]],
+                    sentences = [uSentence ["give", "carrot cake", "to", "rabbit"],
+                                 uSentence ["give", "rabbit", "carrot cake"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -3347,7 +3349,8 @@ hypnotismScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["give", "chocolate cake", "to", "rabbit"]],
+                    sentences = [uSentence ["give", "chocolate cake", "to", "rabbit"],
+                                 uSentence ["give", "rabbit", "chocolate cake"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -3375,7 +3378,8 @@ hypnotismScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["give", "lemon cake", "to", "rabbit"]],
+                    sentences = [uSentence ["give", "lemon cake", "to", "rabbit"],
+                                 uSentence ["give", "rabbit", "lemon cake"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -3403,7 +3407,8 @@ hypnotismScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["give", "cupcake", "to", "rabbit"]],
+                    sentences = [uSentence ["give", "cupcake", "to", "rabbit"],
+                                 uSentence ["give", "rabbit", "cupcake"]],
                     conditionalActions =
                     [
                         ConditionalAction
@@ -3622,6 +3627,7 @@ cupcakeScene =
                 Interaction
                 {
                     sentences = [uSentence ["give", "star", "to", "elderly woman"],
+                                 uSentence ["give", "elderly woman", "star"],
                                  uSentence ["pay", "elderly woman", "with", "star"],
                                  uSentence ["pay", "elderly woman", "for", "cake"],
                                  uSentence ["pay", "elderly woman"],

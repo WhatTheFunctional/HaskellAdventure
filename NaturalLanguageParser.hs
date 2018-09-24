@@ -59,9 +59,14 @@ unambiguousSentence verbsList nounsList prepositionsList [verb, noun]
     = makeUnambiguousSentence (concat [(findVerb verbsList verb),
                                        (findNoun nounsList noun)])
 unambiguousSentence verbsList nounsList prepositionsList [verb, preposition, noun]
-    = makeUnambiguousSentence (concat [(findVerb verbsList verb),
-                                       (findPreposition prepositionsList preposition),
-                                       (findNoun nounsList noun)])
+    | (length (findPreposition prepositionsList preposition)) /= 0
+        = makeUnambiguousSentence (concat [(findVerb verbsList verb),
+                                           (findPreposition prepositionsList preposition),
+                                           (findNoun nounsList noun)])
+    | otherwise
+        = makeUnambiguousSentence (concat [(findVerb verbsList verb),
+                                           (findNoun nounsList preposition),
+                                           (findNoun nounsList noun)])
 unambiguousSentence verbsList nounsList prepositionsList [verb, noun0, preposition, noun1]
     = makeUnambiguousSentence (concat [(findVerb verbsList verb),
                                        (findNoun nounsList noun0),
@@ -133,9 +138,12 @@ parseSentence [(TokenMatch _ t0), (TokenMatch _ t1), (TokenMatch _ t2), (TokenMa
                     (prepositionsInTokenList t2),
                     (nounsInTokenList t3)]
 parseSentence [(TokenMatch _ t0), (TokenMatch _ t1), (TokenMatch _ t2)]
-    = makeSentence [(verbsInTokenList t0),
-                    (prepositionsInTokenList t1),
-                    (nounsInTokenList t2)]
+    = (makeSentence [(verbsInTokenList t0),
+                     (prepositionsInTokenList t1),
+                     (nounsInTokenList t2)]) ++
+      (makeSentence [(verbsInTokenList t0),
+                     (nounsInTokenList t1),
+                     (nounsInTokenList t2)])
 parseSentence [(TokenMatch _ t0), (TokenMatch _ t1)]
     = makeSentence [(verbsInTokenList t0),
                     (nounsInTokenList t1)]
