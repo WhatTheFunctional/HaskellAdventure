@@ -35,6 +35,7 @@ allVerbs =
         TokenVerb "get" ["get", "take", "pick up", "pluck", "snatch", "acquire", "grab", "pick"],
         TokenVerb "put" ["put", "place", "put down"],
         TokenVerb "throw" ["throw", "pitch"],
+        TokenVerb "say hi" ["say hi", "say hello"],
         TokenVerb "give" ["give"],
         TokenVerb "select" ["select", "pick"],
         TokenVerb "read" ["read"],
@@ -3151,6 +3152,20 @@ hypnotismScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["say hi", "to", "rabbit"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription [(CTrue, "The <rabbit> says, \"Hi there! Welcome to my magic show!.\"", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["talk", "to", "rabbit"],
                                  uSentence ["talk", "with", "rabbit"]],
                     conditionalActions =
@@ -3654,6 +3669,19 @@ cupcakeScene =
                             {
                                 condition = CTrue,
                                 conditionalDescription = ConditionalDescription [(CTrue, "You see an <elderly woman> sitting behind a <table> with three <cakes>. Her hair is tied in a bun and she's wearing a blue apron and a hair net.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["say hi", "to", "elderly woman"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <elderly woman> says \"Hello dear. Are you here to buy a cake? I baked them this morning.\"", [])],
                                 stateChanges = []
                             }
                         ]
