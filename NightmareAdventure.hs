@@ -3208,6 +3208,20 @@ hypnotismScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["inspect", "couch"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription [(CTrue, "You see a comfortable red <couch> on stage next to the white <rabbit>.", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["sit", "upon", "couch"],
                                  uSentence ["lie down", "upon", "couch"]],
                     conditionalActions =
