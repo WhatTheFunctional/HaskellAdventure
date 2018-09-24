@@ -161,7 +161,7 @@ allNouns =
         TokenNoun "green card" ["green card"],
         TokenNoun "blue card" ["blue card"],
         TokenNoun "table" ["table"],
-        TokenNoun "cupcake" ["cupcake", "flower", "cake", "cup cake", "cupcake flower", "cup cake flower"],
+        TokenNoun "cupcake" ["cupcake", "flower", "cake", "cup cake", "cupcake flower", "cup cake flower", "treat"],
         TokenNoun "audience" ["audience", "ghostly audience"],
         TokenNoun "elderly woman" ["elderly woman", "old woman", "elderly lady", "old lady", "woman"],
         TokenNoun "prison" ["prison", "jail", "cell"]
