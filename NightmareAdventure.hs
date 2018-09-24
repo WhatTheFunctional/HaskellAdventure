@@ -82,7 +82,7 @@ allVerbs =
         TokenVerb "ask" ["ask", "question", "query", "inquire", "quiz", "interrogate"],
         TokenVerb "talk" ["talk", "chat", "converse", "communicate", "speak", "parley"],
         TokenVerb "call" ["call", "summon"],
-        TokenVerb "buy" ["buy", "purchase"],
+        TokenVerb "buy" ["buy", "purchase", "ask to buy", "request"],
         TokenVerb "pay" ["pay"],
         TokenVerb "fall asleep" ["fall asleep"],
         TokenVerb "sleep" ["sleep", "slumber"],
