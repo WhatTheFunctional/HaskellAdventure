@@ -148,7 +148,7 @@ allNouns =
         TokenNoun "cupcake constellation" ["cupcake", "cup cake", "cupcake constellation", "cup cake constellation"],
         TokenNoun "rabbit" ["rabbit", "white rabbit"],
         TokenNoun "couch" ["couch", "red couch"],
-        TokenNoun "star field" ["star field", "starfield"],
+        TokenNoun "star field" ["star field", "starfield", "stars", "sea of stars"],
         TokenNoun "pendulum" ["pendulum"],
         TokenNoun "cakes" ["cakes"],
         TokenNoun "carrot cake" ["carrot cake", "cake"],
