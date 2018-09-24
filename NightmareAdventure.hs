@@ -163,7 +163,7 @@ allNouns =
         TokenNoun "table" ["table"],
         TokenNoun "cupcake" ["cupcake", "flower", "cake", "cup cake"],
         TokenNoun "audience" ["audience", "ghostly audience"],
-        TokenNoun "elderly woman" ["elderly woman", "old woman", "elderly lady", "old lady"],
+        TokenNoun "elderly woman" ["elderly woman", "old woman", "elderly lady", "old lady", "woman"],
         TokenNoun "prison" ["prison", "jail", "cell"]
     ]
 
