@@ -229,7 +229,7 @@ startFlags :: Flags
 startFlags = Flags []
 
 introString :: String
-introString = "It's been a long day working at the moisture farms outside of your <village square>. You return home just as the sun is setting. You open the door to your mud-brick <cottage> to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of the great desert can be dangerous.\nBut as you lean down to look at your <brother> you realize that he is not dead, but asleep.\nYou rush to check your <parents>, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them."
+introString = "It's been a long day working at the moisture farms outside of your <village square>. You return home just as the sun is setting. You open the door to your mud-brick <cottage> to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of the great desert can be dangerous.\nBut as you lean down to look at your <brother> you realize that he is not dead, but asleep.\nYou rush to check your <parents>, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them.\n\n[Pssssst, objects enclosed in <> like front door, parents etc are available for interaction. For instance, try this command next: look at parents ]\n"
 
 cottageDescriptionString :: String
 cottageDescriptionString = "You're standing in your home. <Jorryn> is lying by the <front door> which is to the <east>. Your <parents> are on the floor by the stove."
