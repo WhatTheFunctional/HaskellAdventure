@@ -40,7 +40,7 @@ allVerbs =
         TokenVerb "read" ["read"],
         TokenVerb "look" ["look", "view", "scan", "see"],
         TokenVerb "inspect" ["see", "view", "scan", "spy", "observe", "inspect", "check out", "look at", "look", "examine"],
-        TokenVerb "look around" ["look around"],
+        TokenVerb "look around" ["look around", "search"],
         TokenVerb "use" ["use"],
         TokenVerb "jump" ["jump", "hop"],
         TokenVerb "sit" ["sit"],
