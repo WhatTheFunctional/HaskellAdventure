@@ -3864,6 +3864,7 @@ cupcakeScene =
                 {
                     sentences = [uSentence ["buy", "left cake"],
                                  uSentence ["get", "left cake"],
+                                 uSentence ["give", "elderly woman", "star", "for", "left cake"],
                                  uSentence ["ask", "elderly woman", "for", "left cake"]],
                     conditionalActions =
                         [
@@ -3887,6 +3888,7 @@ cupcakeScene =
                 {
                     sentences = [uSentence ["buy", "middle cake"],
                                  uSentence ["get", "middle cake"],
+                                 uSentence ["give", "elderly woman", "star", "for", "middle cake"],
                                  uSentence ["ask", "elderly woman", "for", "middle cake"]],
                     conditionalActions =
                         [
@@ -3910,6 +3912,7 @@ cupcakeScene =
                 {
                     sentences = [uSentence ["buy", "right cake"],
                                  uSentence ["get", "right cake"],
+                                 uSentence ["give", "elderly woman", "star", "for", "right cake"],
                                  uSentence ["ask", "elderly woman", "for", "right cake"]],
                     conditionalActions =
                         [
