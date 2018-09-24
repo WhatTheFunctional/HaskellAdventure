@@ -140,7 +140,7 @@ stateChange Nothing _  stateChanges (Just (sceneKey, inventory, flags))
                     updateFlags flags stateChanges)) --If there is no scene transition, return to the current scene with updated inventory and flags
 stateChange (Just (SceneChange nextScene)) endScenes stateChanges (Just (sceneKey, inventory, flags)) 
     = if nextScene `elem` endScenes
-      then return Nothing --This is an end state for the game
+      then getChar >> return Nothing --This is an end state for the game
       else return (Just (nextScene,
                          updateInventory inventory stateChanges,
                          updateFlags flags stateChanges)) --Transition to the next scene with updated inventory and flags

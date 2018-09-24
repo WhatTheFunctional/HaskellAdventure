@@ -472,7 +472,7 @@ winScene :: Scene
 winScene =
     Scene
     {
-        sceneDescription = ConditionalDescription [(CTrue, "Everything swirls around, and you find yourself back in your <cottage> with your <parents>, and <Jorryn>. <Jorryn> is stretching out of his sleep. \"I feel so refreshed! Get ready, we have to go tend to the crops!\", he says.", [SceneChange "end"])],
+        sceneDescription = ConditionalDescription [(CTrue, "", [SceneChange "end"])],
         interactions = []
     }
 
@@ -480,7 +480,7 @@ loseScene :: Scene
 loseScene =
     Scene
     {
-        sceneDescription = ConditionalDescription [(CTrue, "Game over.", [SceneChange "end"])],
+        sceneDescription = ConditionalDescription [(CTrue, "", [SceneChange "end"])],
         interactions = []
     }
 
@@ -3091,7 +3091,7 @@ clockScene =
                            ConditionalAction
                            {
                                condition = InInventory "pendulum",
-                               conditionalDescription = ConditionalDescription[(CTrue, "The <pendulum> easily fits in the <clock>, and resumes its to-and-fro motion!", [])],
+                               conditionalDescription = ConditionalDescription[(CTrue, "The <pendulum> easily fits in the <clock>, and resumes its to-and-fro motion! Everything swirls around, and you find yourself back in your <cottage> with your <parents>, and <Jorryn>. <Jorryn> is stretching out of his sleep. \"I feel so refreshed! Get ready, we have to go tend to the crops!\", he says.", [])],
                                stateChanges = [SceneChange "win"]
                            }
                        ]
@@ -3256,7 +3256,7 @@ hypnotismScene =
                             {
                                 condition = CNot (InInventory "pendulum"),
                                 conditionalDescription =
-                                    ConditionalDescription [(CTrue, "You lie down on the <couch>. The <rabbit> walks up to you and swings its <pendulum> in front of you. You feel your eyes growing heavy. You fall into a deep slumber, never to awake again.", [SceneChange "lose"])],
+                                    ConditionalDescription [(CTrue, "You lie down on the <couch>. The <rabbit> walks up to you and swings its <pendulum> in front of you. You feel your eyes growing heavy. You fall into a deep slumber, never to awake again. Game over.", [SceneChange "lose"])],
                                 stateChanges = []
                             },
                             ConditionalAction
