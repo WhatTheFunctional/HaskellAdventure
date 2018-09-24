@@ -62,6 +62,8 @@ allVerbs =
         TokenVerb "smile" ["smile", "grin"],
         TokenVerb "frown" ["frown"],
         TokenVerb "climb" ["climb", "scale", "get"],
+        TokenVerb "turn" ["turn"],
+        TokenVerb "turn off" ["turn off", "switch off", "put off"],
         TokenVerb "unlock" ["unlock"],
         TokenVerb "lock" ["lock"],
         TokenVerb "open" ["open"],
@@ -78,7 +80,7 @@ allVerbs =
         TokenVerb "press" ["press", "hit", "push", "depress", "poke"],
         TokenVerb "break" ["break", "crack", "throw", "deface", "harm"],
         TokenVerb "stop" ["stop", "pause"],
-        TokenVerb "lift" ["lift", "remove", "pick"],
+        TokenVerb "lift" ["lift", "remove", "pick", "push"],
         TokenVerb "touch" ["touch", "stroke", "grab", "feel", "handle", "pat", "brush", "tap", "poke"],
         TokenVerb "ask" ["ask", "question", "query", "inquire", "quiz", "interrogate"],
         TokenVerb "talk" ["talk", "chat", "converse", "communicate", "speak", "parley"],
@@ -140,6 +142,7 @@ allNouns =
         TokenNoun "bed" ["bed"],
         TokenNoun "sleep" ["sleep", "slumber"],
         TokenNoun "gramophone" ["gramophone", "phonograph"],
+        TokenNoun "off" ["off", "down"],
         TokenNoun "needle" ["needle", "stylus"],
         TokenNoun "star" ["star"], -- Star field nouns
         TokenNoun "stars" ["sea of stars", "stars", "star field", "starfield"],
@@ -2247,7 +2250,10 @@ wizardTowerMusicRoomScene =
                 Interaction
                 {
                     sentences = [uSentence ["lift", "needle"],
-                                 uSentence ["touch", "needle"]],
+                                 uSentence ["touch", "needle"],
+                                 uSentence ["lift", "needle", "off"],
+                                 uSentence ["turn", "gramophone", "off"],
+                                 uSentence ["turn off", "gramophone"]],
                     conditionalActions = 
                         [
                             ConditionalAction
