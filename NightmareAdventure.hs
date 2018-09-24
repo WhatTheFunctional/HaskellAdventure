@@ -1424,6 +1424,7 @@ elevatorScene =
                 {
                     sentences = [uSentence ["go", "to", "ground floor"],
                                  uSentence ["press", "ground floor"],
+                                 uSentence ["press", "ground floor", "button"],
                                  uSentence ["select", "ground floor"],
                                  uSentence ["ride", "to", "ground floor"]],
                     conditionalActions = 
@@ -1444,6 +1445,7 @@ elevatorScene =
                {
                    sentences = [uSentence ["go", "to", "bedroom"],
                                 uSentence ["press", "bedroom"],
+                                uSentence ["press", "bedroom", "button"],
                                 uSentence ["select", "bedroom"],
                                 uSentence ["ride", "to", "bedroom"]],
                    conditionalActions = 
@@ -1464,6 +1466,7 @@ elevatorScene =
                {
                    sentences = [uSentence ["go", "to", "music room"],
                                 uSentence ["press", "music room"],
+                                uSentence ["press", "music room", "button"],
                                 uSentence ["select", "music room"],
                                 uSentence ["ride", "to", "music room"]],
                    conditionalActions = 
@@ -1484,6 +1487,7 @@ elevatorScene =
                {
                    sentences = [uSentence ["go", "to", "guest room"],
                                 uSentence ["press", "guest room"],
+                                uSentence ["press", "guest room", "button"],
                                 uSentence ["select", "guest room"],
                                 uSentence ["ride", "to", "guest room"]],
                    conditionalActions = 
