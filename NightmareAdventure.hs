@@ -2496,7 +2496,7 @@ wizardTowerGuestRoomScene =
                            {
                                condition = FlagSet "heard wizard",
                                conditionalDescription = ConditionalDescription [(CTrue, "The <bed> is so cozy that the second you sit on it, you lie down. You fall into a serene slumber as soon as your head hits the pillow. You feel a gentle breeze, and are transported into Dreamland.", [])],
-                               stateChanges = []
+                               stateChanges = [SceneChange "starfield"]
                            },
                            ConditionalAction
                            {
@@ -2993,6 +2993,7 @@ clockScene =
                 Interaction
                 {
                     sentences = [uSentence ["talk", "to", "parents"],
+                                 uSentence ["shout", "to", "parents"],
                                  uSentence ["talk", "with", "parents"],
                                  uSentence ["walk", "to", "parents"],
                                  uSentence ["approach", "parents"]],
@@ -3001,7 +3002,7 @@ clockScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription[(CTrue, "Get us out of here! I hope our crops are not wilting away.", [])],
+                                conditionalDescription = ConditionalDescription[(CTrue, "Your <parents> say, \"Get us out of here! I hope our crops are not wilting away.\"", [])],
                                 stateChanges = []
                             }
                         ]
@@ -3009,6 +3010,7 @@ clockScene =
                 Interaction
                 {
                     sentences = [uSentence ["talk", "to", "Jorryn"],
+                                 uSentence ["shout", "to", "Jorryn"],
                                  uSentence ["talk", "with", "Jorryn"],
                                  uSentence ["walk", "to", "Jorryn"],
                                  uSentence ["approach", "Jorryn"]],
@@ -3017,7 +3019,7 @@ clockScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription[(CTrue, "Please get me out of this nightmare land!", [])],
+                                conditionalDescription = ConditionalDescription[(CTrue, "<Jorryn> says, \"Please get me out of this nightmare land!\"", [])],
                                 stateChanges = []
                             }
                         ]
@@ -3025,6 +3027,7 @@ clockScene =
                 Interaction
                 {
                     sentences = [uSentence ["talk", "to", "Evanna"],
+                                 uSentence ["shout", "to", "Evanna"],
                                  uSentence ["talk", "with", "Evanna"],
                                  uSentence ["walk", "to", "Evanna"],
                                  uSentence ["approach", "Evanna"]],
@@ -3033,7 +3036,7 @@ clockScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription[(CTrue, "Oh my gosh, this gravel is so rough, why am I sleeping on the road?", [])],
+                                conditionalDescription = ConditionalDescription[(CTrue, "<Evanna> says, \"Oh my gosh, this gravel is so rough, why am I sleeping on the road?\"", [])],
                                 stateChanges = []
                             }
                         ]
@@ -3041,6 +3044,7 @@ clockScene =
                 Interaction
                 {
                     sentences = [uSentence ["talk", "to", "wizard"],
+                                 uSentence ["shout", "to", "wizard"],
                                  uSentence ["talk", "with", "wizard"],
                                  uSentence ["walk", "to", "wizard"],
                                  uSentence ["approach", "wizard"]],
@@ -3049,7 +3053,7 @@ clockScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription[(CTrue, "Fix <clock> with <pendulum>! Everyone wakes up, and you win.", [])],
+                                conditionalDescription = ConditionalDescription[(CTrue, "The <wizard> says, \"Fix <clock> with <pendulum>! Everyone wakes up, and you win!\"", [])],
                                 stateChanges = [] 
                             }
                         ]
