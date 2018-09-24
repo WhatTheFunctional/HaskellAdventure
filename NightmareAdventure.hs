@@ -3268,6 +3268,28 @@ hypnotismScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["ask", "rabbit", "for", "pendulum"],
+                                 uSentence ["buy", "pendulum"]],
+                    conditionalActions =
+                    [
+                        ConditionalAction
+                        {
+                            condition = CNot (InInventory "pendulum"),
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "The <rabbit> says \"I want a treat in exchange!\"", [])],
+                            stateChanges = []
+                        },
+                        ConditionalAction
+                        {
+                            condition = CTrue,
+                            conditionalDescription =
+                                ConditionalDescription [(CTrue, "You already have the <rabbit>'s <pendulum>.", [])],
+                            stateChanges = []
+                        }
+                    ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["give", "pendulum", "to", "rabbit"],
                                  uSentence ["give", "rabbit", "pendulum"]],
                     conditionalActions =
