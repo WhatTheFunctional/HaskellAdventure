@@ -37,6 +37,7 @@ allVerbs =
         TokenVerb "throw" ["throw", "pitch"],
         TokenVerb "say hi" ["say hi", "say hello"],
         TokenVerb "greet" ["greet"],
+        TokenVerb "thank" ["thank"],
         TokenVerb "give" ["give"],
         TokenVerb "select" ["select", "pick"],
         TokenVerb "read" ["read"],
@@ -3158,6 +3159,24 @@ hypnotismScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["thank", "rabbit"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription =
+                                    ConditionalDescription
+                                    [
+                                        (CNot (InInventory "pendulum"), "The <white rabbit> looks at you curiously.", []),
+                                        (InInventory "pendulum", "The <white rabbit> says \"No problem.\".", [])
+                                    ],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["say hi", "to", "rabbit"],
                                  uSentence ["greet", "rabbit"]],
                     conditionalActions =
@@ -3736,6 +3755,19 @@ cupcakeScene =
                 },
                 Interaction
                 {
+                    sentences = [uSentence ["thank", "elderly woman"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <elderly woman> says \"You are most welcome\".", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
                     sentences = [uSentence ["say hi", "to", "elderly woman"],
                                  uSentence ["greet", "elderly woman"]],
                     conditionalActions =
@@ -3809,12 +3841,9 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["get", "left cake"],
-                                 uSentence ["eat", "left cake"],
-                                 uSentence ["get", "middle cake"],
+                    sentences = [uSentence ["eat", "left cake"],
                                  uSentence ["eat", "middle cake"],
-                                 uSentence ["eat", "right cake"],
-                                 uSentence ["get", "right cake"]],
+                                 uSentence ["eat", "right cake"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -3827,7 +3856,9 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["buy", "left cake"]],
+                    sentences = [uSentence ["buy", "left cake"],
+                                 uSentence ["get", "left cake"],
+                                 uSentence ["ask", "elderly woman", "for", "left cake"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -3848,7 +3879,9 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["buy", "middle cake"]],
+                    sentences = [uSentence ["buy", "middle cake"],
+                                 uSentence ["get", "middle cake"],
+                                 uSentence ["ask", "elderly woman", "for", "middle cake"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -3869,7 +3902,9 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["buy", "right cake"]],
+                    sentences = [uSentence ["buy", "right cake"],
+                                 uSentence ["get", "right cake"],
+                                 uSentence ["ask", "elderly woman", "for", "right cake"]],
                     conditionalActions =
                         [
                             ConditionalAction
