@@ -36,6 +36,7 @@ allVerbs =
         TokenVerb "put" ["put", "place", "put down"],
         TokenVerb "throw" ["throw", "pitch"],
         TokenVerb "say hi" ["say hi", "say hello"],
+        TokenVerb "greet" ["greet"],
         TokenVerb "give" ["give"],
         TokenVerb "select" ["select", "pick"],
         TokenVerb "read" ["read"],
@@ -3152,7 +3153,8 @@ hypnotismScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["say hi", "to", "rabbit"]],
+                    sentences = [uSentence ["say hi", "to", "rabbit"],
+                                 uSentence ["greet", "rabbit"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -3675,7 +3677,8 @@ cupcakeScene =
                 },
                 Interaction
                 {
-                    sentences = [uSentence ["say hi", "to", "elderly woman"]],
+                    sentences = [uSentence ["say hi", "to", "elderly woman"],
+                                 uSentence ["greet", "elderly woman"]],
                     conditionalActions =
                         [
                             ConditionalAction
