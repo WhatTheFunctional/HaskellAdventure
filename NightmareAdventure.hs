@@ -151,6 +151,7 @@ allNouns =
         TokenNoun "star field" ["star field", "starfield", "stars", "sea of stars"],
         TokenNoun "pendulum" ["pendulum"],
         TokenNoun "cakes" ["cakes"],
+        TokenNoun "price" ["price"],
         TokenNoun "carrot cake" ["carrot cake", "cake"],
         TokenNoun "chocolate cake" ["chocolate cake", "cake"],
         TokenNoun "lemon cake" ["lemon cake", "cake"],
@@ -3761,6 +3762,22 @@ cupcakeScene =
                             {
                                 condition = CTrue,
                                 conditionalDescription = ConditionalDescription [(CTrue, "The <elderly woman> gestures at the <table> and says \"I have three cakes for sale, I baked them all myself this morning.\"", [])],
+                                stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["talk", "to", "elderly woman", "about", "price"],
+                                 uSentence ["talk", "about", "price"],
+                                 uSentence ["ask", "elderly woman", "about", "price"],
+                                 uSentence ["ask", "about", "price"]],
+                    conditionalActions =
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "The <elderly woman> says \"Each cake costs only one star!.\"", [])],
                                 stateChanges = []
                             }
                         ]
