@@ -3287,6 +3287,8 @@ hypnotismScene =
                 Interaction
                 {
                     sentences = [uSentence ["ask", "rabbit", "about", "pendulum"],
+                                 uSentence ["ask", "about", "pendulum"],
+                                 uSentence ["talk", "about", "pendulum"],
                                  uSentence ["talk", "to", "rabbit", "about", "pendulum"],
                                  uSentence ["talk", "with", "rabbit", "about", "pendulum"]],
                     conditionalActions =
@@ -3310,6 +3312,8 @@ hypnotismScene =
                 Interaction
                 {
                     sentences = [uSentence ["ask", "rabbit", "about", "clock"],
+                                 uSentence ["ask", "about", "clock"],
+                                 uSentence ["talk", "about", "clock"],
                                  uSentence ["talk", "to", "rabbit", "about", "clock"],
                                  uSentence ["talk", "with", "rabbit", "about", "clock"]],
                     conditionalActions =
@@ -3326,6 +3330,8 @@ hypnotismScene =
                 Interaction
                 {
                     sentences = [uSentence ["ask", "rabbit", "about", "carrot cake"],
+                                 uSentence ["ask", "about", "carrot cake"],
+                                 uSentence ["talk", "about", "carrot cake"],
                                  uSentence ["talk", "to", "rabbit", "about", "carrot cake"],
                                  uSentence ["talk", "with", "rabbit", "about", "carrot cake"]],
                     conditionalActions =
@@ -3344,6 +3350,12 @@ hypnotismScene =
                     sentences = [uSentence ["ask", "rabbit", "about", "chocolate cake"],
                                  uSentence ["ask", "rabbit", "about", "lemon cake"],
                                  uSentence ["ask", "rabbit", "about", "cupcake"],
+                                 uSentence ["ask", "about", "chocolate cake"],
+                                 uSentence ["ask", "about", "lemon cake"],
+                                 uSentence ["ask", "about", "cupcake"],
+                                 uSentence ["talk", "about", "chocolate cake"],
+                                 uSentence ["talk", "about", "lemon cake"],
+                                 uSentence ["talk", "about", "cupcake"],
                                  uSentence ["talk", "to", "rabbit", "about", "chocolate cake"],
                                  uSentence ["talk", "to", "rabbit", "about", "lemon cake"],
                                  uSentence ["talk", "to", "rabbit", "about", "cupcake"],
@@ -3366,6 +3378,12 @@ hypnotismScene =
                     sentences = [uSentence ["ask", "rabbit", "about", "hypnotism constellation"],
                                  uSentence ["ask", "rabbit", "about", "hypnosis"],
                                  uSentence ["ask", "rabbit", "about", "couch"],
+                                 uSentence ["ask", "about", "hypnotism constellation"],
+                                 uSentence ["ask", "about", "hypnosis"],
+                                 uSentence ["ask", "about", "couch"],
+                                 uSentence ["talk", "about", "hypnotism constellation"],
+                                 uSentence ["talk", "about", "hypnosis"],
+                                 uSentence ["talk", "about", "couch"],
                                  uSentence ["talk", "to", "rabbit", "about", "hypnotism constellation"],
                                  uSentence ["talk", "to", "rabbit", "about", "hypnosis"],
                                  uSentence ["talk", "to", "rabbit", "about", "couch"],
@@ -3692,7 +3710,11 @@ cupcakeScene =
                 Interaction
                 {
                     sentences = [uSentence ["talk", "with", "elderly woman"],
-                                 uSentence ["talk", "to", "elderly woman"]],
+                                 uSentence ["talk", "to", "elderly woman"],
+                                 uSentence ["talk", "to", "elderly woman", "about", "cakes"],
+                                 uSentence ["talk", "about", "cakes"],
+                                 uSentence ["ask", "elderly woman", "about", "cakes"],
+                                 uSentence ["ask", "about", "cakes"]],
                     conditionalActions =
                         [
                             ConditionalAction
@@ -3710,6 +3732,7 @@ cupcakeScene =
                                  uSentence ["pay", "elderly woman", "with", "star"],
                                  uSentence ["pay", "elderly woman", "for", "cake"],
                                  uSentence ["pay", "elderly woman"],
+                                 uSentence ["buy", "cake"],
                                  uSentence ["pay", "for", "cake"]],
                     conditionalActions =
                         [
