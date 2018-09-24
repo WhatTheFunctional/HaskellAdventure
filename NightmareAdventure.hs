@@ -127,6 +127,7 @@ allNouns =
         TokenNoun "gateway" ["gateway", "gate", "cloaked gateway", "cloaked door"],
         TokenNoun "elevator" ["elevator"],
         TokenNoun "elevator arms" ["elevator arms", "arms"],
+        TokenNoun "view" ["view", "scene"],
         TokenNoun "ground floor" ["ground floor"],
         TokenNoun "wizard" ["wizard", "isvald"],
         TokenNoun "bedroom" ["bedroom", "bed room"],
@@ -1356,6 +1357,20 @@ elevatorScene =
                                 condition = CTrue,
                                 conditionalDescription = ConditionalDescription [(CTrue, "This seems like an uncomfortable place to sleep.", [])],
                                 stateChanges = []
+                            }
+                        ]
+                },
+                Interaction
+                {
+                    sentences = [uSentence ["inspect", "view"],
+                                 uSentence ["look around", "at", "view"]],
+                    conditionalActions = 
+                        [
+                            ConditionalAction
+                            {
+                                condition = CTrue,
+                                conditionalDescription = ConditionalDescription [(CTrue, "As you float across the tower, you see blue crystal flights of stairs separating from, and meeting each other to form pathways to seemingly nowhere. Perhaps, the rooms have cloaked entrances too. When you look down at the base, you realize that you're quite far from solid ground. You instantly look away.", [])],
+                                stateChanges = [] 
                             }
                         ]
                 },
