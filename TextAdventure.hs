@@ -57,8 +57,8 @@ printHelp
                      "Grammar - Print available grammar.\n",
                      "Verbs - Print all available verbs.\n",
                      "Prepositions - Print all available prepositions.\n",
-                     "Nouns - Print all available nouns. Warning, this contains spoilers!\n",
-                     "Flags - Print all current flags. Warning, this contains spoilers!\n",
+                     -- "Nouns - Print all available nouns. Warning, this contains spoilers!\n",
+                     -- "Flags - Print all current flags. Warning, this contains spoilers!\n",
                      "Quit - Exit the  game.\n",
                      "--------------------"] >>
       hFlush stdout
@@ -135,10 +135,10 @@ parseInput inventory flags line
     | map Data.Char.toLower line == "help" = printHelp >> return (Just [])
     | map Data.Char.toLower line == "grammar" = putStrLn "All grammar:" >> printGrammar >> return (Just [])
     | map Data.Char.toLower line == "verbs" = putStrLn "All verbs:" >> printVerbs allVerbs >> return (Just [])
-    | map Data.Char.toLower line == "nouns" = putStrLn "All nouns:" >> printNouns allNouns >> return (Just [])
+    -- | map Data.Char.toLower line == "nouns" = putStrLn "All nouns:" >> printNouns allNouns >> return (Just [])
     | map Data.Char.toLower line == "prepositions" = putStrLn "All prepositions:" >> printPrepositions allPrepositions >> return (Just [])
     | map Data.Char.toLower line == "inventory" = putStrLn "All items in inventory:" >> printInventory inventory >> return (Just [])
-    | map Data.Char.toLower line == "flags" = putStrLn "All currently set flags:" >> printFlags flags >> return (Just [])
+    -- | map Data.Char.toLower line == "flags" = putStrLn "All currently set flags:" >> printFlags flags >> return (Just [])
     | map Data.Char.toLower line == "quit" = putStrLn "Thanks for playing!" >> hFlush stdout >> return Nothing
     | sentences == [] = putStr "I'm sorry, I don't understand what you said." >> hFlush stdout >> return (Just sentences)
     | otherwise = --printWordTokens sentenceTokenMatches >>
