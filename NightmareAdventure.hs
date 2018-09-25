@@ -809,7 +809,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You already got the <ruby amulet>.", [])
+                                        (CTrue, "You already have the <ruby amulet>.", [])
                                     ],
                                 stateChanges = []
                             },
