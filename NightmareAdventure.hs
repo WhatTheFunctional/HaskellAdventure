@@ -1455,7 +1455,7 @@ elevatorScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "The <elevator> whisks you off, and brings you to the ground floor with a gentle bounce. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
+                                           (CTrue, "The <elevator> whisks you away, and brings you to the ground floor with a gentle bounce. Exit <elevator> to hop off here, or ride to a different room by picking from the magical <button panel>.", [])
                                        ],
                                 stateChanges = [SetFlag "elevator ground floor", RemoveFlag "elevator bedroom", RemoveFlag "elevator music room", RemoveFlag "elevator guest room"]
                             }
@@ -1923,7 +1923,7 @@ wizardTowerBedroomScene =
                            ConditionalAction
                            {
                                condition = CTrue,
-                               conditionalDescription = ConditionalDescription [(CTrue, "The magnificent four poster <bed> looks quite comfortable. Alas, no one save the <wizard> can be in it. The <bed>'s canopy looks lovely even drawn aside.", [])],
+                               conditionalDescription = ConditionalDescription [(CTrue, "The magnificent four poster <bed> looks quite comfortable. Alas, no one save the <wizard> can occupy it. The <bed>'s canopy looks lovely even drawn aside.", [])],
                                stateChanges = []
                            }
                        ]
@@ -2046,7 +2046,7 @@ wizardTowerBedroomScene =
                            ConditionalAction
                            {
                                condition = FlagSet "at wizard",
-                               conditionalDescription = ConditionalDescription [(CTrue, "You are close enough to the <wizard> that you can see his whiskers vibrate with every sleeping breath", [])],
+                               conditionalDescription = ConditionalDescription [(CTrue, "You are close enough to the <wizard> that you can see his whiskers flutter with every sleeping breath.", [])],
                                stateChanges = []
                            }
                        ]
@@ -2183,7 +2183,7 @@ wizardTowerBedroomScene =
     }
 
 wizardTowerMusicRoomDescriptionString :: String
-wizardTowerMusicRoomDescriptionString = "You are in a harmonious room. The walls are white, with black musical notes running across them. Their tune interleaves with framed pictures of the wizard playing the piano. At the head of the room, sits a grand piano. Arm chairs with delicate details on the cushions face the piano. The <gramophone> to the right of the piano, seems to be the source of a lullaby that's making you sleepy."
+wizardTowerMusicRoomDescriptionString = "You are in a harmonious room. The walls are white, with black musical notes running across them. Their tune interweaves with framed pictures of the wizard playing the piano. At the head of the room, sits a grand piano. Arm chairs with delicate details on the cushions face the piano. The <gramophone> to the right of the piano, seems to be the source of a lullaby that's making you sleepy."
 
 wizardTowerMusicRoomScene :: Scene
 wizardTowerMusicRoomScene = 
@@ -2274,7 +2274,7 @@ wizardTowerMusicRoomScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "The music does not turn off. Yet, it dims gently, and you hear the wizard's voice say, \"I am trapped in dream land by accident. I need a pendulum in the dream world to break the spell. You must fall asleep in the real world to join me here in order to save the village.\" The music is distinct again.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "The music does not turn off. Yet, it dims gently, and you hear the wizard's voice say, \"I am trapped in dream land by accident. I need the pendulum in the dream world to break the spell. You must fall asleep in the real world to join me here in order to save the village.\" The music is distinct again.", [])],
                                 stateChanges = [SetFlag "heard wizard"]
                             }
                         ]
@@ -2434,7 +2434,7 @@ wizardTowerMusicRoomScene =
     }
  
 wizardTowerGuestRoomDescriptionString :: String
-wizardTowerGuestRoomDescriptionString = "You are in a simple, yet cozy room. It is setup with a four poster <bed>, plain wooden chest of drawers, and a full length mirror. The <elevator>'s call <button> is behind you."
+wizardTowerGuestRoomDescriptionString = "You are in a simple, yet cozy room. It contains a four poster <bed>, plain wooden chest of drawers, and a full length mirror. The <elevator>'s call <button> is behind you."
 
 wizardTowerGuestRoomScene :: Scene
 wizardTowerGuestRoomScene = 
@@ -2663,7 +2663,7 @@ wizardTowerGuestRoomScene =
     }
 
 starFieldDescriptionString :: String
-starFieldDescriptionString = "You open your eyes and find yourself floating in a sea of <stars>. To your left you see a constellation which looks like a <clock>." ++
+starFieldDescriptionString = "You open your eyes and find yourself floating in a sea of <stars>. As the world darkens, the <stars> get brighter. They are so close that you can touch them. To your left you see a constellation which looks like a <clock>." ++
                              "To your right you see a constellation which you know is called <hypnotism>. Above you is a constellation called <cupcake>. It seems like you could <float> right over to them."
 
 starFieldScene :: Scene
@@ -3232,7 +3232,7 @@ hypnotismScene =
                             {
                                 condition = CTrue,
                                 conditionalDescription =
-                                    ConditionalDescription [(CTrue, "The <rabbit> asks, \"Are you volunteering for my trick?, just lie down on the <couch>.\"", [])],
+                                    ConditionalDescription [(CTrue, "The <rabbit> asks, \"Are you here to volunteer for my next trick?, just lie down on the <couch>.\"", [])],
                                 stateChanges = []
                             }
                         ]
@@ -3874,7 +3874,7 @@ cupcakeScene =
                             ConditionalAction
                             {
                                 condition = CTrue,
-                                conditionalDescription = ConditionalDescription [(CTrue, "You reach out to take one of the <cakes>. The <elderly woman> says \"Those cakes aren't free, you have to pay for them you know!\".", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You reach out to take one of the <cakes>. The <elderly woman> says \"Those cakes aren't free, you have to pay for them!\".", [])],
                                 stateChanges = []
                             }
                         ]
