@@ -31,35 +31,35 @@ gameIntro = "Nightmare Adventure\n" ++
 allVerbs :: [Token]
 allVerbs =
     [
-        TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "ambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go"],
+        TokenVerb "walk" ["walk", "stride", "strut", "step", "hike", "trot", "stroll", "march", "amble", "saunter", "trek", "wander", "trudge", "ambulate", "plod", "traverse", "prance", "promenade", "perambulate", "tread", "traipse", "hoof it", "move", "go", "jog", "run"],
         TokenVerb "get" ["get", "take", "pick up", "pluck", "snatch", "acquire", "grab", "pick"],
         TokenVerb "put" ["put", "place", "put down"],
-        TokenVerb "throw" ["throw", "pitch"],
+        TokenVerb "throw" ["throw", "pitch", "toss"],
         TokenVerb "say hi" ["say hi", "say hello"],
         TokenVerb "greet" ["greet"],
         TokenVerb "thank" ["thank"],
-        TokenVerb "give" ["give"],
+        TokenVerb "give" ["give", "share"],
         TokenVerb "select" ["select", "pick"],
         TokenVerb "read" ["read"],
-        TokenVerb "look" ["look", "view", "scan", "see"],
+        TokenVerb "look" ["look", "view", "scan", "see", "look at"],
         TokenVerb "inspect" ["see", "view", "scan", "spy", "observe", "inspect", "check out", "look at", "look", "examine", "check on"],
         TokenVerb "look around" ["look around", "search"],
-        TokenVerb "use" ["use"],
+        TokenVerb "use" ["use", "initiate", "start"],
         TokenVerb "jump" ["jump", "hop"],
-        TokenVerb "sit" ["sit"],
+        TokenVerb "sit" ["sit", "sit down"],
         TokenVerb "lie down" ["lie", "lie down"],
         TokenVerb "lie" ["lie", "lay"],
         TokenVerb "go" ["go", "move", "proceed"],
         TokenVerb "ride" ["ride", "fly", "head"],
         TokenVerb "approach" ["approach"],
-        TokenVerb "fly" ["fly", "float", "drift", "glide", "move", "go"],
-        TokenVerb "wake" ["wake"],
+        TokenVerb "fly" ["fly", "float", "drift", "glide", "move", "go", "levitate"],
+        TokenVerb "wake" ["wake", "wake up"],
         TokenVerb "flip" ["flip", "back flip", "backflip"],
         TokenVerb "shake" ["shake", "jostle"],
         TokenVerb "run" ["run", "race", "jog", "sprint", "dash"],
         TokenVerb "sing" ["sing"],
         TokenVerb "dance" ["dance"],
-        TokenVerb "smile" ["smile", "grin"],
+        TokenVerb "smile" ["smile", "grin", "laugh"],
         TokenVerb "frown" ["frown"],
         TokenVerb "climb" ["climb", "scale", "get"],
         TokenVerb "turn" ["turn"],
@@ -77,7 +77,7 @@ allVerbs =
         TokenVerb "drink" ["drink", "consume"],
         TokenVerb "do something" ["do something"],
         TokenVerb "do nothing" ["do nothing"],
-        TokenVerb "press" ["press", "hit", "push", "depress", "poke"],
+        TokenVerb "press" ["press", "hit", "push", "depress", "poke", "tap", "touch"],
         TokenVerb "break" ["break", "crack", "throw", "deface", "harm"],
         TokenVerb "stop" ["stop", "pause"],
         TokenVerb "lift" ["lift", "remove", "pick", "push"],
@@ -88,7 +88,7 @@ allVerbs =
         TokenVerb "buy" ["buy", "purchase", "ask to buy", "request"],
         TokenVerb "pay" ["pay"],
         TokenVerb "fall asleep" ["fall asleep"],
-        TokenVerb "sleep" ["sleep", "slumber"],
+        TokenVerb "sleep" ["sleep", "slumber", "nap", "relax"],
         TokenVerb "fix" ["fix", "repair"],
         TokenVerb "shout" ["shout", "yell", "scream", "roar", "howl", "bellow", "shriek"]
     ]
@@ -111,7 +111,7 @@ allNouns =
         TokenNoun "door" ["door", "doorway"],
         TokenNoun "home" ["home", "my house", "house", "cottage", "mud-brick cottage", "mud brick cottage"], --Cottage nouns
         TokenNoun "Jorryn" ["jorryn", "my brother", "brother"],
-        TokenNoun "parents" ["parents"],
+        TokenNoun "parents" ["parents", "family"],
         TokenNoun "square" ["square", "village square", "village"], --Village square nouns
         TokenNoun "clock" ["ancient clock", "clock"],
         TokenNoun "Evanna" ["evanna"],
@@ -125,7 +125,7 @@ allNouns =
         TokenNoun "ruby indentation" ["ruby indentation"],
         TokenNoun "ruby amulet" ["ruby amulet"],
         TokenNoun "gateway" ["gateway", "gate", "cloaked gateway", "cloaked door"],
-        TokenNoun "elevator" ["elevator"],
+        TokenNoun "elevator" ["elevator", "lift"],
         TokenNoun "elevator arms" ["elevator arms", "arms"],
         TokenNoun "view" ["view", "scene"],
         TokenNoun "ground floor" ["ground floor"],
@@ -144,7 +144,7 @@ allNouns =
         TokenNoun "sleep" ["sleep", "slumber"],
         TokenNoun "gramophone" ["gramophone", "phonograph"],
         TokenNoun "off" ["off", "down"],
-        TokenNoun "needle" ["needle", "stylus"],
+        TokenNoun "needle" ["needle", "stylus", "pin"],
         TokenNoun "star" ["star"], -- Star field nouns
         TokenNoun "stars" ["sea of stars", "stars", "star field", "starfield"],
         TokenNoun "clock constellation" ["clock", "clock constellation"],
@@ -206,7 +206,7 @@ allPrepositions =
         TokenPreposition "using" ["using"],
         TokenPreposition "by" ["by"],
         TokenPreposition "to" ["to", "toward", "towards"],
-        TokenPreposition "until" ["until"],
+        TokenPreposition "until" ["until", "till"],
         TokenPreposition "with" ["with"],
         TokenPreposition "together with" ["together with"],
         TokenPreposition "in through" ["in through"]
@@ -229,10 +229,10 @@ startFlags :: Flags
 startFlags = Flags []
 
 introString :: String
-introString = "It's been a long day working at the moisture farms outside of your <village square>. You return home just as the sun is setting. You open the door to your mud-brick <cottage> to find your brother, <Jorryn>, lying on the dirt floor just inside the <front door>.\nAt first, you fear the worst; life on the edge of the great desert can be dangerous.\nBut as you lean down to look at your <brother> you realize that he is not dead, but asleep.\nYou rush to check your <parents>, who are also on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them.\n\n[Pssssst, objects enclosed in <> like front door, parents etc are available for interaction. For instance, try this command next: look at parents ]\n"
+introString = "It's been a long day working at the hydration farms outside of your <village square>. You return home as the sun is setting. You open the door to your mud-brick <cottage> to find your brother, <Jorryn>, face down on the dirt floor just past the <front door>.\nYou fear the worst; life on the edge of the great desert can be dangerous.\nBut when you lean down to look at your <brother> you realize that he is not dead, he's asleep.\nYou look around the corner and find that your <parents> are also sprawled out on the floor by the stove, they are also asleep.\nNo amount of shaking or shouting seems to wake them.\n\n[Pssssst, objects enclosed in <> like front door, parents etc are available for interaction. For instance, try this command next: look at parents ]\n"
 
 cottageDescriptionString :: String
-cottageDescriptionString = "You're standing in your home. <Jorryn> is lying by the <front door> which is to the <east>. Your <parents> are on the floor by the stove."
+cottageDescriptionString = "You're standing in your home. <Jorryn> is lying by the <front door>. Your <parents> are on the floor by the stove. You notice that the bustling cacophony of commerce from the <village square> to the <east> is eerily absent."
 
 cottageScene :: Scene
 cottageScene =
@@ -449,8 +449,8 @@ cottageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (FlagSet "square visited", "You walk through the front door of your <home> out into the <village>. Everyone you pass is still asleep. Your friend, <Evanna>, is still asleep at the base of the <ancient clock>.", []),
-                                            (CNot (FlagSet "square visited"), "You walk through the front door of your <home> out into your <village>. As you walk through the <village>, you come across several people asleep on the ground. You arrive at the <village square> and you notice that, for the first time in your life, the <ancient clock> has stopped. You see your friend, <Evanna>, walking slowly through the <village square> in a dazed stupor. As you approach, she collapses to the ground. The <ancient clock> chimes and her body starts to glow a deep golden color, the glowing aura shoots quickly into the <ancient clock> and it falls silent.", [])
+                                            (FlagSet "square visited", "You walk through the front door of your <home> and towards the <village>. Everyone you pass is asleep. Your friend, <Evanna>, is fast asleep at the base of the <ancient clock>.", []),
+                                            (CNot (FlagSet "square visited"), "You walk through the front door of your <home> and towards the <village>. As you walk through the <village>, you come across several people asleep on the ground. You arrive at the <village square> and you notice that, for the first time in your life, the <ancient clock> has stopped. You see your friend, <Evanna>, walking slowly through the <village square> in a dazed stupor. As you approach, she collapses to the ground. The <ancient clock> chimes and her body starts to glow a deep golden color, the glowing aura departs her body and shoots into the <ancient clock> as it falls silent.", [])
                                         ],
                                 stateChanges = [SceneChange "village", SetFlag "square visited", RemoveFlag "cottage described"]
                             },
@@ -529,7 +529,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You inspect the <ancient clock>. It appears to be carved out of a block of marble and has stood on this spot, steadily ticking since long before your tribe came to settle in the great desert. The <ancient clock> is not ticking, and the hands have stopped. You notice that something appears to have bored a perfectly round hole in the marble. Inside, you see that the <ancient clock> operates with a complicated set of gears. The pendulum of the <ancient clock> appears to be missing.", [])
+                                        (CTrue, "You inspect the <ancient clock>. It is carved out of a block of marble and has stood on this spot, steadily ticking, since long before your tribe came to settle in the great desert. But, the <ancient clock> is not ticking, and the hands have stopped. You notice a perfectly round hole in the middle of the marble. Inside, you see that the <ancient clock> operates with a complicated set of gears. The pendulum of the <ancient clock> appears to be missing.", [])
                                     ],
                                 stateChanges = []
                             }
@@ -661,7 +661,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (CTrue, "You walk through the deserted streets of your <village>, passing several sleeping bodies on your way home.", [RemoveFlag "village described"])
+                                            (CTrue, "You walk through the deserted streets of your <village>, passing sleeping bodies on your way home.", [RemoveFlag "village described"])
                                         ],
                                 stateChanges = [SceneChange "cottage"]
                             }
