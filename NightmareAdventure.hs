@@ -450,7 +450,7 @@ cottageScene =
                                     ConditionalDescription
                                         [
                                             (FlagSet "square visited", "You walk through the front door of your <home> and towards the <village>. Everyone you pass is asleep. Your friend, <Evanna>, is fast asleep at the base of the <ancient clock>.", []),
-                                            (CNot (FlagSet "square visited"), "You walk through the front door of your <home> and towards the <village>. As you walk through the <village>, you come across several people asleep on the ground. You arrive at the <village square> and you notice that, for the first time in your life, the <ancient clock> has stopped. You see your friend, <Evanna>, walking slowly through the <village square> in a dazed stupor. As you approach, she collapses to the ground. The <ancient clock> chimes and her body starts to glow a deep golden color, the glowing aura departs her body and shoots into the <ancient clock> as it falls silent.", [])
+                                            (CNot (FlagSet "square visited"), "You walk through the front door of your <home> and towards the <village>.\n\nAs you walk through the <village>, you come across several people asleep on the ground. You arrive at the <village square> and you notice that, for the first time in your life, the <ancient clock> has stopped.\n\nYou see your friend, <Evanna>, walking slowly through the <village square> in a dazed stupor. As you approach, she collapses to the ground. The <ancient clock> chimes and her body starts to glow a deep golden color, the glowing aura departs her body and shoots into the <ancient clock> as it falls silent.\n", [])
                                         ],
                                 stateChanges = [SceneChange "village", SetFlag "square visited", RemoveFlag "cottage described"]
                             },
@@ -680,7 +680,7 @@ villageScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                         [
-                                            (CTrue, "You walk towards the looming <wizard's tower>.", [RemoveFlag "village described"])
+                                            (CTrue, "You walk towards the looming <wizard's tower>.\n", [RemoveFlag "village described"])
                                         ],
                                 stateChanges = [SceneChange "tower"]
                             }
@@ -690,7 +690,7 @@ villageScene =
     }
 
 towerExteriorDescriptionString :: String
-towerExteriorDescriptionString = "You are standing at the base of the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is the great desert, which stretches to the horizon. The <village square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
+towerExteriorDescriptionString = "You are standing at the base of the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tower is a giant spiral of blue crystal, maybe 100 feet tall, with no visible entrances. Beyond the tower is the great desert, which stretches to the horizon.\n\nThe <village square> is to the <north>. In front of you is a <pedestal> with some strange <indentations>."
 
 gatewayDescriptionString :: String
 gatewayDescriptionString = " A cloaked <gateway> has been opened in the side of the <tower>."
@@ -1109,7 +1109,7 @@ towerExteriorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                     [
-                                        (CTrue, "You walk through the cloaked <gateway>.", [])
+                                        (CTrue, "You walk through the cloaked <gateway>.\n", [])
                                     ],
                                 stateChanges = [SceneChange "tower ground floor"]
                             },
@@ -1129,7 +1129,7 @@ towerExteriorScene =
     }
 
 wizardTowerGroundFloorDescriptionString :: String
-wizardTowerGroundFloorDescriptionString = "You are inside the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in. To your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer to the other rooms in the <tower>."
+wizardTowerGroundFloorDescriptionString = "You are inside the <wizard's tower>, inhabited by Isvald, the <village>'s resident wizard. The tall <tower>'s blue crystal interiors playfully bounce the sunlight streaming in.\n\nTo your <west>, is the cloaked <gateway> that let you in. To your <east>, is an <elevator> with a <button> to summon it, which seems to be the only way to get past the foyer to the other rooms in the <tower>."
 
 wizardTowerGroundFloorScene :: Scene
 wizardTowerGroundFloorScene =
@@ -1255,7 +1255,7 @@ wizardTowerGroundFloorScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the <tower>.", [])
+                                           (CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the <tower>.\n", [])
                                        ],
                                 stateChanges = []
                             },
@@ -1304,7 +1304,7 @@ wizardTowerGroundFloorScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
+                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.\n", [RemoveFlag "elevator arrived"]) 
                                        ],
                                 stateChanges = [SceneChange "elevator", SetFlag "elevator ground floor", RemoveFlag "wizardTowerGroundFloor described"]
                             }
@@ -1539,7 +1539,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription 
                                       [
-                                          (CTrue, "You step out to the <ground floor>, and the <elevator> lifts off.", [])
+                                          (CTrue, "You step out to the <ground floor>, and the <elevator> lifts off.\n", [])
                                       ],
                                stateChanges = [SceneChange "tower ground floor", RemoveFlag "elevator ground floor", RemoveFlag "elevator described"]
                            },
@@ -1549,7 +1549,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription
                                       [
-                                          (CTrue, "You step out into the <bedroom>, and the <elevator> drifts away.", [])
+                                          (CTrue, "You step out into the <bedroom>, and the <elevator> drifts away.\n", [])
                                       ],
                                stateChanges = [SceneChange "tower bedroom", RemoveFlag "elevator bedroom", RemoveFlag "elevator described"]
                            },
@@ -1559,7 +1559,7 @@ elevatorScene =
                                conditionalDescription = 
                                    ConditionalDescription
                                       [
-                                          (CTrue, "You step out into the <music room>, and the <elevator> cruises away.", [])
+                                          (CTrue, "You step out into the <music room>, and the <elevator> cruises away.\n", [])
                                       ],
                                stateChanges = [SceneChange "tower music room", RemoveFlag "elevator music room", RemoveFlag "elevator described"]
                            },
@@ -1569,7 +1569,7 @@ elevatorScene =
                                conditionalDescription =
                                    ConditionalDescription
                                       [
-                                          (CTrue, "You step out into the <guest room>, and the <elevator> slides away.", [])
+                                          (CTrue, "You step out into the <guest room>, and the <elevator> slides away.\n", [])
                                       ],
                                stateChanges = [SceneChange "tower guest room", RemoveFlag "elevator guest room", RemoveFlag "elevator described"]
                            }
@@ -1700,7 +1700,7 @@ elevatorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                       [
-                                          (CTrue, "You step out into the <guest room>, and the <elevator> slides away.", [])
+                                          (CTrue, "You step out into the <guest room>, and the <elevator> slides away.\n", [])
                                       ],
                                 stateChanges = [SceneChange "tower guest room", RemoveFlag "elevator guest room", RemoveFlag "elevator described"]
                             },
@@ -1730,7 +1730,7 @@ elevatorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                       [
-                                          (CTrue, "You step out into the <music room>, and the <elevator> cruises away.", [])
+                                          (CTrue, "You step out into the <music room>, and the <elevator> cruises away.\n", [])
                                       ],
                                 stateChanges = [SceneChange "tower music room", RemoveFlag "elevator music room", RemoveFlag "elevator described"]
                             },
@@ -1760,7 +1760,7 @@ elevatorScene =
                                 conditionalDescription =
                                     ConditionalDescription
                                       [
-                                          (CTrue, "You step out into the <bedroom>, and the <elevator> drifts away.", [])
+                                          (CTrue, "You step out into the <bedroom>, and the <elevator> drifts away.\n", [])
                                       ],
                                 stateChanges = [SceneChange "tower bedroom", RemoveFlag "elevator bedroom", RemoveFlag "elevator described"]
                             },
@@ -1790,7 +1790,7 @@ elevatorScene =
                                 conditionalDescription = 
                                    ConditionalDescription 
                                       [
-                                          (CTrue, "You step out to the <ground floor>, and the <elevator> lifts off.", [])
+                                          (CTrue, "You step out to the <ground floor>, and the <elevator> lifts off.\n", [])
                                       ],
                                 stateChanges = [SceneChange "tower ground floor", RemoveFlag "elevator ground floor", RemoveFlag "elevator described"] 
                             },
@@ -1949,7 +1949,7 @@ wizardTowerBedroomScene =
                            ConditionalAction
                            {
                                condition = FlagSet "elevator arrived",
-                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.", [])],
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.\n", [])],
                                stateChanges = []
                            },
                            ConditionalAction
@@ -2142,7 +2142,7 @@ wizardTowerBedroomScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
+                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.\n", [RemoveFlag "elevator arrived"]) 
                                        ],
                                 stateChanges = [SetFlag "at elevator", RemoveFlag "at wizard", RemoveFlag "at chest of drawers", SceneChange "elevator", SetFlag "elevator bedroom", RemoveFlag "wizardTowerBedroom described"]
                             },
@@ -2300,7 +2300,7 @@ wizardTowerMusicRoomScene =
                            ConditionalAction
                            {
                                condition = FlagSet "elevator arrived",
-                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.", [])],
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.\n", [])],
                                stateChanges = []
                            },
                            ConditionalAction
@@ -2393,7 +2393,7 @@ wizardTowerMusicRoomScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
+                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.\n", [RemoveFlag "elevator arrived"]) 
                                        ],
                                 stateChanges = [SceneChange "elevator", SetFlag "elevator music room", RemoveFlag "music room described"]
                             },
@@ -2491,7 +2491,7 @@ wizardTowerGuestRoomScene =
                             ConditionalAction
                             {
                                 condition = FlagSet "heard wizard",
-                                conditionalDescription = ConditionalDescription [(CTrue, "You fall into a serene slumber as soon as your head hits the pillow. You feel a gentle breeze, and are transported into Dreamland.", [])],
+                                conditionalDescription = ConditionalDescription [(CTrue, "You fall into a serene slumber as soon as your head hits the pillow. You feel a gentle breeze, and are transported into Dreamland.\n", [])],
                                 stateChanges = [SceneChange "starfield"]
                             },
                             ConditionalAction
@@ -2529,7 +2529,7 @@ wizardTowerGuestRoomScene =
                            ConditionalAction
                            {
                                condition = FlagSet "elevator arrived",
-                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.", [])],
+                               conditionalDescription = ConditionalDescription [(CTrue, "The <elevator> is a cool glass cube that allows a 360-degree view of the tower.\n", [])],
                                stateChanges = []
                            },
                            ConditionalAction
@@ -2622,7 +2622,7 @@ wizardTowerGuestRoomScene =
                                 conditionalDescription = 
                                     ConditionalDescription
                                        [
-                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.", [RemoveFlag "elevator arrived"]) 
+                                           (CTrue, "You enter the cool glass cube <elevator>. The doors slide shut as you take in a 360-degree view of the tower.\n", [RemoveFlag "elevator arrived"]) 
                                        ],
                                 stateChanges = [SceneChange "elevator", SetFlag "elevator guest room", RemoveFlag "wizard tower guest room described"]
                             },
@@ -2663,7 +2663,7 @@ wizardTowerGuestRoomScene =
     }
 
 starFieldDescriptionString :: String
-starFieldDescriptionString = "You open your eyes and find yourself floating in a sea of <stars>. As the world darkens, the <stars> get brighter. They are so close that you can touch them. To your left you see a constellation which looks like a <clock>." ++
+starFieldDescriptionString = "You open your eyes and find yourself floating in a sea of <stars>. As the world darkens, the <stars> get brighter. They are so close that you can touch them.\n\nTo your left you see a constellation which looks like a <clock>." ++
                              "To your right you see a constellation which you know is called <hypnotism>. Above you is a constellation called <cupcake>. It seems like you could <float> right over to them."
 
 starFieldScene :: Scene
@@ -2828,7 +2828,7 @@ starFieldScene =
                         ConditionalAction
                         {
                             condition = CTrue,
-                            conditionalDescription = ConditionalDescription [(CTrue, "You float towards the <clock> constellation", [])],
+                            conditionalDescription = ConditionalDescription [(CTrue, "You float towards the <clock> constellation.\n", [])],
                             stateChanges = [SceneChange "clock",
                                             RemoveFlag "star field described"]
                         }
@@ -2848,7 +2848,7 @@ starFieldScene =
                         ConditionalAction
                         {
                             condition = CTrue,
-                            conditionalDescription = ConditionalDescription [(CTrue, "You float towards the <hypnotism> constellation", [])],
+                            conditionalDescription = ConditionalDescription [(CTrue, "You float towards the <hypnotism> constellation.\n", [])],
                             stateChanges = [SceneChange "hypnotism",
                                             RemoveFlag "star field described"]
                         }
@@ -2868,7 +2868,7 @@ starFieldScene =
                         ConditionalAction
                         {
                             condition = CTrue,
-                            conditionalDescription = ConditionalDescription [(CTrue, "You float towards the <cupcake> constellation", [])],
+                            conditionalDescription = ConditionalDescription [(CTrue, "You float towards the <cupcake> constellation.\n", [])],
                             stateChanges = [SceneChange "cupcake",
                                             RemoveFlag "star field described"]
                         }
@@ -3086,7 +3086,7 @@ clockScene =
                         ConditionalAction
                         {
                             condition = CTrue,
-                            conditionalDescription = ConditionalDescription [(CTrue, "You loved ones blur as you walk away into the <star field>.", [])],
+                            conditionalDescription = ConditionalDescription [(CTrue, "Your loved ones blur as you walk away into the <star field>.\n", [])],
                             stateChanges = [SceneChange "starfield",
                                             RemoveFlag "clock described"]
                         }
@@ -3119,10 +3119,10 @@ clockScene =
     }
 
 hypnotismDescriptionString :: String
-hypnotismDescriptionString = "You step up onto the stage, the lights overhead are blindingly bright. Before you is a ghostly <audience>, to your right on the stage is a <white rabbit> wearing a tuxedo and a top hat. Next to the <white rabbit> there's a giant red <couch>. You can see the <star field> off stage to your <left>. "
+hypnotismDescriptionString = "You step up onto the stage, the lights overhead are blindingly bright. Before you is a ghostly <audience>, to your right on the stage is a <white rabbit> wearing a tuxedo and a top hat. Next to the <white rabbit> there's a giant red <couch>.\n\nYou can see the <star field> off stage to your <left>."
 
 hypnotismDescriptionStringBefore :: String
-hypnotismDescriptionStringBefore = hypnotismDescriptionString ++ "The <white rabbit> has a <pendulum> in its paw."
+hypnotismDescriptionStringBefore = hypnotismDescriptionString ++ " The <white rabbit> has a <pendulum> in its paw."
 
 hypnotismScene :: Scene
 hypnotismScene =
@@ -3976,7 +3976,7 @@ cupcakeScene =
                         ConditionalAction
                         {
                             condition = CTrue,
-                            conditionalDescription = ConditionalDescription [(CTrue, "You float back to the <star field>.", [])],
+                            conditionalDescription = ConditionalDescription [(CTrue, "You float back to the <star field>.\n", [])],
                             stateChanges = [SceneChange "starfield",
                                             RemoveFlag "cupcake described"]
                         }
